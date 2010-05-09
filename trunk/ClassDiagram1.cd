@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="TODO">
+    <Position X="0.956" Y="5.698" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="TODO">
+    <Position X="12.279" Y="2.958" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="TODO">
+    <Position X="9.909" Y="7.26" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="TODO">
+    <Position X="15.109" Y="7" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="ICGame.Game">
+    <Position X="3.75" Y="1.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEEAAAAAACwAAAAAAAQAAAAEAAAgAAAAAAAAAAAQ=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.UserInterfaceController">
+    <Position X="0.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQACAAAAAAAAAAAAAAAQAAAAAAAAAAEAAAAAAAIAAAA=</HashCode>
+      <FileName>UserInterfaceController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Camera" />
+      <Property Name="AI" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ICGame.Camera">
+    <Position X="3.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAEEAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.Campaign">
+    <Position X="7" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAABAAAAAAAAAQAAAAAAAABAAAAgAAAgAAAAAAAA=</HashCode>
+      <FileName>Campaign.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="UnitContainer" />
+      <Property Name="Mission" />
+      <Property Name="ObjectFactory" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ICGame.Mission">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Mission.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ObjectContainer" />
+      <Property Name="Board" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ICGame.Board">
+    <Position X="7.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAEAAAgABAAAAAAAAAAIAEAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.UnitContainer">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UnitContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.GameObjectContainer">
+    <Position X="5.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ObjectContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.Display">
+    <Position X="9.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAgAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Display.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="UserInterface" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ICGame.UserInterface">
+    <Position X="9.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.GameObjectFactory">
+    <Position X="9.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ObjectFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.GameObject">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Object.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ICGame.Unit">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACCAAAAAAAAAAAABAAAQCBAAAAEAABAAAAAAAI=</HashCode>
+      <FileName>Unit.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ICGame.Vehicle">
+    <Position X="14" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Vehicle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.StaticObject">
+    <Position X="15.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAABAAAQCBAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StaticObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ICGame.Infantry">
+    <Position X="15.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Infantry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.Building">
+    <Position X="17.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAABAAAQCBAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Building.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ICGame.AI">
+    <Position X="1.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ICGame.Civilian">
+    <Position X="19.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAABAAAQCBAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Civilian.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="ICGame.IDrawable">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IDrawable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ICGame.IAnimated">
+    <Position X="11.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IAnimated.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ICGame.IPhysical">
+    <Position X="11.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IPhysical.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ICGame.IDestructible">
+    <Position X="11.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAABAAAQABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IDestructible.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ICGame.IInteractive">
+    <Position X="11.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>IInteractive.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ICGame.IControllable">
+    <Position X="11.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAAAAAEAABAAAAAAAA=</HashCode>
+      <FileName>IControllable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="ICGame.GameObjectID">
+    <Position X="9.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjectID.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
