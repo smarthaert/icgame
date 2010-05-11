@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace ICGame
 {
     public class UserInterfaceController
     {
+        KeyboardState curState,prevState;
+
+
         public UserInterfaceController()
         {
-            throw new System.NotImplementedException();
+            curState = Keyboard.GetState();
         }
     
         public Camera Camera
@@ -22,30 +27,27 @@ namespace ICGame
             }
         }
 
-        public AI AI
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
-
         private void UpdateMouseState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         private void UpdateKeyboardState()
         {
-            throw new System.NotImplementedException();
+            prevState = curState;
+            curState = Keyboard.GetState();
+
+            if (curState.IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
+            {
+                Mediator.Game.GameState = GameState.Exit;
+            }
+
         }
 
         public void UpdateInput()
         {
-            throw new System.NotImplementedException();
+            UpdateMouseState();
+            UpdateKeyboardState();
         }
     }
 }

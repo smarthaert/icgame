@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ICGame
 {
-    public class AI
+    public class GameEventController
     {
-        public AI()
+        public GameEventController()
         {
             throw new System.NotImplementedException();
         }
