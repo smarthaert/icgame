@@ -16,18 +16,53 @@ namespace ICGame
     /// <summary>
     /// This is the main type for your game
     /// </summary>
+
+    public enum GameState
+    {
+        Initialize,MainMenu,Campaign,Mission,Pause,Exit
+    }
+
     public class Game : Microsoft.Xna.Framework.Game
     {
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        GameState gameState;
+
+        public GameState GameState
+        {
+            get
+            {
+                return gameState;
+            }
+            set
+            {
+                gameState = value;
+            }
+        }
+
+        UserInterfaceController userInterfaceController;
+        
 
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Mediator.Game = this;
+            gameState = GameState.Initialize;
         }
 
+        #region Subclasses
+
         public UserInterfaceController UserInterfaceController
+        {
+            get
+            {
+                return userInterfaceController;
+            }
+        }
+
+        public Campaign Campaign
         {
             get
             {
@@ -49,7 +84,7 @@ namespace ICGame
             }
         }
 
-        public Campaign Campaign
+        public AI AI
         {
             get
             {
@@ -59,6 +94,31 @@ namespace ICGame
             {
             }
         }
+
+        public GameEventController GameEventController
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        #endregion
+
+        public GameInfo GameInfo
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -70,7 +130,14 @@ namespace ICGame
         {
             // TODO: Add your initialization logic here
 
+
+            userInterfaceController = new UserInterfaceController();
+
+
+
             base.Initialize();
+
+            gameState = GameState.MainMenu;
         }
 
         /// <summary>
@@ -102,10 +169,25 @@ namespace ICGame
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
 
-            // TODO: Add your update logic here
+            UserInterfaceController.UpdateInput();
+
+            switch (gameState)
+            {
+                case GameState.Initialize:
+                    break;
+                case GameState.MainMenu:
+                    break;
+                case GameState.Campaign:
+                    break;
+                case GameState.Mission:
+                    break;
+                case GameState.Pause:
+                    break;
+                case GameState.Exit:
+                    this.Exit();
+                    break;
+            }
 
             base.Update(gameTime);
         }

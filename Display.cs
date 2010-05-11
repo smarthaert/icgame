@@ -7,8 +7,8 @@ namespace ICGame
     public class Display
     {
         private Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice;
-    
-        public Display(Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDeviceManager)
+
+        public Display(Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDeviceManager, ref GameState gameState)
         {
             throw new System.NotImplementedException();
         }
