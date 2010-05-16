@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
     public class Civilian : GameObject, IAnimated, IPhysical, IDestructible, IInteractive
     {
+        public Civilian(Model model)
+            : base(model)
+        {
+            
+        }
         #region IPhysical Members
 
         public int BoundingBox

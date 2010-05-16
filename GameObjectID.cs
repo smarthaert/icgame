@@ -6,5 +6,6 @@ namespace ICGame
 {
     public enum GameObjectID
     {
+        xwing,
     }
 }

@@ -8,18 +8,19 @@ namespace ICGame
 {
     public interface IDrawable
     {
+
         Matrix ModelMatrix
         {
             get;
-            set;
+        
         }
 
         Model Model
         {
-            get;
-            set;
+            get; set;
         }
-
+    
         GameObjectDrawer GetDrawer();
+
     }
 }

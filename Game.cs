@@ -33,10 +33,12 @@ namespace ICGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-     
+
             Campaign = new Campaign();
             Camera=new Camera();
+
             UserInterfaceController = new UserInterfaceController(Camera, Campaign);
+            
             Campaign.GameState = GameState.Initialize;
 
         }
@@ -109,8 +111,8 @@ namespace ICGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
             effect = Content.Load<Effect>("effects");
+
         }
 
         /// <summary>
