@@ -1,19 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
     public class Display
     {
-        private Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice;
+        private GraphicsDeviceManager graphicsDeviceManager;
+        private GraphicsDevice graphicsDevice;
 
-        public Display(Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDeviceManager, ref GameState gameState)
+        public Display(GraphicsDeviceManager graphicsDeviceManager)
         {
             throw new System.NotImplementedException();
         }
     
-        public UserInterface UserInterface
+        public UserInterfaceDraw UserInterface
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public Camera Camera
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public Campaign Campaign
         {
             get
             {

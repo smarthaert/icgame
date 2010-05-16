@@ -6,6 +6,6 @@ namespace ICGame
 {
     public interface IDrawable
     {
-        void Draw();
+        void GetDrawer();
     }
 }
