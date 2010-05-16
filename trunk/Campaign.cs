@@ -7,11 +7,12 @@ namespace ICGame
     public class Campaign
     {
     
-        public Campaign(Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice)
+        public Campaign()
         {
-            throw new System.NotImplementedException();
+            
         }
     
+
         public UnitContainer UnitContainer
         {
             get
@@ -43,6 +44,12 @@ namespace ICGame
             set
             {
             }
+        }
+
+        public GameState GameState
+        {
+            get; set;
+
         }
 
         public void LoadMission()

@@ -6,14 +6,14 @@ namespace ICGame
 {
     public class UserInterface
     {
-        public UserInterface()
+        public UserInterface(Campaign campaign)
         {
-            throw new System.NotImplementedException();
+            Campaign = campaign;
         }
-    
-        public void Draw()
+
+        public Campaign Campaign
         {
-            throw new System.NotImplementedException();
+            get; set;
         }
     }
 }

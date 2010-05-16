@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ICGame
 {
-    public class GameObject:IDrawable
+    public abstract class GameObject : IDrawable
     {
         #region IDrawable Members
 
-        public void Draw()
+        public virtual void GetDrawer()
         {
             throw new NotImplementedException();
         }

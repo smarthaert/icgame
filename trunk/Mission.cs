@@ -6,9 +6,9 @@ namespace ICGame
 {
     public class Mission
     {
-        public Mission(Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice)
+        public Mission()
         {
-            throw new System.NotImplementedException();
+            
         }
     
         public GameObjectContainer ObjectContainer

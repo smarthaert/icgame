@@ -27,19 +27,9 @@ namespace ICGame
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GameState gameState;
-
-        public GameState GameState
-        {
-            get
-            {
-                return gameState;
-            }
-            set
-            {
-                gameState = value;
-            }
-        }
+        
+        private Effect effect;
+      
 
         UserInterfaceController userInterfaceController;
         
@@ -48,8 +38,11 @@ namespace ICGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Mediator.Game = this;
-            gameState = GameState.Initialize;
+            Campaign = new Campaign();
+            Camera=new Camera();
+            
+            Campaign.GameState = GameState.Initialize;
+
         }
 
         #region Subclasses
@@ -64,13 +57,8 @@ namespace ICGame
 
         public Campaign Campaign
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get;
+            set;
         }
 
         public Display Display
@@ -131,13 +119,13 @@ namespace ICGame
             // TODO: Add your initialization logic here
 
 
-            userInterfaceController = new UserInterfaceController();
+            userInterfaceController = new UserInterfaceController(Camera,Campaign);
 
 
 
             base.Initialize();
 
-            gameState = GameState.MainMenu;
+            Campaign.GameState = GameState.MainMenu;
         }
 
         /// <summary>
@@ -149,6 +137,7 @@ namespace ICGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            effect = Content.Load<Effect>("effects");
             // TODO: use this.Content to load your game content here
         }
 
@@ -172,7 +161,7 @@ namespace ICGame
 
             UserInterfaceController.UpdateInput();
 
-            switch (gameState)
+            switch (Campaign.GameState)
             {
                 case GameState.Initialize:
                     break;
@@ -201,8 +190,58 @@ namespace ICGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            //TYMCZASOWE
+            VertexPositionColor [] vertices = new VertexPositionColor[3];
+            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f,300.0f);
+            Matrix view = Camera.CameraMatrix;
+            Matrix worldMatrix = Matrix.Identity;
+
+            effect.Parameters["xView"].SetValue(view);
+            effect.Parameters["xProjection"].SetValue(projection);
+            effect.Parameters["xWorld"].SetValue(worldMatrix);
+ 
+            vertices[0].Position = new Vector3(-0.5f, -0.5f, 0f);
+            vertices[0].Color = Color.Red;
+            vertices[1].Position = new Vector3(0, 0.5f, 0f);
+            vertices[1].Color = Color.Green;
+            vertices[2].Position = new Vector3(0.5f, -0.5f, 0f);
+            vertices[2].Color = Color.Yellow;
+
+            VertexDeclaration myVertexDeclaration = new VertexDeclaration(graphics.GraphicsDevice, VertexPositionColor.VertexElements);
+
+
+            effect.CurrentTechnique = effect.Techniques["Colored"];
+            effect.Begin();
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Begin();
+
+                graphics.GraphicsDevice.VertexDeclaration = myVertexDeclaration;
+                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+
+                pass.End();
+            }
+            effect.End();
+            //TYMCZASOWE
 
             base.Draw(gameTime);
+        }
+
+        public Camera Camera
+        {
+            get;
+            set;
+        }
+
+        public UserInterface UserInterface
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
         }
     }
 }
