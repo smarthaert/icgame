@@ -19,6 +19,12 @@ namespace ICGame
         {
             get; set;
         }
+
+        List<Texture2D> Textures
+        {
+            get;
+            set;
+        }
     
         GameObjectDrawer GetDrawer();
 
