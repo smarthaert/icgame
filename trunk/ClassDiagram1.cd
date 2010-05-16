@@ -7,9 +7,6 @@
     <Position X="15.029" Y="2.958" Height="0.75" Width="1.7" />
   </Comment>
   <Comment CommentText="TODO">
-    <Position X="12.659" Y="7.26" Height="0.75" Width="1.7" />
-  </Comment>
-  <Comment CommentText="TODO">
     <Position X="17.859" Y="7" Height="0.75" Width="1.7" />
   </Comment>
   <Class Name="ICGame.Game">
@@ -19,8 +16,8 @@
     </Compartments>
     <AssociationLine Name="AI" Type="ICGame.AI" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="3.5" Y="1.352" />
-        <Point X="2.938" Y="1.352" />
+        <Point X="3.5" Y="1.406" />
+        <Point X="2.938" Y="1.406" />
         <Point X="2.938" Y="8.25" />
       </Path>
     </AssociationLine>
@@ -66,6 +63,7 @@
     <ShowAsAssociation>
       <Property Name="UnitContainer" />
       <Property Name="Mission" />
+      <Property Name="GameObjectFactory" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.Mission">
@@ -89,7 +87,7 @@
   <Class Name="ICGame.UnitContainer">
     <Position X="9.25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
       <FileName>UnitContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -101,9 +99,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Display">
-    <Position X="12" Y="0.5" Width="1.5" />
+    <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAACCAAAAgAAAgAAAAAAAAAAAAEAAAwAAAAAAAAAAAA=</HashCode>
+      <HashCode>EAACCAAAAiAAAgAAAAAAAgAAAAEAAAwAAAAAAAAAAAA=</HashCode>
       <FileName>Display.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -113,7 +111,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.UserInterfaceDraw">
-    <Position X="12" Y="2.75" Width="1.5" />
+    <Position X="12.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>UserInterfaceDraw.cs</FileName>
@@ -125,14 +123,14 @@
   <Class Name="ICGame.GameObjectFactory">
     <Position X="12.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAAAAAAAIABA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAABAAAAIABA=</HashCode>
       <FileName>ObjectFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObject">
-    <Position X="17.25" Y="1" Width="1.5" />
+    <Position X="17" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
       <FileName>Object.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -253,9 +251,9 @@
     </TypeIdentifier>
   </Class>
   <Interface Name="ICGame.IDrawable">
-    <Position X="14.5" Y="1" Width="1.5" />
+    <Position X="14.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
       <FileName>IDrawable.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -295,7 +293,7 @@
     </TypeIdentifier>
   </Interface>
   <Enum Name="ICGame.GameObjectID">
-    <Position X="12.5" Y="8.25" Width="1.5" />
+    <Position X="12.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
       <FileName>GameObjectID.cs</FileName>
