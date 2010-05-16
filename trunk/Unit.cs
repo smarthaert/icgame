@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
     public class Unit : GameObject, IAnimated, IPhysical, IInteractive, IDestructible, IControllable
     {
+        public Unit(Model model):
+            base(model)
+        {
+            
+        }
+
         #region IPhysical Members
 
         public int BoundingBox

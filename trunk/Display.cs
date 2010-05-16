@@ -11,9 +11,11 @@ namespace ICGame
     {
         private GraphicsDeviceManager graphics;
         private GraphicsDevice graphicsDevice;
+
         private Effect effect;
         private Matrix viewMatrix;
         private Matrix projectionMatrix;
+
 
         public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, Effect effect)
         {
@@ -22,6 +24,7 @@ namespace ICGame
             UserInterface = userInterface;
             Camera = camera;
             this.effect = effect;
+
         }
 
         public ContentManager Content

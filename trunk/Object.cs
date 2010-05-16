@@ -8,43 +8,39 @@ namespace ICGame
 {
     public abstract class GameObject : IDrawable
     {
-        public Matrix ModelMatrix
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
-
-        public Model Model
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
+        
         #region IDrawable Members
 
+        public GameObject(Model model)
+        {
+            Model = model;
+        }
         public virtual GameObjectDrawer GetDrawer()
         {
-            
+            return new GameObjectDrawer(this);
         }
 
-        #endregion
 
         public void Update()
         {
             
         }
 
-        #region IDrawable Members
 
+        public Matrix ModelMatrix
+        {
+            get
+            {
+                return Matrix.CreateScale(0.0005f, 0.0005f, 0.0005f) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(new Vector3(19, 12, -5));
+            }
+            
+
+        }
+
+        public Model Model
+        {
+            get; set;
+        }
 
         #endregion
     }

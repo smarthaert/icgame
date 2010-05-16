@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
     public class StaticObject : GameObject, IPhysical, IDestructible
     {
+        public StaticObject(Model model)
+            : base(model)
+        {
+            
+        }
         #region IPhysical Members
 
         public int BoundingBox

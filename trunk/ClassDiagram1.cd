@@ -19,13 +19,13 @@
     </Compartments>
     <AssociationLine Name="AI" Type="ICGame.AI" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="3.5" Y="1.406" />
-        <Point X="2.938" Y="1.406" />
+        <Point X="3.5" Y="1.352" />
+        <Point X="2.938" Y="1.352" />
         <Point X="2.938" Y="8.25" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>EQQCmEAAIAAACwAAAAgAAQAAAAEAAAgAAAAAAAAAAAQ=</HashCode>
+      <HashCode>EQQCmEAAIAAACwAAAAAAAQAAAAEAAAgAAAAAAAAAAAQ=</HashCode>
       <FileName>Game.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -60,13 +60,12 @@
   <Class Name="ICGame.Campaign">
     <Position X="10" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAABAAAAAAAAAQAAAAAAAABAAAAgAAAgAAAAAIAA=</HashCode>
+      <HashCode>AAAAAABAAAAAAAAAQAAAAAAAAJAAAAgAAAgAAAAAIAA=</HashCode>
       <FileName>Campaign.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="UnitContainer" />
       <Property Name="Mission" />
-      <Property Name="ObjectFactory" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.Mission">
@@ -104,7 +103,7 @@
   <Class Name="ICGame.Display">
     <Position X="12" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAACAAAAAAAAAgAAAAAAAAAAAAEAAAQAAAgAAAAAAAA=</HashCode>
+      <HashCode>EAACCAAAAgAAAgAAAAAAAAAAAAEAAAwAAAAAAAAAAAA=</HashCode>
       <FileName>Display.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -126,14 +125,14 @@
   <Class Name="ICGame.GameObjectFactory">
     <Position X="12.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAAAAAAAIABA=</HashCode>
       <FileName>ObjectFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObject">
-    <Position X="17.25" Y="1.5" Width="1.5" />
+    <Position X="17.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
       <FileName>Object.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -254,9 +253,9 @@
     </TypeIdentifier>
   </Class>
   <Interface Name="ICGame.IDrawable">
-    <Position X="14.5" Y="1.5" Width="1.5" />
+    <Position X="14.5" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
       <FileName>IDrawable.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -296,9 +295,9 @@
     </TypeIdentifier>
   </Interface>
   <Enum Name="ICGame.GameObjectID">
-    <Position X="12.5" Y="6.75" Width="1.5" />
+    <Position X="12.5" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
       <FileName>GameObjectID.cs</FileName>
     </TypeIdentifier>
   </Enum>
