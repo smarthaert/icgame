@@ -27,20 +27,16 @@ namespace ICGame
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
         private Effect effect;
-      
-
-        UserInterfaceController userInterfaceController;
-        
 
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+     
             Campaign = new Campaign();
             Camera=new Camera();
-            
+            UserInterfaceController = new UserInterfaceController(Camera, Campaign);
             Campaign.GameState = GameState.Initialize;
 
         }
@@ -49,63 +45,47 @@ namespace ICGame
 
         public UserInterfaceController UserInterfaceController
         {
-            get
-            {
-                return userInterfaceController;
-            }
+            get; set;
         }
 
         public Campaign Campaign
+        {
+            get; set;
+        }
+
+        public Display Display
+        {
+            get; set;
+        }
+
+        public AI AI
+        { 
+            get; set; 
+        }
+
+        public GameEventController GameEventController
+        {
+            get; set;
+        }
+
+        public GameInfo GameInfo
+        {
+            get; set;
+        }
+
+        public Camera Camera
         {
             get;
             set;
         }
 
-        public Display Display
+        public UserInterface UserInterface
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get;
+            set;
         }
-
-        public AI AI
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
-
-        public GameEventController GameEventController
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
-
         #endregion
 
-        public GameInfo GameInfo
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
 
 
         /// <summary>
@@ -116,15 +96,8 @@ namespace ICGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-
-            userInterfaceController = new UserInterfaceController(Camera,Campaign);
-
-
-
             base.Initialize();
-
+            Display = new Display(graphics, UserInterface, Camera, effect);
             Campaign.GameState = GameState.MainMenu;
         }
 
@@ -138,7 +111,6 @@ namespace ICGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             effect = Content.Load<Effect>("effects");
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -147,7 +119,7 @@ namespace ICGame
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            
         }
 
         /// <summary>
@@ -187,61 +159,11 @@ namespace ICGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-            //TYMCZASOWE
-            VertexPositionColor [] vertices = new VertexPositionColor[3];
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f,300.0f);
-            Matrix view = Camera.CameraMatrix;
-            Matrix worldMatrix = Matrix.Identity;
-
-            effect.Parameters["xView"].SetValue(view);
-            effect.Parameters["xProjection"].SetValue(projection);
-            effect.Parameters["xWorld"].SetValue(worldMatrix);
- 
-            vertices[0].Position = new Vector3(-0.5f, -0.5f, 0f);
-            vertices[0].Color = Color.Red;
-            vertices[1].Position = new Vector3(0, 0.5f, 0f);
-            vertices[1].Color = Color.Green;
-            vertices[2].Position = new Vector3(0.5f, -0.5f, 0f);
-            vertices[2].Color = Color.Yellow;
-
-            VertexDeclaration myVertexDeclaration = new VertexDeclaration(graphics.GraphicsDevice, VertexPositionColor.VertexElements);
-
-
-            effect.CurrentTechnique = effect.Techniques["Colored"];
-            effect.Begin();
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-            {
-                pass.Begin();
-
-                graphics.GraphicsDevice.VertexDeclaration = myVertexDeclaration;
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
-
-                pass.End();
-            }
-            effect.End();
-            //TYMCZASOWE
-
-            base.Draw(gameTime);
+           
+           Display.Draw();
+           base.Draw(gameTime);
         }
 
-        public Camera Camera
-        {
-            get;
-            set;
-        }
-
-        public UserInterface UserInterface
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
+    
     }
 }

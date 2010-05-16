@@ -9,41 +9,24 @@ namespace ICGame
     
         public Campaign()
         {
-            
+            UnitContainer = new UnitContainer();
+            GameObjectFactory = new GameObjectFactory();
         }
-    
+
 
         public UnitContainer UnitContainer
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get; set;
         }
 
         public Mission Mission
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get; set;
         }
 
-        public GameObjectFactory ObjectFactory
+        public GameObjectFactory GameObjectFactory
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get; set;
         }
 
         public GameState GameState
@@ -59,7 +42,11 @@ namespace ICGame
 
         public void BuyUnit(GameObjectID gameObjectID)
         {
-            throw new System.NotImplementedException();
+            GameObject gameObject = GameObjectFactory.CreateGameObject(gameObjectID);
+            if(gameObject.GetType() == typeof(Unit))
+            {
+                UnitContainer.Units.Add(gameObject as Unit);
+            }
         }
 
         public void SendToMission(Unit unit)

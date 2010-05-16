@@ -6,14 +6,14 @@ namespace ICGame
 {
     public class GameObjectFactory
     {
-        public GameObjectFactory(Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice)
+        public GameObjectFactory()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public GameObject CreateGameObject(GameObjectID gameObjectID)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public List<GameObject> GetAvaliableUnits()

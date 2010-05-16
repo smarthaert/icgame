@@ -6,6 +6,15 @@ namespace ICGame
 {
     public class UnitContainer
     {
-        private List<Unit> units;
+        public List<Unit> Units
+        {
+            get; set;
+        }
+
+        public UnitContainer()
+        {
+            Units = new List<Unit>();
+        }
+
     }
 }
