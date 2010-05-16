@@ -9,6 +9,7 @@ namespace ICGame
     {
 
         private Model model1;
+        private List<Texture2D> texture2Ds;
 
         public GameObjectFactory()
         {
@@ -17,7 +18,24 @@ namespace ICGame
 
         public void LoadModels(Game game)
         {
-            model1 = game.Content.Load<Model>("xwing");
+            model1 = game.Content.Load<Model>("car");
+            texture2Ds = new List<Texture2D>();
+            foreach (ModelMesh mesh in model1.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    texture2Ds.Add(effect.Texture);
+                }
+            }
+
+            foreach (ModelMesh mesh in model1.Meshes)
+            {
+                foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
+                }
+                
+            }
         }
 
         public GameObject CreateGameObject(GameObjectID gameObjectID)
@@ -25,7 +43,9 @@ namespace ICGame
 
             if (gameObjectID==GameObjectID.xwing)
             {
-                return new Unit(model1);
+                Unit unit = new Unit(model1);
+                unit.Textures = texture2Ds;
+                return unit;
             }
             return null;
         }

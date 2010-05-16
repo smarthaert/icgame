@@ -27,7 +27,7 @@ namespace ICGame
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private Effect effect;
+        public Effect effect;   //nie patrzeæ
 
         public Game()
         {
@@ -99,7 +99,7 @@ namespace ICGame
         protected override void Initialize()
         {
             base.Initialize();
-            Display = new Display(graphics, UserInterface, Camera, effect);
+            Display = new Display(graphics, UserInterface, Camera, Campaign, effect);
             Campaign.GameState = GameState.MainMenu;
         }
 
@@ -112,7 +112,8 @@ namespace ICGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
-
+            Campaign.GameObjectFactory.LoadModels(this);
+            Campaign.BuyUnit(GameObjectID.xwing);
         }
 
         /// <summary>

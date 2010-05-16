@@ -31,7 +31,7 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateScale(0.0005f, 0.0005f, 0.0005f) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(new Vector3(19, 12, -5));
+                return Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(new Vector3(0,0,0));
             }
             
 
@@ -39,6 +39,11 @@ namespace ICGame
 
         public Model Model
         {
+            get; set;
+        }
+
+        public List<Texture2D> Textures
+        { 
             get; set;
         }
 

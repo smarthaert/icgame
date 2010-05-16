@@ -17,12 +17,13 @@ namespace ICGame
         private Matrix projectionMatrix;
 
 
-        public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, Effect effect)
+        public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, Campaign campaign, Effect effect)
         {
             graphics = graphicsDeviceManager;
             graphicsDevice = graphics.GraphicsDevice;
             UserInterface = userInterface;
             Camera = camera;
+            Campaign = campaign;
             this.effect = effect;
 
         }
@@ -53,7 +54,7 @@ namespace ICGame
 
             // TODO: Add your drawing code here
             //TYMCZASOWE
-            VertexPositionColor[] vertices = new VertexPositionColor[3];
+            /*VertexPositionColor[] vertices = new VertexPositionColor[3];
             Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
             Matrix view = Camera.CameraMatrix;
             Matrix worldMatrix = Matrix.Identity;
@@ -83,8 +84,16 @@ namespace ICGame
 
                 pass.End();
             }
-            effect.End();
+            effect.End();*/
             //TYMCZASOWE
+
+            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
+            Matrix view = Camera.CameraMatrix;
+
+            foreach (Unit unit in Campaign.UnitContainer.Units)
+            {
+                unit.GetDrawer().Draw(projection,view);
+            }
 
         }
     }

@@ -21,12 +21,16 @@ namespace ICGame
 
         public virtual void Draw(Matrix projection, Matrix view)
         {
+            Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
+            GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
+            int i = 0;
             foreach (var model in GameObject.Model.Meshes)
             {
-                foreach (var effect in model.Effects)
+                foreach (Effect effect in model.Effects)
                 {
-                    effect.CurrentTechnique = effect.Techniques["Colored"];
-                    effect.Parameters["xWorld"].SetValue(GameObject.ModelMatrix);
+                    effect.CurrentTechnique = effect.Techniques["Textured"];
+                    effect.Parameters["xTexture"].SetValue(GameObject.Textures[i++]);
+                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix);
                     effect.Parameters["xView"].SetValue(view);
                     effect.Parameters["xProjection"].SetValue(projection);
                 }
