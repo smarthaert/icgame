@@ -7,26 +7,19 @@ namespace ICGame
 {
     public class Camera
     {
-        private float pitch = 0;
-        private float yaw = 0;
-        private float roll = 0;
-
-        private Vector3 forward = new Vector3(1, 0, 0);
-        private Vector3 up = new Vector3(0, 1, 0);
-        private Vector3 side = new Vector3(0, 0, 0);
-
-        private Vector3 position = new Vector3(0, 0, 50);
+       
+        private Vector3 lookAtPosition = new Vector3(0, 0, 0);
+        private Quaternion rotation = Quaternion.Identity;
+        private Vector3 cameraPosition=new Vector3(0,0,0);
 
         public Camera()
         {
 
         }
 
-        public Camera(Vector3 forward, Vector3 up, Vector3 position)
+        public Camera(Vector3 position)
         {
-            this.forward = forward;
-            this.position = position;
-            this.up = up;
+            lookAtPosition = position;   
         }
 
 
@@ -39,39 +32,22 @@ namespace ICGame
             get
             {
                 CalculateCamera();
-                Vector3 temporary = position + forward;
-              //  temporary.Y = 0;
-                //temporary.Z -= position.Y;
-                return Matrix.CreateLookAt(position, temporary, up);
+                return Matrix.CreateLookAt(cameraPosition, new Vector3(lookAtPosition.X,0,lookAtPosition.Z), Vector3.Transform(new Vector3(0,1,0),Matrix.CreateFromQuaternion(rotation)));
+                
             }
         }
 
         private void CalculateCamera()
         {
-            float cosY = (float)Math.Cos(yaw);
-            float cosP = (float)Math.Cos(pitch);
-            float cosR = (float)Math.Cos(roll);
-
-            float sinY = (float)Math.Sin(yaw);
-            float sinP = (float)Math.Sin(pitch);
-            float sinR = (float)Math.Sin(roll);
-
-            forward.X = sinY * cosP;
-            forward.Y = sinP;
-            forward.Z = cosP * -cosY;
-
-            //up = Vector3.up;
-            up.X = -cosY * sinR - sinY * sinP * cosR;
-            up.Y = cosP * cosR;
-            up.Z = -sinY * sinR - sinP * cosR * -cosY;
-
-            side = Vector3.Cross(forward, up);
+            cameraPosition = Vector3.Transform(new Vector3(0, 0, 20.0f), Matrix.CreateFromQuaternion(rotation))+ lookAtPosition;
 
         }
 
         public void Rotate(float angle)
         {
-            yaw += angle/4;
+            Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0),angle);     
+            rotation *= additionalRot;            
+
         }
 
         /// <summary>
@@ -83,19 +59,15 @@ namespace ICGame
 
         public void Move(float dX, float dZ)
         {
-            Vector3 tempForward = forward;
-            tempForward.Y = 0;
-            position += dZ * tempForward;
-            position += dX * side;
-
-
+            lookAtPosition += dZ * Vector3.Transform(new Vector3(0, 0, -1), Matrix.CreateFromQuaternion(rotation));
+            lookAtPosition += dX * Vector3.Transform(new Vector3(1, 0, 0), Matrix.CreateFromQuaternion(rotation)); 
         }
 
-        public void ChangeHeight(float delta)
+        public void ChangeHeight(float dY)
         {
-            position += delta*6*up;
-              pitch -= delta/2;
-            Move(0,-delta*5);
+            
+            lookAtPosition += dY * Vector3.Transform(new Vector3(0, 1, 0), Matrix.CreateFromQuaternion(rotation));
+            Move(0,-dY);
 
 
         }
