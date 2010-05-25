@@ -21,6 +21,7 @@ namespace ICGame
         {
             graphics = graphicsDeviceManager;
             graphicsDevice = graphics.GraphicsDevice;
+            graphicsDevice.RenderState.CullMode = CullMode.None;
             UserInterface = userInterface;
             Camera = camera;
             Campaign = campaign;
@@ -48,7 +49,7 @@ namespace ICGame
             get; set;
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             graphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -92,6 +93,7 @@ namespace ICGame
 
             foreach (Unit unit in Campaign.UnitContainer.Units)
             {
+                unit.Animate(gameTime);
                 unit.GetDrawer().Draw(projection,view);
             }
 

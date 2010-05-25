@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
@@ -18,7 +19,7 @@ namespace ICGame
 
         public void LoadModels(Game game)
         {
-            model1 = game.Content.Load<Model>("car");
+            model1 = game.Content.Load<Model>("firetruck");
             texture2Ds = new List<Texture2D>();
             foreach (ModelMesh mesh in model1.Meshes)
             {
@@ -41,9 +42,9 @@ namespace ICGame
         public GameObject CreateGameObject(GameObjectID gameObjectID)
         {
 
-            if (gameObjectID==GameObjectID.xwing)
+            if (gameObjectID==GameObjectID.FireTruck)
             {
-                Unit unit = new Unit(model1);
+                Vehicle unit = new Vehicle(model1,1.0f, 6);
                 unit.Textures = texture2Ds;
                 return unit;
             }

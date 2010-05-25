@@ -9,7 +9,8 @@ namespace ICGame
 {
     public class GameObjectDrawer
     {
-        private static float angle = 0;
+        private static double angle = 0;
+        private static double div = 0;
         public GameObjectDrawer(GameObject gameObject)
         {
             GameObject = gameObject;
@@ -20,13 +21,22 @@ namespace ICGame
             get; set;
         }
 
+        public EffectDrawer EffectDrawer
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         public virtual void Draw(Matrix projection, Matrix view)
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
-            transforms[GameObject.Model.Bones["rueda_1"].Index] = Matrix.CreateRotationX(angle)*
-                                                            transforms[GameObject.Model.Bones["rueda_1"].Index];
-            angle += 0.1f;
+            
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)
             {
