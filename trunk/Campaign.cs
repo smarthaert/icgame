@@ -43,9 +43,9 @@ namespace ICGame
         public void BuyUnit(GameObjectID gameObjectID)
         {
             GameObject gameObject = GameObjectFactory.CreateGameObject(gameObjectID);
-            if(gameObject.GetType() == typeof(Unit))
+            if(gameObject.GetType() == typeof(Vehicle))
             {
-                UnitContainer.Units.Add(gameObject as Unit);
+                UnitContainer.Units.Add(gameObject as Vehicle);
             }
         }
 

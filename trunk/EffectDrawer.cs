@@ -4,9 +4,7 @@ using System.Text;
 
 namespace ICGame
 {
-    public enum GameObjectID
+    public class EffectDrawer
     {
-        xwing,
-        FireTruck,
     }
 }

@@ -6,6 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
+    public enum Direction
+    {
+        Forward,Backward,Left,Right,None
+    }
+    
     public abstract class GameObject : IDrawable
     {
         
@@ -31,7 +36,7 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(new Vector3(0,0,0));
+                return Matrix.CreateScale(0.01f, 0.01f, 0.01f) * Matrix.CreateRotationY(3*MathHelper.PiOver2) /** Matrix.CreateRotationX(MathHelper.PiOver2) */* Matrix.CreateTranslation(new Vector3(0,0,0));
             }
             
 
@@ -48,5 +53,16 @@ namespace ICGame
         }
 
         #endregion
+
+        public Vector3 Position
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
     }
 }

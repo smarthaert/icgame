@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
@@ -80,6 +81,20 @@ namespace ICGame
                 throw new NotImplementedException();
             }
         }
+
+        #endregion
+
+        #region IAnimated Members
+
+        public void Animate(GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region IAnimated Members
+
 
         #endregion
     }

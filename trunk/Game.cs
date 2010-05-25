@@ -32,6 +32,7 @@ namespace ICGame
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+            
             Content.RootDirectory = "Content";
 
             Campaign = new Campaign();
@@ -101,6 +102,7 @@ namespace ICGame
             base.Initialize();
             Display = new Display(graphics, UserInterface, Camera, Campaign, effect);
             Campaign.GameState = GameState.MainMenu;
+            
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace ICGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             Campaign.GameObjectFactory.LoadModels(this);
-            Campaign.BuyUnit(GameObjectID.xwing);
+            Campaign.BuyUnit(GameObjectID.FireTruck);
         }
 
         /// <summary>
@@ -163,7 +165,7 @@ namespace ICGame
         protected override void Draw(GameTime gameTime)
         {
            
-           Display.Draw();
+           Display.Draw(gameTime);
            base.Draw(gameTime);
         }
 
