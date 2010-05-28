@@ -51,7 +51,7 @@ namespace ICGame
 
         public void CalculateCamera()
         {
-            cameraPosition = Vector3.Transform(new Vector3(0, 0, 20.0f), Matrix.CreateFromQuaternion(rotation))+ lookAtPosition;
+            cameraPosition = Vector3.Transform(new Vector3(0, 30, 20.0f), Matrix.CreateFromQuaternion(rotation))+ lookAtPosition;
 
         }
 

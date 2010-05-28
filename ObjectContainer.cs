@@ -1,16 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
     public class GameObjectContainer
     {
-        private List<GameObject> gameObjects;
+        private Board Board
+        {
+            get; set;
+        }
+        public GameObjectContainer(Board board)
+        {
+            Board = board;
+            GameObjects=new List<GameObject>();
+        }
+        public List<GameObject> GameObjects
+        {
+            get; set;
+        }
+            
 
         public void UpdateGameObjects()
         {
-            throw new System.NotImplementedException();
+            for (int i=0;i<GameObjects.Count;i++)
+            {
+                GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,Board.GetHeight((int)GameObjects[i].Position.X,(int)GameObjects[i].Position.Z),GameObjects[i].Position.Z);
+            }
         }
     }
 }

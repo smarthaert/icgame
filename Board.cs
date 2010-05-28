@@ -40,8 +40,8 @@ namespace ICGame
             {
                 for (int j = 0; j < terrainHeight; j++)
                 {
-                    vertexArray.Add(new VertexPositionColor(new Vector3(i, heightMap[i, j]-20, j),
-                                                            new Color(0, 0, (byte)(heightMap[i, j]*10-40), 1)));
+                    vertexArray.Add(new VertexPositionColor(new Vector3(i, heightMap[i, j], j),
+                                                            new Color(0, 0, (byte)(heightMap[i, j]*10+20), 1)));
                 }
             }
             vertexPositionColor = (VertexPositionColor[]) vertexArray.ToArray(typeof (VertexPositionColor));
@@ -80,6 +80,14 @@ namespace ICGame
         public void GetTileInfo(int X, int Y)
         {
             
+        }
+
+        public float GetHeight(int x, int y)
+        {
+            //TODO: Interpolacja
+            if (x < 0 || y < 0 || x >= terrainWidth || y >= terrainHeight)
+                return 0;
+            return heightMap[x, y];
         }
 
         public Microsoft.Xna.Framework.Vector3 GetNormal(int X, int Y, int objectWidth, int objectLength, float angle)

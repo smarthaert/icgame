@@ -26,7 +26,7 @@ namespace ICGame
     {
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        SpriteBatch spriteBatch; 
         public Effect effect;   //nie patrzeæ
 
         public Game()
@@ -39,7 +39,7 @@ namespace ICGame
             Camera=new Camera();
 
             UserInterfaceController = new UserInterfaceController(Camera, Campaign);
-            
+            UserInterface=new UserInterface(Campaign);
             Campaign.GameState = GameState.Initialize;
 
         }
@@ -114,8 +114,11 @@ namespace ICGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
+            UserInterface.LoadGraphics(this);
             Campaign.GameObjectFactory.LoadModels(this);
             Campaign.BuyUnit(GameObjectID.FireTruck); 
+            Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
+
             Texture2D heightMap = Content.Load<Texture2D>("heightmap");
             Campaign.Mission.Board.LoadHeightData(heightMap);
         }
@@ -139,7 +142,7 @@ namespace ICGame
             // Allows the game to exit
 
             UserInterfaceController.UpdateInput();
-
+            Campaign.Mission.ObjectContainer.UpdateGameObjects(); //temp
             switch (Campaign.GameState)
             {
                 case GameState.Initialize:

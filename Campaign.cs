@@ -54,7 +54,7 @@ namespace ICGame
 
         public void SendToMission(Unit unit)
         {
-            throw new System.NotImplementedException();
+            Mission.ObjectContainer.GameObjects.Add(unit);
         }
     }
 }

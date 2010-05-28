@@ -19,6 +19,8 @@ namespace ICGame
         public GameObject(Model model)
         {
             Model = model;
+            Position = new Vector3(0, 0, 0);
+            
         }
         public virtual GameObjectDrawer GetDrawer()
         {
@@ -36,7 +38,7 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateScale(0.01f, 0.01f, 0.01f) * Matrix.CreateRotationY(3*MathHelper.PiOver2) /** Matrix.CreateRotationX(MathHelper.PiOver2) */* Matrix.CreateTranslation(new Vector3(0,0,0));
+                return Matrix.CreateScale(0.01f, 0.01f, 0.01f) * Matrix.CreateRotationY(3*MathHelper.PiOver2) /** Matrix.CreateRotationX(MathHelper.PiOver2) */* Matrix.CreateTranslation(Position);
             }
             
 
