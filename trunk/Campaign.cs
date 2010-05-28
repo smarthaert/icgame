@@ -11,6 +11,9 @@ namespace ICGame
         {
             UnitContainer = new UnitContainer();
             GameObjectFactory = new GameObjectFactory();
+            //TEMP
+            Mission = new Mission();
+            //\TEMP
         }
 
 

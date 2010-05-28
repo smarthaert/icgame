@@ -31,13 +31,25 @@ namespace ICGame
         {
             get
             {
-                CalculateCamera();
+                //CalculateCamera();
                 return Matrix.CreateLookAt(cameraPosition, new Vector3(lookAtPosition.X,0,lookAtPosition.Z), Vector3.Transform(new Vector3(0,1,0),Matrix.CreateFromQuaternion(rotation)));
                 
             }
         }
 
-        private void CalculateCamera()
+        public Vector3 CameraPosition
+        {
+            get
+            {
+                return cameraPosition;
+            }
+            set
+            {
+                cameraPosition = value;
+            }
+        }
+
+        public void CalculateCamera()
         {
             cameraPosition = Vector3.Transform(new Vector3(0, 0, 20.0f), Matrix.CreateFromQuaternion(rotation))+ lookAtPosition;
 

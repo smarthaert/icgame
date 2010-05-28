@@ -11,6 +11,12 @@ namespace ICGame
 
         private Model model1;
         private List<Texture2D> texture2Ds;
+        private List<Vector3> diffuse;
+        private List<double> ambient;
+        private List<Vector3> specular;
+        private List<double> shininess;
+        private List<double> alpha;
+        private List<float> specularFactor;
 
         public GameObjectFactory()
         {
@@ -21,11 +27,22 @@ namespace ICGame
         {
             model1 = game.Content.Load<Model>("firetruck");
             texture2Ds = new List<Texture2D>();
+            diffuse = new List<Vector3>();
+            specular = new List<Vector3>();
+            ambient = new List<double>();
+            alpha = new List<double>();
+            specularFactor = new List<float>();
             foreach (ModelMesh mesh in model1.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     texture2Ds.Add(effect.Texture);
+                    diffuse.Add(effect.Parameters["DiffuseColor"].GetValueVector3());
+                    //ambient.Add(effect.Parameters["AmbientFactor"].GetValueSingle());
+                    specular.Add(effect.SpecularColor);
+                    //shininess.Add(effect.);
+                    alpha.Add(effect.Alpha);
+                    specularFactor.Add(effect.SpecularPower);
                 }
             }
 

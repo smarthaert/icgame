@@ -9,8 +9,6 @@ namespace ICGame
 {
     public class GameObjectDrawer
     {
-        private static double angle = 0;
-        private static double div = 0;
         public GameObjectDrawer(GameObject gameObject)
         {
             GameObject = gameObject;
@@ -32,7 +30,7 @@ namespace ICGame
             }
         }
 
-        public virtual void Draw(Matrix projection, Matrix view)
+        public virtual void Draw(Matrix projection, Camera camera)
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -42,10 +40,16 @@ namespace ICGame
             {
                 foreach (Effect effect in model.Effects)
                 {
-                    effect.CurrentTechnique = effect.Techniques["Textured"];
+                    effect.CurrentTechnique = effect.Techniques["TexturedShaded"];
+                    effect.Parameters["xEnableLighting"].SetValue(true); 
+                    Vector3 lightDirection = new Vector3(0.5f, 0, -1.0f);
+                    lightDirection.Normalize();
+                    effect.Parameters["xLightDirection"].SetValue(lightDirection);
+                    effect.Parameters["xAmbient"].SetValue(0.2f);
+                    effect.Parameters["xCameraPosition"].SetValue(camera.CameraPosition);
                     effect.Parameters["xTexture"].SetValue(GameObject.Textures[i++]);
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix);
-                    effect.Parameters["xView"].SetValue(view);
+                    effect.Parameters["xView"].SetValue(camera.CameraMatrix);
                     effect.Parameters["xProjection"].SetValue(projection);
                 }
                 model.Draw();

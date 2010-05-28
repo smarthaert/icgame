@@ -24,6 +24,7 @@ float4x4 xView;
 float4x4 xProjection;
 float4x4 xWorld;
 float3 xLightDirection;
+float3 xCameraPosition;
 float xAmbient;
 bool xEnableLighting;
 bool xShowNormals;
@@ -116,6 +117,61 @@ technique Colored
 	{   
 		VertexShader = compile vs_1_1 ColoredVS();
 		PixelShader  = compile ps_1_1 ColoredPS();
+	}
+}
+
+//------- Technique: TexturedShaded --------
+
+VertexToPixel TexturedShadedVS( float4 inPos : POSITION, float3 inNormal: NORMAL, float2 inTexCoords: TEXCOORD0)
+{	
+	VertexToPixel Output = (VertexToPixel)0;
+	float4x4 preViewProjection = mul (xView, xProjection);
+	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
+    
+	Output.Position = mul(inPos, preWorldViewProjection);	
+	Output.TextureCoords = inTexCoords;
+	
+	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
+		
+	float4 V = normalize(float4(xCameraPosition.x,xCameraPosition.y,xCameraPosition.z,0)-mul(xView,mul(xWorld,inPos)));
+	float4 R = normalize(reflect(float4(xLightDirection,0),normalize(mul(xView,mul(xWorld,float4(inNormal.x,inNormal.y,inNormal.z,0))))));
+	
+	float RV = saturate(dot(R,V));
+	
+	Output.LightingFactor = 1;
+	if (xEnableLighting)
+		Output.LightingFactor = saturate(dot(Normal, -xLightDirection));
+	
+	
+    
+	return Output;    
+}
+
+PixelToFrame TexturedShadedPS(VertexToPixel PSIn) 
+{
+	PixelToFrame Output = (PixelToFrame)0;		
+	
+	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
+	Output.Color.rgb *= saturate(PSIn.LightingFactor + xAmbient);
+
+	return Output;
+}
+
+technique TexturedShaded_2_0
+{
+	pass Pass0
+	{   
+		VertexShader = compile vs_2_0 TexturedShadedVS();
+		PixelShader  = compile ps_2_0 TexturedShadedPS();
+	}
+}
+
+technique TexturedShaded
+{
+	pass Pass0
+	{   
+		VertexShader = compile vs_1_1 TexturedShadedVS();
+		PixelShader  = compile ps_1_1 TexturedShadedPS();
 	}
 }
 

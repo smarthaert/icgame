@@ -8,29 +8,17 @@ namespace ICGame
     {
         public Mission()
         {
-            
+            Board = new Board();
         }
     
         public GameObjectContainer ObjectContainer
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get; set;
         }
 
         public Board Board
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get; set;
         }
     }
 }

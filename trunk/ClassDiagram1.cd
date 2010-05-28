@@ -47,7 +47,7 @@
   <Class Name="ICGame.Camera">
     <Position X="5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAAAEAAACAAAAEEBAAAAAAAEAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAJAAAAEAAACAAAAEEBAAAAAAAEAAAAAAAAA=</HashCode>
       <FileName>Camera.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -77,7 +77,7 @@
   <Class Name="ICGame.Board">
     <Position X="10.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAEAAEAAAgABAAAAAAAAAAIAEAAAAAAAAAAAAgA=</HashCode>
+      <HashCode>CAQAQAEAAUAAAQABAAAAAAAAABIAEAgAACAEABAAAgA=</HashCode>
       <FileName>Board.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -120,14 +120,14 @@
   <Class Name="ICGame.GameObjectFactory">
     <Position X="12.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAABAAAAIABA=</HashCode>
+      <HashCode>QAABAAAAAAAAAAAAAACEAAoAAAAAAAAAAABQAABIABA=</HashCode>
       <FileName>ObjectFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObject">
     <Position X="17" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
+      <HashCode>AEQAAAAAAQAAAIBgAgAAAAAAAAAAAAAAAAgAAFAAgAA=</HashCode>
       <FileName>Object.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -135,13 +135,13 @@
   <Class Name="ICGame.Unit">
     <Position X="16.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAACCAAAAAAEAAAAQRAQAQCBAAQAEAABAAAAAAAI=</HashCode>
+      <HashCode>AAAgAACCAAAAAAEAAAAQRAQAQCBAAQAEAABAAAAAIAI=</HashCode>
       <FileName>Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Vehicle">
-    <Position X="16.75" Y="8" Width="1.5" />
+    <Position X="16.75" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEDAFAIAQAAACAAAAEgAAAQAAAAAAAAAAAAABAAAAgQ=</HashCode>
       <FileName>Vehicle.cs</FileName>
@@ -212,7 +212,7 @@
   <Class Name="ICGame.GameObjectDrawer">
     <Position X="25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAACAAAgAAAAAAAAAAAAAAAAAAAAAAAAJAAAA=</HashCode>
+      <HashCode>AAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
       <FileName>GameObjectDrawer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -255,10 +255,20 @@
       <FileName>EffectDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="ICGame.BoardDrawer">
+    <Position X="12.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>BoardDrawer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Board" />
+    </ShowAsAssociation>
+  </Class>
   <Interface Name="ICGame.IDrawable">
     <Position X="14.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAgAABAAgAA=</HashCode>
+      <HashCode>AEAAAAAAAQAAAIBAAgAAAAAAAAAAAAAAAAgAAFAAgAA=</HashCode>
       <FileName>IDrawable.cs</FileName>
     </TypeIdentifier>
   </Interface>
