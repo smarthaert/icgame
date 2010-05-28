@@ -9,6 +9,7 @@ namespace ICGame
         public Mission()
         {
             Board = new Board();
+            ObjectContainer=new GameObjectContainer(Board);
         }
     
         public GameObjectContainer ObjectContainer

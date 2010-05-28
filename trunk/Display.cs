@@ -23,6 +23,7 @@ namespace ICGame
             UserInterface = userInterface;
             Camera = camera;
             Campaign = campaign;
+           
             this.effect = effect;
 
         }
@@ -57,12 +58,15 @@ namespace ICGame
             //Matrix view = Camera.CameraMatrix;
             Camera.CalculateCamera();
 
-            foreach (Unit unit in Campaign.UnitContainer.Units)
+            foreach (GameObject gameObject in Campaign.Mission.ObjectContainer.GameObjects)
             {
-                unit.Animate(gameTime);
-                unit.GetDrawer().Draw(projection,Camera);
+                if(gameObject is IAnimated) 
+                ((IAnimated)gameObject).Animate(gameTime);
+                gameObject.GetDrawer().Draw(projection,Camera);
             }
             Campaign.Mission.Board.GetDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,projection);
+            UserInterface.Drawer.Draw();
+
         }
     }
 }

@@ -46,12 +46,12 @@ namespace ICGame
                 Campaign.GameState = GameState.Exit;
             }
             
-            if(curState.IsKeyDown(Keys.Left))
+            if(curState.IsKeyDown(Keys.Z))
             {
                 Camera.Move(-0.2f,0);
             }
             
-            if (curState.IsKeyDown(Keys.Right))
+            if (curState.IsKeyDown(Keys.X))
             {
                 Camera.Move(0.2f, 0);
             }
@@ -66,27 +66,42 @@ namespace ICGame
                 Camera.Move(0, -0.2f);
             }
 
-            if (curState.IsKeyDown(Keys.X))
+            if (curState.IsKeyDown(Keys.Right))
             {
-                Camera.Rotate(0.05f);
+                Camera.Rotate(0.01f);
             }
 
-            if (curState.IsKeyDown(Keys.Z))
+            if (curState.IsKeyDown(Keys.Left))
             {
-                Camera.Rotate(-0.05f);
+                Camera.Rotate(-0.01f);
             }
 
             if (curState.IsKeyDown(Keys.Q))
             {
-                Camera.ChangeHeight(0.01f);
+                Camera.ChangeHeight(0.1f);
             }
 
             if (curState.IsKeyDown(Keys.A))
             {
-                Camera.ChangeHeight(-0.01f);
+                Camera.ChangeHeight(-0.1f);
             }
 
-            
+            if (curState.IsKeyDown(Keys.I))
+            {
+                Campaign.UnitContainer.Units[0].Position+=new Vector3(0,0,0.2f);
+            }
+            if (curState.IsKeyDown(Keys.K))
+            {
+                Campaign.UnitContainer.Units[0].Position += new Vector3(0, 0, -0.2f);
+            }
+            if (curState.IsKeyDown(Keys.J))
+            {
+                Campaign.UnitContainer.Units[0].Position += new Vector3(0.2f, 0, 0);
+            }
+            if (curState.IsKeyDown(Keys.L))
+            {
+                Campaign.UnitContainer.Units[0].Position += new Vector3(-0.2f, 0, 0);
+            }
         }
 
         public void UpdateInput()
