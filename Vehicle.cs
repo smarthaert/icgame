@@ -114,24 +114,36 @@ namespace ICGame
         {
             float rot = 0;
             const float turningSpeed = 0.003f;
+            const float maxAngle = 0.5f*MathHelper.PiOver4;
             switch(wheelState)
             {
                 case WheelState.StraightRight:
                     rot = turningSpeed * gameTime.ElapsedGameTime.Milliseconds;
                     wheelAngle += rot;
-                    if (wheelAngle >= 0.5*MathHelper.PiOver4)
+                    if (wheelAngle >= maxAngle)
                     {
                         wheelState = WheelState.Right;
                         //TEMP
                         WheelState = WheelState.RightStraight;
                         //\TEMP
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
+                            Matrix.CreateRotationY(maxAngle - wheelAngle+rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
+                            Matrix.CreateRotationY(maxAngle - wheelAngle+rot);
+                        wheelAngle = maxAngle;
                     }
-                    AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] * 
-                        Matrix.CreateRotationY(rot);
-                    AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                        Matrix.CreateRotationY(rot);
+                    else
+                    {
+                        
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index] * 
+                            Matrix.CreateRotationY(rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
+                            Matrix.CreateRotationY(rot);
+                    }
                     break;
                 case WheelState.RightStraight:
                     rot = -turningSpeed * gameTime.ElapsedGameTime.Milliseconds;
@@ -142,31 +154,50 @@ namespace ICGame
                         //TEMP
                         WheelState = WheelState.StraightLeft;
                         //\TEMP
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
+                            Matrix.CreateRotationY(-wheelAngle+rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
+                            Matrix.CreateRotationY(-wheelAngle+rot);
+                        wheelAngle = 0;
                     }
-                    AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                        Matrix.CreateRotationY(rot);
-                    AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                        Matrix.CreateRotationY(rot);
+                    else
+                    {
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index]*
+                            Matrix.CreateRotationY(rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index]*
+                            Matrix.CreateRotationY(rot);
+                    }
                     break;
                 case WheelState.StraightLeft:
                     rot = -turningSpeed * gameTime.ElapsedGameTime.Milliseconds;
                     wheelAngle += rot;
-                    if (wheelAngle <= -0.5*MathHelper.PiOver4)
+                    if (wheelAngle <= -maxAngle)
                     {
                         wheelState = WheelState.Left;
                         //TEMP
                         WheelState = WheelState.LeftStraight;
                         //\TEMP
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
+                            Matrix.CreateRotationY(-maxAngle - wheelAngle + rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
+                            Matrix.CreateRotationY(-maxAngle - wheelAngle + rot);
+                        wheelAngle = -maxAngle;
                     }
-                    rot *= -1;
-                    AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                        Matrix.CreateRotationY(-rot);
-                    AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                        Matrix.CreateRotationY(-rot);
+                    else
+                    {
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index]*
+                            Matrix.CreateRotationY(rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index]*
+                            Matrix.CreateRotationY(rot);
+                    }
                     break;
                 case WheelState.LeftStraight:
                     rot = turningSpeed * gameTime.ElapsedGameTime.Milliseconds;
@@ -177,14 +208,23 @@ namespace ICGame
                         //TEMP
                         WheelState = WheelState.StraightRight;
                         //\TEMP
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
+                            Matrix.CreateRotationY(-wheelAngle+rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
+                            Matrix.CreateRotationY(-wheelAngle+rot);
+                        wheelAngle = 0;
                     }
-                    rot *= -1;
-                    AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                        Matrix.CreateRotationY(-rot);
-                    AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                        Matrix.CreateRotationY(-rot);
+                    else
+                    {
+                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel0"].Index]*
+                            Matrix.CreateRotationY(rot);
+                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
+                            AnimationTransforms[Model.Bones["Wheel1"].Index]*
+                            Matrix.CreateRotationY(rot);
+                    }
                     break;
             }
         }
@@ -196,14 +236,21 @@ namespace ICGame
             {
                 float rot = doorSpeed*gameTime.ElapsedGameTime.Milliseconds;
                 leftDoorAngle += rot;
-                if(leftDoorAngle >= MathHelper.PiOver2)
+                if (leftDoorAngle >= MathHelper.PiOver2)
                 {
+                    leftDoorState = DoorState.Open;
+                    //TEMP
                     leftDoorState = DoorState.Closing;
-                    rot = rot - leftDoorAngle + MathHelper.PiOver2;
+                    //\TEMP
+                    AnimationTransforms[Model.Bones["DoorLeft"].Index] =
+                        Matrix.CreateRotationY(MathHelper.PiOver2);
                 }
-                AnimationTransforms[Model.Bones["DoorLeft"].Index] =
-                    Matrix.CreateRotationY(rot) *
-                    AnimationTransforms[Model.Bones["DoorLeft"].Index];
+                else
+                {
+                    AnimationTransforms[Model.Bones["DoorLeft"].Index] =
+                        Matrix.CreateRotationY(rot)*
+                        AnimationTransforms[Model.Bones["DoorLeft"].Index];
+                }
             }
             else if (leftDoorState == DoorState.Closing)
             {
@@ -211,8 +258,12 @@ namespace ICGame
                 leftDoorAngle += rot;
                 if (leftDoorAngle <= 0)
                 {
+                    leftDoorState = DoorState.Closed;
+                    //TEMP
                     leftDoorState = DoorState.Opening;
-                    rot = rot - leftDoorAngle;
+                    //\TEMP
+                    AnimationTransforms[Model.Bones["DoorLeft"].Index] =
+                        Matrix.Identity;
                 }
                 AnimationTransforms[Model.Bones["DoorLeft"].Index] =
                     Matrix.CreateRotationY(rot) *
@@ -224,8 +275,12 @@ namespace ICGame
                 rightDoorAngle += rot;
                 if (rightDoorAngle >= MathHelper.PiOver2)
                 {
+                    rightDoorState = DoorState.Open;
+                    //TEMP
                     rightDoorState = DoorState.Closing;
-                    rot = rot - rightDoorAngle + MathHelper.PiOver2;
+                    //\TEMP
+                    AnimationTransforms[Model.Bones["DoorRight"].Index] =
+                        Matrix.CreateRotationY(-MathHelper.PiOver2);
                 }
                 AnimationTransforms[Model.Bones["DoorRight"].Index] =
                     Matrix.CreateRotationY(-rot) *
@@ -237,8 +292,12 @@ namespace ICGame
                 rightDoorAngle += rot;
                 if (rightDoorAngle <= 0)
                 {
+                    rightDoorState = DoorState.Closed;
+                    //TEMP
                     rightDoorState = DoorState.Opening;
-                    rot = rot - rightDoorAngle;
+                    //\TEMP
+                    AnimationTransforms[Model.Bones["DoorRight"].Index] =
+                        Matrix.Identity;
                 }
                 AnimationTransforms[Model.Bones["DoorRight"].Index] =
                     Matrix.CreateRotationY(-rot) *

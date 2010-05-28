@@ -56,13 +56,37 @@ namespace ICGame
 
         public Vector3 Position
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get; set;
         }
+
+        #region IDrawable Members
+
+
+        public Vector3 Diffuse
+        {
+            get; set;
+        }
+
+        public Vector3 Ambient
+        {
+            get; set;
+        }
+
+        public Vector3 Specular
+        {
+            get; set;
+        }
+
+        public Vector3 Shininess
+        {
+            get; set;
+        }
+
+        public float SpecularFactor
+        {
+            get; set;
+        }
+
+        #endregion
     }
 }

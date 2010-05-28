@@ -115,7 +115,9 @@ namespace ICGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             Campaign.GameObjectFactory.LoadModels(this);
-            Campaign.BuyUnit(GameObjectID.FireTruck);
+            Campaign.BuyUnit(GameObjectID.FireTruck); 
+            Texture2D heightMap = Content.Load<Texture2D>("heightmap");
+            Campaign.Mission.Board.LoadHeightData(heightMap);
         }
 
         /// <summary>
