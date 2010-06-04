@@ -82,15 +82,51 @@ namespace ICGame
             
         }
 
-        public float GetHeight(int x, int y)
+        public float GetHeight(float x, float y)
         {
-            //TODO: Interpolacja
             if (x < 0 || y < 0 || x >= terrainWidth || y >= terrainHeight)
                 return 0;
-            return heightMap[x, y];
+            int lx, ly, hx, hy;
+            if(x==0)
+            {
+                lx = 0;
+                hx = 0;
+            }
+            else
+            {
+                lx = Convert.ToInt32(Math.Floor(Convert.ToDouble(x)));
+                if(lx+1 < terrainWidth)
+                {
+                    hx = lx + 1;
+                }
+                else
+                {
+                    hx = lx;
+                }
+            }
+            if (y == 0)
+            {
+                ly = 0;
+                hy = 0;
+            }
+            else
+            {
+                ly = Convert.ToInt32(Math.Floor(Convert.ToDouble(y)));
+                if (ly + 1 < terrainWidth)
+                {
+                    hy = ly + 1;
+                }
+                else
+                {
+                    hy = ly;
+                }
+            }
+            x = x - lx;
+            y = y - ly;
+            return heightMap[lx, ly] + (heightMap[hx, ly] - heightMap[lx, ly]) * x + (heightMap[lx, hy] - heightMap[lx, ly]) * y + (heightMap[lx, ly] - heightMap[hx,ly] - heightMap[lx,hy] + heightMap[hx,hy])*x*y;
         }
 
-        public Microsoft.Xna.Framework.Vector3 GetNormal(int X, int Y, int objectWidth, int objectLength, float angle)
+        public Microsoft.Xna.Framework.Vector3 GetNormal(float X, float Y, float objectWidth, float objectLength, float angle)
         {
             return new Vector3();
         }

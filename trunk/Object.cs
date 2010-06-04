@@ -13,6 +13,7 @@ namespace ICGame
     
     public abstract class GameObject : IDrawable
     {
+        private Vector3 position;
         
         #region IDrawable Members
 
@@ -38,7 +39,7 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateScale(0.01f, 0.01f, 0.01f) * Matrix.CreateRotationY(3*MathHelper.PiOver2) /** Matrix.CreateRotationX(MathHelper.PiOver2) */* Matrix.CreateTranslation(Position);
+                return Matrix.CreateScale(0.01f, 0.01f, 0.01f) /** Matrix.CreateRotationY(3*MathHelper.PiOver2)*/ * Matrix.CreateRotationZ(-MathHelper.PiOver2) * Matrix.CreateTranslation(Position);
             }
             
 
@@ -58,7 +59,14 @@ namespace ICGame
 
         public Vector3 Position
         {
-            get; set;
+            get
+            {
+                return position;
+            } 
+            set
+            {
+                position = new Vector3(value.X,value.Y,value.Z);
+            }
         }
 
         #region IDrawable Members

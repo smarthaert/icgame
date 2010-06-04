@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
     public interface IPhysical
     {
-        int BoundingBox
+        BoundingBox BoundingBox
         {
             get;
             set;

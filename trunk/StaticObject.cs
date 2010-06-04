@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
@@ -14,7 +15,7 @@ namespace ICGame
         }
         #region IPhysical Members
 
-        public int BoundingBox
+        public BoundingBox BoundingBox
         {
             get
             {

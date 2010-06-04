@@ -16,7 +16,7 @@ namespace ICGame
 
         #region IPhysical Members
 
-        public int BoundingBox
+        public BoundingBox BoundingBox
         {
             get
             {

@@ -88,27 +88,44 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="kolo.png">
-      <Name>kolo</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="wszystko.png">
-      <Name>wszystko</Name>
+    <Compile Include="heightmap.bmp">
+      <Name>heightmap</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="firetruck.fbx">
+    <Compile Include="_models\firetruck.fbx">
       <Name>firetruck</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="heightmap.bmp">
-      <Name>heightmap</Name>
+    <Compile Include="_models\textures\firetruck\backwheel.png">
+      <Name>backwheel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="_models\textures\firetruck\bodywork.png">
+      <Name>bodywork</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="_models\textures\firetruck\frontwheel.png">
+      <Name>frontwheel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="_models\textures\firetruck\watercannon.png">
+      <Name>watercannon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="rightUIPanel.png">
+      <Name>rightUIPanel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -25,7 +25,7 @@ namespace ICGame
 
         public void LoadModels(Game game)
         {
-            model1 = game.Content.Load<Model>("firetruck");
+            model1 = game.Content.Load<Model>("_models/firetruck");
             texture2Ds = new List<Texture2D>();
             diffuse = new List<Vector3>();
             specular = new List<Vector3>();
