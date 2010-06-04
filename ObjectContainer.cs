@@ -26,7 +26,8 @@ namespace ICGame
         {
             for (int i=0;i<GameObjects.Count;i++)
             {
-                GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,Board.GetHeight((int)GameObjects[i].Position.X,(int)GameObjects[i].Position.Z),GameObjects[i].Position.Z);
+                GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,Board.GetHeight(GameObjects[i].Position.X,GameObjects[i].Position.Z),GameObjects[i].Position.Z);
+                
             }
         }
     }

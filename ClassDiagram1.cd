@@ -77,7 +77,7 @@
   <Class Name="ICGame.Board">
     <Position X="10.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAQAQAEAAUAAAQABAAAAAAAAABIAEAgAACAEABAAAgA=</HashCode>
+      <HashCode>CAQAQAEAAUAAAQABAAAAAABAABIAEAgAACAEABAAAgA=</HashCode>
       <FileName>Board.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -91,14 +91,14 @@
   <Class Name="ICGame.GameObjectContainer">
     <Position X="8" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>ObjectContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Display">
     <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAACCAAAAiAAAgAAAAAAAgAAAAEAAAwAAAAAAAAAAAA=</HashCode>
+      <HashCode>EAACCAAAAgAAAgAAAAAAAAAAAAEAAAwAAAAAAAAAAAA=</HashCode>
       <FileName>Display.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -110,7 +110,7 @@
   <Class Name="ICGame.UserInterfaceDraw">
     <Position X="12.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>EAAAAAAAAAAAAgAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>UserInterfaceDraw.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -125,15 +125,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObject">
-    <Position X="17" Y="0.5" Width="1.5" />
+    <Position X="16.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEQAAAAAAQAAAIBgAgAAAAAAAAAAAAAAAAgAAFAAgAA=</HashCode>
+      <HashCode>AEQAAAAAAQAAAIBgAgAAIAAAAAAAAAAAAAgAAFAAgAA=</HashCode>
       <FileName>Object.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Unit">
-    <Position X="16.75" Y="3.75" Width="1.5" />
+    <Position X="16.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAACCAAAAAAEAAAAQRAQAQCBAAQAEAABAAAAAIAI=</HashCode>
       <FileName>Unit.cs</FileName>
@@ -141,7 +141,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Vehicle">
-    <Position X="16.75" Y="9.25" Width="1.5" />
+    <Position X="16.75" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEDAFAIAQAAACAAAAEgAAAQAAAAAAAAAAAAABAAAAgQ=</HashCode>
       <FileName>Vehicle.cs</FileName>
@@ -202,7 +202,7 @@
   <Class Name="ICGame.UserInterface">
     <Position X="7" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AEAAgAAAAAAAAAAAAAAAEAAAAAkAAAGQAAAAEAAAAAA=</HashCode>
       <FileName>UserInterface.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -266,14 +266,14 @@
     </ShowAsAssociation>
   </Class>
   <Interface Name="ICGame.IDrawable">
-    <Position X="14.5" Y="0.75" Width="1.5" />
+    <Position X="14.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAAAQAAAIBAAgAAAAAAAAAAAAAAAAgAAFAAgAA=</HashCode>
       <FileName>IDrawable.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IAnimated">
-    <Position X="14.5" Y="2.75" Width="1.5" />
+    <Position X="14.5" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IAnimated.cs</FileName>
