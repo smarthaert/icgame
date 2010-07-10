@@ -26,31 +26,37 @@ namespace ICGame
             set;
         }
 
-        Vector3 Diffuse
+        List<Vector3> DiffuseColor
+        {
+            get;
+            set;
+        }
+        
+        List<float> DiffuseFactor
         {
             get;
             set;
         }
 
-        Microsoft.Xna.Framework.Vector3 Ambient
+        List<Vector3> Ambient
         {
             get;
             set;
         }
 
-        Microsoft.Xna.Framework.Vector3 Specular
+        List<Vector3> Specular
         {
             get;
             set;
         }
 
-        Microsoft.Xna.Framework.Vector3 Shininess
+        List<Vector3> Shininess
         {
             get;
             set;
         }
 
-        float SpecularFactor
+        List<float> SpecularFactor
         {
             get;
             set;

@@ -8,16 +8,22 @@ namespace ICGame
 {
     public class UserInterfaceController
     {
-        KeyboardState curState,prevState;
+        private KeyboardState curState,prevState;
+        private MouseState mouseCurState,mousePrevState;
 
 
-        public UserInterfaceController(Camera camera, Campaign campaign)
+        public UserInterfaceController(Camera camera, Campaign campaign, UserInterface userInterface)
         {
             curState = Keyboard.GetState();
+            mouseCurState = Mouse.GetState();
             Camera = camera;
             Campaign = campaign;
+            UserInterface = userInterface;
+        }
 
-           
+        public UserInterface UserInterface
+        {
+            get; set;
         }
 
         public Campaign Campaign
@@ -31,9 +37,25 @@ namespace ICGame
             get; set;
         }
 
+        public void UpdateUserInterfaceState(GameTime gameTime)
+        {
+            UserInterface.ZuneUIModel.Animate(gameTime);
+        }
+
         private void UpdateMouseState()
         {
-            
+            mousePrevState = mouseCurState;
+            mouseCurState = Mouse.GetState();
+            if(mouseCurState.LeftButton==ButtonState.Pressed&&mouseCurState!=mousePrevState)
+            {
+                if (mouseCurState.X >= UserInterface.ZuneUIModel.PositionX && mouseCurState.X <= UserInterface.ZuneUIModel.PositionX+UserInterface.ZuneUIModel.ZuneUI.Width
+                 && mouseCurState.Y >= UserInterface.ZuneUIModel.PositionY && mouseCurState.Y <= UserInterface.ZuneUIModel.PositionY+20)
+                {
+                    UserInterface.ZuneUIModel.State = UserInterface.ZuneUIModel.IsUp() == true
+                                                          ? ZuneState.Down
+                                                          : ZuneState.Up;
+                }
+            }
         }
 
         private void UpdateKeyboardState()
@@ -101,6 +123,14 @@ namespace ICGame
             if (curState.IsKeyDown(Keys.L))
             {
                 Campaign.UnitContainer.Units[0].Position += new Vector3(-0.2f, 0, 0);
+            }
+            if (curState.IsKeyDown(Keys.G))
+            {
+                UserInterface.ZuneUIModel.State = ZuneState.Up;
+            }
+            if (curState.IsKeyDown(Keys.H))
+            {
+                UserInterface.ZuneUIModel.State = ZuneState.Down;
             }
         }
 

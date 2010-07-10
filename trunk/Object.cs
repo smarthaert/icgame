@@ -71,32 +71,55 @@ namespace ICGame
 
         #region IDrawable Members
 
-
-        public Vector3 Diffuse
+        public List<float> Opacity
         {
             get; set;
         }
 
-        public Vector3 Ambient
+        public List<float> Transparency
         {
             get; set;
         }
 
-        public Vector3 Specular
+
+        public List<Vector3> DiffuseColor
         {
-            get; set;
+            get;
+            set;
+        }
+        
+        public List<float> DiffuseFactor
+        {
+            get;
+            set;
         }
 
-        public Vector3 Shininess
+        public List<Vector3> Ambient
         {
-            get; set;
+            get;
+            set;
         }
 
-        public float SpecularFactor
+        public List<Vector3> Specular
         {
-            get; set;
+            get;
+            set;
+        }
+
+        public List<Vector3> Shininess
+        {
+            get;
+            set;
+        }
+
+        public List<float> SpecularFactor
+        {
+            get;
+            set;
         }
 
         #endregion
+
+     
     }
 }
