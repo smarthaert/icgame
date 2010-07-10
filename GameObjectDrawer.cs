@@ -51,6 +51,7 @@ namespace ICGame
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix);
                     effect.Parameters["xView"].SetValue(camera.CameraMatrix);
                     effect.Parameters["xProjection"].SetValue(projection);
+                    //effect.GraphicsDevice.RenderState.AlphaBlendEnable = false;
                 }
                 model.Draw();
             }

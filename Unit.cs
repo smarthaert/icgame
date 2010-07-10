@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -42,20 +43,56 @@ namespace ICGame
             {
                 AnimationTransforms[i] = Matrix.Identity;
             }
+            BoundingBox = new BoundingBox(GetMinVertex(),GetMaxVertex());
         }
 
         #region IPhysical Members
 
         public BoundingBox BoundingBox
         {
-            get
+            get; set;
+        }
+
+        private Vector3 GetMinVertex()
+        {
+            Vector3 result = new Vector3(0,0,0);
+            foreach (ModelMesh mesh in Model.Meshes)
             {
-                throw new NotImplementedException();
+                if(mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius < result.X)
+                {
+                    result.X = mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius;
+                }
+                if (mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius < result.Y)
+                {
+                    result.Y = mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius;
+                }
+                if (mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius < result.Z)
+                {
+                    result.Z = mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius;
+                }
             }
-            set
+            return result;
+        }
+
+        private Vector3 GetMaxVertex()
+        {
+            Vector3 result = new Vector3(0, 0, 0);
+            foreach (ModelMesh mesh in Model.Meshes)
             {
-                throw new NotImplementedException();
+                if (mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius > result.X)
+                {
+                    result.X = mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius;
+                }
+                if (mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius > result.Y)
+                {
+                    result.Y = mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius;
+                }
+                if (mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius > result.Z)
+                {
+                    result.Z = mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius;
+                }
             }
+            return result;
         }
 
         #endregion
