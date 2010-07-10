@@ -20,6 +20,7 @@ namespace ICGame
             graphics = graphicsDeviceManager;
             graphicsDevice = graphics.GraphicsDevice;
             graphicsDevice.RenderState.CullMode = CullMode.None;
+        //    graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
             UserInterface = userInterface;
             Camera = camera;
             Campaign = campaign;
@@ -62,7 +63,7 @@ namespace ICGame
             {
                 if(gameObject is IAnimated) 
                 ((IAnimated)gameObject).Animate(gameTime);
-                gameObject.GetDrawer().Draw(projection,Camera);
+                gameObject.GetDrawer().Draw(projection,Camera,graphicsDevice);
             }
             Campaign.Mission.Board.GetDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,projection);
             UserInterface.Drawer.Draw();

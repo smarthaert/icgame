@@ -45,13 +45,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="xwing.x">
-      <Name>xwing</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ef2.fx">
       <Name>ef2</Name>
       <Importer>EffectImporter</Importer>
@@ -59,30 +52,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="car.x">
-      <Name>car</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="chasis.jpg">
-      <Name>chasis</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="chasis_a.jpg">
-      <Name>chasis_a</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="ruedas.jpg">
-      <Name>ruedas</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="ventanas.jpg">
-      <Name>ventanas</Name>
+    <Compile Include="rightUIPanel.png">
+      <Name>rightUIPanel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -95,39 +66,39 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="_models\firetruck.fbx">
-      <Name>firetruck</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="_models\textures\firetruck\backwheel.png">
+    <Compile Include="backwheel.png">
       <Name>backwheel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="_models\textures\firetruck\bodywork.png">
+    <Compile Include="bodywork.png">
       <Name>bodywork</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="_models\textures\firetruck\frontwheel.png">
+    <Compile Include="frontwheel.png">
       <Name>frontwheel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="_models\textures\firetruck\watercannon.png">
+    <Compile Include="watercannon.png">
       <Name>watercannon</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="rightUIPanel.png">
-      <Name>rightUIPanel</Name>
+    <Compile Include="zune.png">
+      <Name>zune</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="firetruck.fbx">
+      <Name>firetruck</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

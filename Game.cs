@@ -37,9 +37,9 @@ namespace ICGame
 
             Campaign = new Campaign();
             Camera=new Camera();
-
-            UserInterfaceController = new UserInterfaceController(Camera, Campaign);
-            UserInterface=new UserInterface(Campaign);
+            UserInterface = new UserInterface(Campaign);
+            UserInterfaceController = new UserInterfaceController(Camera, Campaign,UserInterface);
+            
             Campaign.GameState = GameState.Initialize;
 
         }
@@ -102,6 +102,11 @@ namespace ICGame
             base.Initialize();
             Display = new Display(graphics, UserInterface, Camera, Campaign, effect);
             Campaign.GameState = GameState.MainMenu;
+            this.IsMouseVisible = true;
+            this.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+            this.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
+            //this.GraphicsDevice.RenderState.DepthBufferEnable = false;
+            this.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
             
         }
 
@@ -142,7 +147,9 @@ namespace ICGame
             // Allows the game to exit
 
             UserInterfaceController.UpdateInput();
+            UserInterfaceController.UpdateUserInterfaceState(gameTime);
             Campaign.Mission.ObjectContainer.UpdateGameObjects(); //temp
+
             switch (Campaign.GameState)
             {
                 case GameState.Initialize:

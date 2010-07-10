@@ -41,7 +41,7 @@ namespace ICGame
                 for (int j = 0; j < terrainHeight; j++)
                 {
                     vertexArray.Add(new VertexPositionColor(new Vector3(i, heightMap[i, j], j),
-                                                            new Color(0, 0, (byte)(heightMap[i, j]*10+20), 1)));
+                                                            new Color(0, 0, (byte)(heightMap[i, j]*10+20),255)));
                 }
             }
             vertexPositionColor = (VertexPositionColor[]) vertexArray.ToArray(typeof (VertexPositionColor));

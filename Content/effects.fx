@@ -12,6 +12,7 @@ struct VertexToPixel
     float4 Color		: COLOR0;
     float LightingFactor: TEXCOORD0;
     float2 TextureCoords: TEXCOORD1;
+    
 };
 
 struct PixelToFrame
@@ -25,10 +26,17 @@ float4x4 xProjection;
 float4x4 xWorld;
 float3 xLightDirection;
 float3 xCameraPosition;
+float3 xDiffuseColor;
+float xDiffuseFactor;
+float xOpacity;
+float xTransparency;
 float xAmbient;
+float xSpecularFactor;
+float3 xSpecularColor;
 bool xEnableLighting;
 bool xShowNormals;
 
+float calcRS;
 //------- Texture Samplers --------
 
 Texture xTexture;
@@ -137,10 +145,11 @@ VertexToPixel TexturedShadedVS( float4 inPos : POSITION, float3 inNormal: NORMAL
 	float4 R = normalize(reflect(float4(xLightDirection,0),normalize(mul(xView,mul(xWorld,float4(inNormal.x,inNormal.y,inNormal.z,0))))));
 	
 	float RV = saturate(dot(R,V));
-	
+	calcRS=RV;
 	Output.LightingFactor = 1;
 	if (xEnableLighting)
-		Output.LightingFactor = saturate(dot(Normal, -xLightDirection));
+		Output.LightingFactor=xDiffuseFactor*saturate(dot(Normal, -xLightDirection))+RV;
+		//Output.LightingFactor = saturate(dot(Normal, -xLightDirection));
 	
 	
     
@@ -152,7 +161,11 @@ PixelToFrame TexturedShadedPS(VertexToPixel PSIn)
 	PixelToFrame Output = (PixelToFrame)0;		
 	
 	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
+	Output.Color +=float4(calcRS*xSpecularColor,0);
 	Output.Color.rgb *= saturate(PSIn.LightingFactor + xAmbient);
+	Output.Color.rgb *= xDiffuseColor;
+	
+	Output.Color.a=xTransparency;
 
 	return Output;
 }

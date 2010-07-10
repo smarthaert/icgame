@@ -25,8 +25,9 @@ namespace ICGame
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Texture,SaveStateMode.SaveState);
             for (int i = 0; i < UserInterface.ScreenSizeY; i++)
             {
-                spriteBatch.Draw(UserInterface.rightUI, new Vector2(UserInterface.ScreenSizeX - UserInterface.rightUI.Width, UserInterface.ScreenSizeY - UserInterface.rightUI.Height * i),new Color(1.0f,1.0f,1.0f,1.0f));
+                spriteBatch.Draw(UserInterface.RightUI, new Vector2(UserInterface.ScreenSizeX - UserInterface.RightUI.Width, UserInterface.ScreenSizeY - UserInterface.RightUI.Height * i),new Color(1.0f,1.0f,1.0f,1.0f));
             }
+            spriteBatch.Draw(UserInterface.ZuneUIModel.ZuneUI, new Vector2(UserInterface.ZuneUIModel.PositionX, UserInterface.ZuneUIModel.PositionY), new Color(1.0f, 1.0f, 1.0f, 1.0f));
             
             spriteBatch.End();
         }
