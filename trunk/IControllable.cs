@@ -19,5 +19,9 @@ namespace ICGame
         }
 
         void CalculateNextStep();
+
+        void Move(Direction direction);
+
+        void Turn(Direction direction);
     }
 }

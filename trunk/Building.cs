@@ -93,8 +93,71 @@ namespace ICGame
 
         #endregion
 
-        #region IAnimated Members
+        #region IPhysical Members
 
+
+        public void AdjustToGround(float front, float back, float left, float right, float length, float width)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Matrix PhysicalTransforms
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
+        #region IPhysical Members
+
+
+        public float Width
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public float Height
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
+        #region IPhysical Members
+
+
+        public float Length
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         #endregion
     }

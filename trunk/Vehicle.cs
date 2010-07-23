@@ -25,6 +25,8 @@ namespace ICGame
         private float leftDoorAngle;
         private float rightDoorAngle;
         private float wheelAngle;
+        private float turretAngle = 0;
+        public float turretDestination;     //TEMP!
 
         #region Properties
 
@@ -110,6 +112,31 @@ namespace ICGame
             //\TEMP
         }
 
+        private void AnimateTurret(GameTime gameTime)
+        {
+            float curAngle = Angle.Z + turretAngle;
+            const float turningSpeed = 0.003f;
+
+            float rot = turretDestination - curAngle;
+            if (rot > MathHelper.Pi)
+            {
+                rot -= 2 * MathHelper.Pi;
+            }
+            else if (rot < -MathHelper.Pi)
+            {
+                rot += 2 * MathHelper.Pi;
+            }
+            if (Math.Abs(rot) >= turningSpeed * gameTime.ElapsedGameTime.Milliseconds)
+            {
+                turretAngle += turningSpeed * gameTime.ElapsedGameTime.Milliseconds * Math.Sign(rot);
+            }
+            else
+            {
+                turretAngle += rot;
+            }
+            AnimationTransforms[Model.Bones["WaterCannon"].Index] = Matrix.CreateRotationZ(turretAngle);
+        }
+
         private void AnimateTurn(GameTime gameTime)
         {
             float rot = 0;
@@ -128,7 +155,7 @@ namespace ICGame
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(maxAngle - wheelAngle+rot);
+                            Matrix.CreateRotationZ(-maxAngle + wheelAngle-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index] *
                             Matrix.CreateRotationZ(maxAngle - wheelAngle+rot);
@@ -139,7 +166,7 @@ namespace ICGame
                         
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] * 
-                            Matrix.CreateRotationZ(rot);
+                            Matrix.CreateRotationZ(-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index] *
                             Matrix.CreateRotationZ(rot);
@@ -156,7 +183,7 @@ namespace ICGame
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(-wheelAngle+rot);
+                            Matrix.CreateRotationZ(wheelAngle-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index] *
                             Matrix.CreateRotationZ(-wheelAngle+rot);
@@ -166,7 +193,7 @@ namespace ICGame
                     {
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index]*
-                            Matrix.CreateRotationZ(rot);
+                            Matrix.CreateRotationZ(-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index]*
                             Matrix.CreateRotationZ(rot);
@@ -183,7 +210,7 @@ namespace ICGame
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(-maxAngle - wheelAngle + rot);
+                            Matrix.CreateRotationZ(maxAngle + wheelAngle - rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index] *
                             Matrix.CreateRotationZ(-maxAngle - wheelAngle + rot);
@@ -193,7 +220,7 @@ namespace ICGame
                     {
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index]*
-                            Matrix.CreateRotationZ(rot);
+                            Matrix.CreateRotationZ(-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index]*
                             Matrix.CreateRotationZ(rot);
@@ -210,7 +237,7 @@ namespace ICGame
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(-wheelAngle+rot);
+                            Matrix.CreateRotationZ(wheelAngle-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index] *
                             Matrix.CreateRotationZ(-wheelAngle+rot);
@@ -220,10 +247,10 @@ namespace ICGame
                     {
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index]*
-                            Matrix.CreateRotationZ(rot);
+                            Matrix.CreateRotationZ(-rot);
                         AnimationTransforms[Model.Bones["Wheel1"].Index] =
                             AnimationTransforms[Model.Bones["Wheel1"].Index]*
-                            Matrix.CreateRotationZ(rot);
+                            Matrix.CreateRotationZ(+rot);
                     }
                     break;
             }
@@ -339,6 +366,7 @@ namespace ICGame
             AnimateTurn(gameTime);
             AnimateDriving(gameTime);
             AnimateDoor(gameTime);
+            AnimateTurret(gameTime);
             base.Animate(gameTime);
         }
     }

@@ -132,6 +132,24 @@ namespace ICGame
             {
                 UserInterface.ZuneUIModel.State = ZuneState.Down;
             }
+            //TEMP
+            if(curState.IsKeyDown(Keys.F1))
+            {
+                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = MathHelper.PiOver2;
+            }
+            if(curState.IsKeyDown(Keys.F2))
+            {
+                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = MathHelper.Pi;
+            }
+            if(curState.IsKeyDown(Keys.F3))
+            {
+                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = 3*MathHelper.PiOver2;
+            }
+            if(curState.IsKeyDown(Keys.F4))
+            {
+                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = 2*MathHelper.Pi;
+            }
+            //\TEMP
         }
 
         public void UpdateInput()

@@ -13,6 +13,8 @@ namespace ICGame
     
     public abstract class GameObject : IDrawable
     {
+        protected const float scale = 0.01f;
+
         private Vector3 position;
         
         #region IDrawable Members
@@ -39,7 +41,14 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateScale(0.01f, 0.01f, 0.01f) /** Matrix.CreateRotationY(3*MathHelper.PiOver2)*/ * Matrix.CreateRotationZ(-MathHelper.PiOver2) * Matrix.CreateTranslation(Position);
+                Matrix result = Matrix.Identity;
+                result *= Matrix.CreateScale(scale,scale,scale) /** Matrix.CreateRotationY(3*MathHelper.PiOver2)*/ * Matrix.CreateRotationZ(-MathHelper.PiOver2);// *result;
+                if (this is IPhysical)
+                {
+                    result *= ((IPhysical)this).PhysicalTransforms;// *result;
+                }
+                result *= Matrix.CreateTranslation(Position);
+                return result;
             }
             
 
@@ -67,6 +76,12 @@ namespace ICGame
             {
                 position = new Vector3(value.X,value.Y,value.Z);
             }
+        }
+
+        public Vector3 Angle
+        {
+            get;
+            set;
         }
 
         #region IDrawable Members
