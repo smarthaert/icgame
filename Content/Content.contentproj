@@ -98,8 +98,14 @@
     <Compile Include="firetruck.fbx">
       <Name>firetruck</Name>
       <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Processor>FBXProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FBXPipeline\FBXPipeline.csproj">
+      <Project>{0E6BE335-0526-4507-A5ED-87D00EC25192}</Project>
+      <Name>FBXPipeline</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

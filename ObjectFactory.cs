@@ -26,6 +26,7 @@ namespace ICGame
         public void LoadModels(Game game)
         {
             model1 = game.Content.Load<Model>("firetruck");
+            
             texture2Ds = new List<Texture2D>();
             diffuse=new List<Vector3>();
             diffuseFactor=new List<float>();
@@ -47,35 +48,13 @@ namespace ICGame
             {
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
                 {
-                    diffuse.Add(meshPart.Effect.Parameters["DiffuseColor"].GetValueVector3());
-                    if (meshPart.Effect.Parameters["DiffuseFactor"]!=null)
-                    diffuseFactor.Add(meshPart.Effect.Parameters["DiffuseFactor"].GetValueSingle());
-                    else 
-                        diffuseFactor.Add(1.0f);
-                    if (meshPart.Effect.Parameters["Alpha"] != null)
-                        transparency.Add(meshPart.Effect.Parameters["Alpha"].GetValueSingle());
-                    else
-                    {
-                        transparency.Add(1.0f);
-                    }
-                  //  if (meshPart.Effect.Parameters["SpecularPower"] != null)
-                        //specularFactor.Add(meshPart.Effect.Parameters["SpecularPower"].GetValueSingle());
-        //                meshPart.Effect.Parameters["SpecularPower"].GetValueString();
-                  //  else
-                   // {
-                    //    specularFactor.Add(0.0f);
-                   // }
-                    if (meshPart.Effect.Parameters["SpecularColor"] != null)
-                        specular.Add(meshPart.Effect.Parameters["SpecularColor"].GetValueVector3());
-                    else
-                    {
-                        specular.Add(new Vector3(1.0f,1.0f,1.0f));
-                    }
-                    
 
+
+                   // string ble = (string)meshPart.Tag;
                     meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
                     
                 }
+                
                 
             }
         }
@@ -87,16 +66,17 @@ namespace ICGame
             {
                 Vehicle unit = new Vehicle(model1,1.0f, 6);
                 unit.Textures = texture2Ds;
-                unit.DiffuseColor = diffuse;
-                unit.DiffuseFactor = diffuseFactor;
-                unit.Transparency = transparency;
-                unit.Specular = specular;
-                unit.SpecularFactor = specularFactor;
+                //unit.DiffuseColor = diffuse;
+                //unit.DiffuseFactor = diffuseFactor;
+                //unit.Transparency = transparency;
+                //unit.Specular = specular;
+                //unit.SpecularFactor = specularFactor;
 
                 IDrawable i = unit;
                 i.GetDrawer();
 
-
+                MaterialReader mr = new MaterialReader(unit);
+                mr.PopulateObject(); //Arise my minion!
                 return unit;
             }
             return null;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,12 +17,26 @@ namespace ICGame
         protected const float scale = 0.01f;
 
         private Vector3 position;
-        
+        private Model _model;
+
+        private ArrayList meshesNames=new ArrayList();
+
         #region IDrawable Members
 
         public GameObject(Model model)
         {
             Model = model;
+            Ambient = new List<float>();
+            Opacity=new List<float>();
+            Transparency=new List<float>();
+            DiffuseColor=new List<Vector3>();
+            DiffuseFactor=new List<float>();
+            Specular=new List<Vector3>();
+            SpecularFactor=new List<float>();
+            Shininess = new List<Vector3>();
+            Opacity = new List<float>();
+            
+
             Position = new Vector3(0, 0, 0);
             
         }
@@ -56,7 +71,21 @@ namespace ICGame
 
         public Model Model
         {
-            get; set;
+            get
+            {
+                return _model;
+            }
+               
+            set
+            {
+                _model = value;
+                foreach (ModelMesh mesh in value.Meshes)
+                {
+                    if (mesh.Tag!=null)
+                        MeshesNames.Add(mesh.Tag.ToString().Split('_')[0]);
+
+                }
+            }
         }
 
         public List<Texture2D> Textures
@@ -78,6 +107,13 @@ namespace ICGame
             }
         }
 
+        public ArrayList MeshesNames
+        {
+            get
+            {
+                return meshesNames;
+            }
+        }
         public Vector3 Angle
         {
             get;
@@ -109,7 +145,7 @@ namespace ICGame
             set;
         }
 
-        public List<Vector3> Ambient
+        public List<float> Ambient
         {
             get;
             set;
