@@ -20,7 +20,6 @@ namespace ICGame
         {
             get; set;
         }
-            
 
         public void UpdateGameObjects()
         {

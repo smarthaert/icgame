@@ -38,7 +38,7 @@ namespace ICGame
             set;
         }
 
-        List<Vector3> Ambient
+        List<float> Ambient
         {
             get;
             set;
