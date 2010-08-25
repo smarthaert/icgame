@@ -36,7 +36,7 @@
   <Class Name="ICGame.UserInterfaceController">
     <Position X="0.5" Y="4" Width="2" />
     <TypeIdentifier>
-      <HashCode>EAACAAAAAAAAAQQAAAAQAAAAAAFAAAEAAAggAAIAAAA=</HashCode>
+      <HashCode>EAACAAAAAAAAEQQAAAAQAAAAAAFAAAEAAAggAAIAAAA=</HashCode>
       <FileName>UserInterfaceController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -47,7 +47,7 @@
   <Class Name="ICGame.Camera">
     <Position X="5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAJAAAAEAAACAAAAEEBAAAAAAAEAAAAAAAAA=</HashCode>
+      <HashCode>AAEAMAAAAZgAABEAAACAAAAEEBEAACAIQEBAAAAAIAA=</HashCode>
       <FileName>Camera.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -78,7 +78,7 @@
     <Position X="10.75" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAQAQAEAAUAAAQABAAAAAABAABIAEAgAACAEABAAAgA=</HashCode>
-      <FileName>Board.cs</FileName>
+      <FileName>NewFolder1\Board.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.UnitContainer">
@@ -127,7 +127,7 @@
   <Class Name="ICGame.GameObject">
     <Position X="16.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEQAEAAEAQAAAIBgAAAAIAAAAACAAAAAAAgAAFAAgAA=</HashCode>
+      <HashCode>AEQAEAAEAQAAAIBgAgAAIAACAECAAABAAEgAAFAAgAA=</HashCode>
       <FileName>Object.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -135,7 +135,7 @@
   <Class Name="ICGame.Unit">
     <Position X="16.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAgCCAMAIAAEAAAASRAQAQCBAAQAEAABAAEBAJAI=</HashCode>
+      <HashCode>AAAgAgCCBMAIAAEIAABSRERAQCBAAQAEAABAAEAAJAI=</HashCode>
       <FileName>Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -150,7 +150,7 @@
   <Class Name="ICGame.StaticObject">
     <Position X="18.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCAAEAAAAAAAAAABAAAQCBAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgCABEAAAAAAAAAABEBAQCBAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>StaticObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -165,7 +165,7 @@
   <Class Name="ICGame.Building">
     <Position X="20.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCAAEAAAAAAAAAABAQAQCBAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAgCABEAAAAAAAAAABERAQCBAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Building.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -180,7 +180,7 @@
   <Class Name="ICGame.Civilian">
     <Position X="22" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCAAEAAAAAAAAAABAQAQCBAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAgCABEAAAAAAAAAABERAQCBAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Civilian.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -209,7 +209,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAgAAAAAAAAAAAAAAAEAAAAAkAAAGQAAAAEABAAAA=</HashCode>
+      <HashCode>AAAAgAAAAAAAAABAAAAAEAAAAAkAAAGQAAAAEABAAAA=</HashCode>
       <FileName>UserInterface.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -219,7 +219,7 @@
   <Class Name="ICGame.GameObjectDrawer">
     <Position X="25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <HashCode>BAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
       <FileName>GameObjectDrawer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -289,7 +289,7 @@
   <Interface Name="ICGame.IPhysical">
     <Position X="14" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAEAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgAABEAAAAAAAAAAAEBAACAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IPhysical.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -301,7 +301,7 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IInteractive">
-    <Position X="14.5" Y="7" Width="1.5" />
+    <Position X="14.25" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>IInteractive.cs</FileName>
