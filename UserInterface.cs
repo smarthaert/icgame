@@ -56,6 +56,14 @@ namespace ICGame
                     }
                 }
             }
+            public bool InterfaceOverlaped(int x, int y)
+            {
+                if (x >= PositionX && x <= PositionX + ZuneUI.Width)
+                    if (y >= PositionY)
+                        return true;
+                return false;
+
+            }
 
         }
 
@@ -65,14 +73,21 @@ namespace ICGame
         private int screenSizeX;
         private int screenSizeY;
         private UserInterfaceDraw userInterfaceDraw;
-        
-        
+
+
+        public bool InterfaceOverlaped(int x, int y)
+        {
+            // Jesli nad prawym paskiem
+            if ((x >= ScreenSizeX - RightUI.Width) || ZuneUIModel.InterfaceOverlaped(x, y)) 
+                return true;
+            return false;
+        }   
+     
         public UserInterface(Campaign campaign)
         {
             Campaign = campaign;
           
         }
-
 
         public int ScreenSizeY
         {

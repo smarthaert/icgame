@@ -11,6 +11,7 @@ namespace ICGame
         private KeyboardState curState,prevState;
         private MouseState mouseCurState,mousePrevState;
 
+        private bool isMouseDragging = false;
 
         public UserInterfaceController(Camera camera, Campaign campaign, UserInterface userInterface)
         {
@@ -56,6 +57,26 @@ namespace ICGame
                                                           : ZuneState.Up;
                 }
             }
+
+            
+            //Drag control
+            if (mouseCurState.RightButton == ButtonState.Pressed && mouseCurState != mousePrevState)
+                isMouseDragging = true;
+            else
+                isMouseDragging = false;
+
+            if(isMouseDragging)
+            {
+                Camera.TransformCameraAccordingToMouseTravel(mouseCurState.X-mousePrevState.X,mouseCurState.Y-mousePrevState.Y);
+            }
+
+            //Scroll control
+            Camera.ChangeHeightAccordingToMouseWheel(mouseCurState.ScrollWheelValue - mousePrevState.ScrollWheelValue);
+
+            if(UserInterface.InterfaceOverlaped(mouseCurState.X,mouseCurState.Y))
+            {
+                
+            }
         }
 
         private void UpdateKeyboardState()
@@ -70,44 +91,45 @@ namespace ICGame
             
             if(curState.IsKeyDown(Keys.Z))
             {
-                Camera.Move(-0.2f,0);
+                Camera.MoveLeft();
             }
             
             if (curState.IsKeyDown(Keys.X))
             {
-                Camera.Move(0.2f, 0);
+                Camera.MoveRight();
             }
 
             if (curState.IsKeyDown(Keys.Up))
             {
-                Camera.Move(0, 0.2f);
+                Camera.MoveForward();
             }
             
             if (curState.IsKeyDown(Keys.Down))
             {
-                Camera.Move(0, -0.2f);
+                Camera.MoveBack();
             }
 
             if (curState.IsKeyDown(Keys.Right))
             {
-                Camera.Rotate(0.01f);
+                Camera.RotateRight();
             }
 
             if (curState.IsKeyDown(Keys.Left))
             {
-                Camera.Rotate(-0.01f);
+                Camera.RotateLeft();
             }
 
             if (curState.IsKeyDown(Keys.Q))
             {
-                Camera.ChangeHeight(0.1f);
+                Camera.MoveUp();
             }
 
             if (curState.IsKeyDown(Keys.A))
             {
-                Camera.ChangeHeight(-0.1f);
+                Camera.MoveDown();
             }
 
+            
             if (curState.IsKeyDown(Keys.I))
             {
                 Campaign.UnitContainer.Units[0].Position+=new Vector3(0,0,0.2f);
@@ -124,6 +146,8 @@ namespace ICGame
             {
                 Campaign.UnitContainer.Units[0].Position += new Vector3(-0.2f, 0, 0);
             }
+
+
             if (curState.IsKeyDown(Keys.G))
             {
                 UserInterface.ZuneUIModel.State = ZuneState.Up;
@@ -132,7 +156,8 @@ namespace ICGame
             {
                 UserInterface.ZuneUIModel.State = ZuneState.Down;
             }
-            //TEMP
+
+            //TEMP  //...jak wszysztko :D
             if(curState.IsKeyDown(Keys.F1))
             {
                 ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = MathHelper.PiOver2;

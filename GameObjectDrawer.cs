@@ -30,6 +30,11 @@ namespace ICGame
             }
         }
 
+        public void DrawSelectionDisc(Matrix projection, Camera camera, GraphicsDevice gd)
+        {
+            
+        }
+
         public virtual void Draw(Matrix projection, Camera camera, GraphicsDevice gd)
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
