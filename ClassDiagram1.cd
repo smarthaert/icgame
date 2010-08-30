@@ -20,7 +20,7 @@
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>EQQCmEAAIAAACwAAAAAAAQAAAAEAAAgAAAAAAAAAAAQ=</HashCode>
-      <FileName>Game.cs</FileName>
+      <FileName>Model\Game.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="UserInterfaceController" />
@@ -36,8 +36,8 @@
   <Class Name="ICGame.UserInterfaceController">
     <Position X="0.5" Y="4" Width="2" />
     <TypeIdentifier>
-      <HashCode>EAACAAAAAAAAEQQAAAAQAAAAAAFAAAEAAAggAAIAAAA=</HashCode>
-      <FileName>UserInterfaceController.cs</FileName>
+      <HashCode>EAACAAAAAAAAEQQAAAAQAAAAAAFAAAEAAAggAAIAAgA=</HashCode>
+      <FileName>Controller\UserInterfaceController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Campaign" />
@@ -47,15 +47,15 @@
   <Class Name="ICGame.Camera">
     <Position X="5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAMAAAAZgAABEAAACAAAAEEBEAACAIQEBAAAAAIAA=</HashCode>
-      <FileName>Camera.cs</FileName>
+      <HashCode>AAFAMAAAAZgAABEAAACAAAAEEBEAACAIQEBAAAAAIAA=</HashCode>
+      <FileName>Model\Camera.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Campaign">
     <Position X="10" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAABAAAAAAAAAQAAAAAAAAJAAAAgAAAgAAAAAIAA=</HashCode>
-      <FileName>Campaign.cs</FileName>
+      <FileName>Model\Campaign.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="UnitContainer" />
@@ -67,7 +67,7 @@
     <Position X="10.75" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
-      <FileName>Mission.cs</FileName>
+      <FileName>Model\Mission.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="ObjectContainer" />
@@ -78,28 +78,28 @@
     <Position X="10.75" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAQAQAEAAUAAAQABAAAAAABAABIAEAgAACAEABAAAgA=</HashCode>
-      <FileName>NewFolder1\Board.cs</FileName>
+      <FileName>Model\Board.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.UnitContainer">
     <Position X="9.25" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
-      <FileName>UnitContainer.cs</FileName>
+      <FileName>Model\UnitContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObjectContainer">
     <Position X="8" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
-      <FileName>ObjectContainer.cs</FileName>
+      <FileName>Model\ObjectContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Display">
     <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAACCAAAAgAAAgAAAAAAAAAAAAEAAAwAAAAAAAAAAAA=</HashCode>
-      <FileName>Display.cs</FileName>
+      <FileName>View\Display.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="UserInterface" />
@@ -111,7 +111,7 @@
     <Position X="12.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAAAAAAAAAAgAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
-      <FileName>UserInterfaceDraw.cs</FileName>
+      <FileName>View\UserInterfaceDraw.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="UserInterface" />
@@ -119,39 +119,51 @@
   </Class>
   <Class Name="ICGame.GameObjectFactory">
     <Position X="12.5" Y="5.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="ICGame.GameObjectFactory.LoadedModel" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\ObjectFactory.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="ICGame.GameObjectFactory.ObjectClass" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\ObjectFactory.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAACEAIoAAAAAAAAAAABAAABIABA=</HashCode>
-      <FileName>ObjectFactory.cs</FileName>
+      <HashCode>AgAAAAAAAAAAAAAAAAAEAAgAAAAAAAAQAAAAAAAAABA=</HashCode>
+      <FileName>Model\ObjectFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObject">
     <Position X="16.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEQAEAAEAQAAAIBgAgAAIAACAECAAABAAEgAAFAAgAA=</HashCode>
-      <FileName>Object.cs</FileName>
+      <FileName>Model\Object.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Unit">
     <Position X="16.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAgCCBMAIAAEIAABSRERAQCBAAQAEAABAAEAAJAI=</HashCode>
-      <FileName>Unit.cs</FileName>
+      <HashCode>AAAgAgCDBMAIAAEIAABSRERAQCBAAQAEAABAAEAAJAI=</HashCode>
+      <FileName>Model\Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Vehicle">
     <Position X="18.75" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AFDAFEIAQBAACAAAAEgAAAQAAAAAAAAAAAAABAAAAgQ=</HashCode>
-      <FileName>Vehicle.cs</FileName>
+      <HashCode>AFDAFEIAQBAACAAAAEgAAAQAAAAAAAAAAAAABBAAAgQ=</HashCode>
+      <FileName>Model\Vehicle.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.StaticObject">
     <Position X="18.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgCABEAAAAAAAAAABEBAQCBAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>StaticObject.cs</FileName>
+      <FileName>Model\StaticObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -159,14 +171,14 @@
     <Position X="18.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Infantry.cs</FileName>
+      <FileName>Interfaces\Infantry.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Building">
     <Position X="20.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgCABEAAAAAAAAAABERAQCBAAAAAAAAAAAAAAAI=</HashCode>
-      <FileName>Building.cs</FileName>
+      <FileName>Model\Building.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -174,14 +186,14 @@
     <Position X="1.75" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>AI.cs</FileName>
+      <FileName>Model\AI.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Civilian">
     <Position X="22" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgCABEAAAAAAAAAABERAQCBAAAAAAAAAAAAAAAI=</HashCode>
-      <FileName>Civilian.cs</FileName>
+      <FileName>Model\Civilian.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -189,14 +201,14 @@
     <Position X="0.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>GameEventController.cs</FileName>
+      <FileName>Controller\GameEventController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameInfo">
     <Position X="7" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>GameInfo.cs</FileName>
+      <FileName>Model\GameInfo.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.UserInterface">
@@ -204,13 +216,13 @@
     <NestedTypes>
       <Class Name="ICGame.UserInterface.Zune" Collapsed="true">
         <TypeIdentifier>
-          <NewMemberFileName>UserInterface.cs</NewMemberFileName>
+          <NewMemberFileName>Model\UserInterface.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAgAAAAAAAAABAAAAAEAAAAAkAAAGQAAAAEABAAAA=</HashCode>
-      <FileName>UserInterface.cs</FileName>
+      <FileName>Model\UserInterface.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Campaign" />
@@ -220,7 +232,7 @@
     <Position X="25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
-      <FileName>GameObjectDrawer.cs</FileName>
+      <FileName>View\GameObjectDrawer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="GameObject" />
@@ -231,42 +243,42 @@
     <Position X="24" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>PeopleDrawer.cs</FileName>
+      <FileName>View\PeopleDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.BuildingDrawer">
     <Position X="25.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>BuildingDrawer.cs</FileName>
+      <FileName>View\BuildingDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.StaticDrawer">
     <Position X="27.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>StaticDrawer.cs</FileName>
+      <FileName>View\StaticDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.VehicleDrawer">
     <Position X="29.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>VehicleDrawer.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\VehicleDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.EffectDrawer">
     <Position X="27.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>EffectDrawer.cs</FileName>
+      <FileName>View\EffectDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.BoardDrawer">
     <Position X="12.75" Y="10.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
-      <FileName>BoardDrawer.cs</FileName>
+      <FileName>View\BoardDrawer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Board" />
@@ -276,56 +288,56 @@
     <Position X="15" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAEAQAAAIBAAAAAAAAAAAAAAAAAAAgAAFAAgAA=</HashCode>
-      <FileName>IDrawable.cs</FileName>
+      <FileName>Interfaces\IDrawable.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IAnimated">
     <Position X="12.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IAnimated.cs</FileName>
+      <FileName>Interfaces\IAnimated.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IPhysical">
     <Position X="14" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAABEAAAAAAAAAAAEBAACAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IPhysical.cs</FileName>
+      <FileName>Interfaces\IPhysical.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IDestructible">
     <Position X="14.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAAAAAAAAAABAAAQABAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IDestructible.cs</FileName>
+      <FileName>Interfaces\IDestructible.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IInteractive">
     <Position X="14.25" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
-      <FileName>IInteractive.cs</FileName>
+      <FileName>Interfaces\IInteractive.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IControllable">
     <Position X="14.5" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAACAIAAAAAAAAACAAAAAAAAAAAEAABAAAAAAAA=</HashCode>
-      <FileName>IControllable.cs</FileName>
+      <FileName>Interfaces\IControllable.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="ICGame.GameObjectID">
-    <Position X="12.5" Y="7.75" Width="1.5" />
+    <Position X="12.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
-      <FileName>GameObjectID.cs</FileName>
+      <HashCode>AAAABAABAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Model\GameObjectID.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="ICGame.GameState" Collapsed="true">
     <Position X="0.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAABAAAAAAQAAAAAAAAAQAAEAAAAAIAAAAAAAAAA=</HashCode>
-      <FileName>Game.cs</FileName>
+      <FileName>Model\Game.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

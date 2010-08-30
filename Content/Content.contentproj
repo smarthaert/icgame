@@ -38,64 +38,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="effects.fx">
+    <Compile Include="Resources\effects.fx">
       <Name>effects</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ef2.fx">
-      <Name>ef2</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="rightUIPanel.png">
+    <Compile Include="Texture2D\UI\rightUIPanel.png">
       <Name>rightUIPanel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="heightmap.bmp">
+    <Compile Include="Resources\heightmap.bmp">
       <Name>heightmap</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="backwheel.png">
-      <Name>backwheel</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="bodywork.png">
-      <Name>bodywork</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="frontwheel.png">
-      <Name>frontwheel</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="watercannon.png">
-      <Name>watercannon</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="zune.png">
+    <Compile Include="Texture2D\UI\zune.png">
       <Name>zune</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="firetruck.fbx">
+    <Compile Include="Model\firetruck.fbx">
       <Name>firetruck</Name>
       <Importer>FbxImporter</Importer>
       <Processor>FBXProcessor</Processor>
@@ -106,6 +77,13 @@
       <Project>{0E6BE335-0526-4507-A5ED-87D00EC25192}</Project>
       <Name>FBXPipeline</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\selection_ring.fbx">
+      <Name>selection_ring</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>FBXProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
