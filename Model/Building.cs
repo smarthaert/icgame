@@ -11,7 +11,8 @@ namespace ICGame
         public Building(Model model)
             : base(model)
         {
-            
+            Position = new Vector3(10,0,16);
+            PhysicalTransforms = Matrix.Identity + Matrix.CreateTranslation(Position);
         }
 
         #region IPhysical Members
@@ -88,7 +89,7 @@ namespace ICGame
 
         public void Animate(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            
         }
 
         #endregion
@@ -98,19 +99,12 @@ namespace ICGame
 
         public void AdjustToGround(float front, float back, float left, float right, float length, float width)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public Matrix PhysicalTransforms
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         #endregion
@@ -120,26 +114,12 @@ namespace ICGame
 
         public float Width
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         public float Height
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         #endregion
@@ -149,14 +129,7 @@ namespace ICGame
 
         public float Length
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         #endregion

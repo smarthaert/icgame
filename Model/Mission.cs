@@ -8,11 +8,9 @@ namespace ICGame
     {
         public Mission()
         {
-            
             Board = new Board();
             ObjectContainer=new GameObjectContainer(Board);
         }
-    
        
         public GameObjectContainer ObjectContainer
         {
@@ -22,6 +20,16 @@ namespace ICGame
         public Board Board
         {
             get; set;
+        }
+
+        public void Update()
+        {
+            ObjectContainer.UpdateGameObjects();
+        }
+
+        public void LoadObjects(GameObjectFactory gameObjectFactory)
+        {
+            ObjectContainer.GameObjects.Add(gameObjectFactory.CreateGameObject(GameObjectID.Home0));
         }
     }
 }

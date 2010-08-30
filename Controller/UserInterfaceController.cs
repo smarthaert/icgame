@@ -14,12 +14,21 @@ namespace ICGame
         private bool isMouseDragging = false;
         private bool isMouseRotating = false;
 
-        public UserInterfaceController(Camera camera, Campaign campaign, UserInterface userInterface)
+        //Konieczne do obslugi kursora
+        private Game mainGame;
+
+        public void InitializeUserInterface(Game game)
+        {
+            mainGame = game;
+            UserInterface.LoadGraphics(mainGame);
+        }
+
+        public UserInterfaceController(Camera camera, CampaignController campaignController, UserInterface userInterface)
         {
             curState = Keyboard.GetState();
             mouseCurState = Mouse.GetState();
             Camera = camera;
-            Campaign = campaign;
+            CampaignController = campaignController;
             UserInterface = userInterface;
         }
 
@@ -28,7 +37,7 @@ namespace ICGame
             get; set;
         }
 
-        public Campaign Campaign
+        public CampaignController CampaignController
         {
             get;
             set;
@@ -97,7 +106,7 @@ namespace ICGame
 
             if (curState.IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
             {
-                Campaign.GameState = GameState.Exit;
+                CampaignController.CampaignState = GameState.Exit;
             }
             
             if(curState.IsKeyDown(Keys.Z))
@@ -141,25 +150,25 @@ namespace ICGame
             }
             if (curState.IsKeyDown(Keys.Tab)&& prevState.IsKeyUp(Keys.Tab))
             {
-                Campaign.UnitContainer.Units[0].Selected = Campaign.UnitContainer.Units[0].Selected ? false : true;
+                ((Unit)CampaignController.GetActiveObject()).Selected =  ((Unit)CampaignController.GetActiveObject()).Selected ? false : true;
             }
 
             
             if (curState.IsKeyDown(Keys.I))
             {
-                Campaign.UnitContainer.Units[0].Position+=new Vector3(0,0,0.2f);
+                ((Unit)CampaignController.GetActiveObject()).Position += new Vector3(0, 0, 0.2f);
             }
             if (curState.IsKeyDown(Keys.K))
             {
-                Campaign.UnitContainer.Units[0].Position += new Vector3(0, 0, -0.2f);
+                ((Unit)CampaignController.GetActiveObject()).Position += new Vector3(0, 0, -0.2f);
             }
             if (curState.IsKeyDown(Keys.J))
             {
-                Campaign.UnitContainer.Units[0].Position += new Vector3(0.2f, 0, 0);
+                ((Unit)CampaignController.GetActiveObject()).Position += new Vector3(0.2f, 0, 0);
             }
             if (curState.IsKeyDown(Keys.L))
             {
-                Campaign.UnitContainer.Units[0].Position += new Vector3(-0.2f, 0, 0);
+                ((Unit)CampaignController.GetActiveObject()).Position += new Vector3(-0.2f, 0, 0);
             }
 
 
@@ -175,19 +184,19 @@ namespace ICGame
             //TEMP  //...jak wszysztko :D
             if(curState.IsKeyDown(Keys.F1))
             {
-                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = MathHelper.PiOver2;
+                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = MathHelper.PiOver2;
             }
             if(curState.IsKeyDown(Keys.F2))
             {
-                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = MathHelper.Pi;
+                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = MathHelper.Pi;
             }
             if(curState.IsKeyDown(Keys.F3))
             {
-                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = 3*MathHelper.PiOver2;
+                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = 3 * MathHelper.PiOver2;
             }
             if(curState.IsKeyDown(Keys.F4))
             {
-                ((Vehicle)Campaign.Mission.ObjectContainer.GameObjects[0]).turretDestination = 2*MathHelper.Pi;
+                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = 2 * MathHelper.Pi;
             }
             //\TEMP
         }

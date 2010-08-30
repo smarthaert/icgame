@@ -6,7 +6,7 @@ namespace ICGame
 {
     public enum GameObjectID
     {
-        xwing,
+        Home0,
         FireTruck,
         SelectionRing,
     }
