@@ -9,11 +9,9 @@ namespace ICGame
     
         public Campaign()
         {
+            GameState = GameState.Initialize;
             UnitContainer = new UnitContainer();
             GameObjectFactory = new GameObjectFactory();
-            //TEMP
-            Mission = new Mission();
-            //\TEMP
         }
 
 
@@ -40,7 +38,8 @@ namespace ICGame
 
         public void LoadMission()
         {
-            throw new System.NotImplementedException();
+            Mission = new Mission();
+            Mission.LoadObjects(GameObjectFactory);
         }
 
         public void BuyUnit(GameObjectID gameObjectID)

@@ -19,7 +19,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>EQQCmEAAIAAACwAAAAAAAQAAAAEAAAgAAAAAAAAAAAQ=</HashCode>
+      <HashCode>EQQCmEAAIAAACwAAAAAAAQAAAAEAACgAAAAAAAAACAQ=</HashCode>
       <FileName>Model\Game.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -31,17 +31,19 @@
       <Property Name="GameInfo" />
       <Property Name="Camera" />
       <Property Name="UserInterface" />
+      <Property Name="CampaignController" />
+      <Property Name="MissionController" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.UserInterfaceController">
     <Position X="0.5" Y="4" Width="2" />
     <TypeIdentifier>
-      <HashCode>EAACAAAAAAAAEQQAAAAQAAAAAAFAAAEAAAggAAIAAgA=</HashCode>
+      <HashCode>EAACAAAAAAAAEQQAAEAQAAAAgABAACEAAAggAAIAAgA=</HashCode>
       <FileName>Controller\UserInterfaceController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Campaign" />
       <Property Name="Camera" />
+      <Property Name="CampaignController" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.Camera">
@@ -66,7 +68,7 @@
   <Class Name="ICGame.Mission">
     <Position X="10.75" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <HashCode>AAQAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBAAAA=</HashCode>
       <FileName>Model\Mission.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -89,7 +91,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.GameObjectContainer">
-    <Position X="8" Y="8" Width="1.5" />
+    <Position X="8.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Model\ObjectContainer.cs</FileName>
@@ -98,13 +100,12 @@
   <Class Name="ICGame.Display">
     <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAACCAAAAgAAAgAAAAAAAAAAAAEAAAwAAAAAAAAAAAA=</HashCode>
+      <HashCode>EAACCAAAAAAAAgAAAAAAAAAAAAAAACwAAAAAAAAAAAA=</HashCode>
       <FileName>View\Display.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="UserInterface" />
       <Property Name="Camera" />
-      <Property Name="Campaign" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.UserInterfaceDraw">
@@ -120,16 +121,16 @@
   <Class Name="ICGame.GameObjectFactory">
     <Position X="12.5" Y="5.25" Width="1.5" />
     <NestedTypes>
-      <Class Name="ICGame.GameObjectFactory.LoadedModel" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Model\ObjectFactory.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
       <Enum Name="ICGame.GameObjectFactory.ObjectClass" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Model\ObjectFactory.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
+      <Class Name="ICGame.GameObjectFactory.LoadedModel" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\ObjectFactory.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
     </NestedTypes>
     <TypeIdentifier>
       <HashCode>AgAAAAAAAAAAAAAAAAAEAAgAAAAAAAAQAAAAAAAAABA=</HashCode>
@@ -221,12 +222,9 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAgAAAAAAAAABAAAAAEAAAAAkAAAGQAAAAEABAAAA=</HashCode>
+      <HashCode>AAAAgAAAAAAAAABAAAAAEAAAAAgAAAGQAAAAEABAAAA=</HashCode>
       <FileName>Model\UserInterface.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Campaign" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.GameObjectDrawer">
     <Position X="25" Y="1.5" Width="1.5" />
@@ -284,6 +282,27 @@
       <Property Name="Board" />
     </ShowAsAssociation>
   </Class>
+  <Class Name="ICGame.MissionController">
+    <Position X="7.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAABAAAAAAAAAAgCABAAAgAAQAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Controller\MissionController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Mission" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ICGame.CampaignController">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAIAAAAACAAAAIAAEQAAIAAAAAAAAACAA=</HashCode>
+      <FileName>Controller\CampaignController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Campaign" />
+      <Property Name="MissionController" />
+    </ShowAsAssociation>
+  </Class>
   <Interface Name="ICGame.IDrawable">
     <Position X="15" Y="0.5" Width="1.5" />
     <TypeIdentifier>
@@ -329,7 +348,7 @@
   <Enum Name="ICGame.GameObjectID">
     <Position X="12.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAABAABAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAABAABAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>Model\GameObjectID.cs</FileName>
     </TypeIdentifier>
   </Enum>

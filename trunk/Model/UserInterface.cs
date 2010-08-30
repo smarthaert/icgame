@@ -83,11 +83,7 @@ namespace ICGame
             return false;
         }   
      
-        public UserInterface(Campaign campaign)
-        {
-            Campaign = campaign;
-          
-        }
+
 
         public int ScreenSizeY
         {
@@ -99,10 +95,7 @@ namespace ICGame
             get { return screenSizeX; }
         }
 
-        public Campaign Campaign
-        {
-            get; set;
-        }
+    
 
         public UserInterfaceDraw Drawer
         {

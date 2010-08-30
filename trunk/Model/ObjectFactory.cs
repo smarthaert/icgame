@@ -24,7 +24,8 @@ namespace ICGame
         private Dictionary<GameObjectID, string> objectAccessList = new Dictionary<GameObjectID, string>()
                                  {
                                      {GameObjectID.FireTruck,"firetruck"},
-                                     {GameObjectID.SelectionRing,"selection_ring"}
+                                     {GameObjectID.SelectionRing,"selection_ring"},
+                                     {GameObjectID.Home0,"home0"}
                                  };
         private Dictionary<GameObjectID, LoadedModel> loadedModels = new Dictionary<GameObjectID, LoadedModel>();
 
@@ -52,7 +53,7 @@ namespace ICGame
                 loadedModels[pair.Key].model = tempModel;
                 loadedModels[pair.Key].name = pair.Value;
 
-                //Temp, temp i po trzykroć temp! Należy dodac jakis plik przechowujacy informację o typie ładowanego obiektu
+                //Temp, temp i po trzykroć temp! Należy dodac jakis plik przechowujacy informację o typie ładowanego obiektu 
                 switch (pair.Value)
                 {
                     case "firetruck":
@@ -60,6 +61,9 @@ namespace ICGame
                         break;
                     case "selection_ring":
                         loadedModels[pair.Key].objectClass = ObjectClass.StaticObject;
+                        break;
+                    case "home0":
+                        loadedModels[pair.Key].objectClass = ObjectClass.Building;
                         break;
                     default:
                         loadedModels[pair.Key].objectClass = ObjectClass.GameObject;
@@ -73,7 +77,8 @@ namespace ICGame
             
             LoadedModel loadedModel = loadedModels[gameObjectID];
             GameObject newObject = null;
-            switch (loadedModel.objectClass)
+            
+            switch (loadedModel.objectClass) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
                     newObject = new Vehicle(loadedModel.model, 1.0f, 6);
@@ -81,6 +86,9 @@ namespace ICGame
                     break;
                 case ObjectClass.StaticObject:
                     newObject = new StaticObject(loadedModel.model);
+                    break;
+                case ObjectClass.Building:
+                    newObject = new Building(loadedModel.model);
                     break;
             }
 
@@ -96,35 +104,6 @@ namespace ICGame
                 throw new Exception("Unknown unit!");
             }
           
-
-          /*  if (gameObjectID==GameObjectID.FireTruck)
-            {
-                Vehicle unit = new Vehicle(model1,1.0f, 6);
-                unit.Textures = texture2Ds;
-                //unit.DiffuseColor = diffuse;
-                //unit.DiffuseFactor = diffuseFactor;
-                //unit.Transparency = transparency;
-                //unit.Specular = specular;
-                //unit.SpecularFactor = specularFactor;
-
-                IDrawable i = unit;
-                i.GetDrawer();
-
-                MaterialReader mr = new MaterialReader(unit,"firetruck");
-                mr.PopulateObject(); //Arise my minion!
-                unit.SelectionRing = (StaticObject) this.CreateGameObject(GameObjectID.SelectionRing);
-
-                return unit;
-            }
-            else if (gameObjectID==GameObjectID.SelectionRing)
-            {
-                StaticObject selectionRing = new StaticObject(model2);
-
-                selectionRing.Textures = texture2Ds2;
-                MaterialReader mr=new MaterialReader(selectionRing,"selection_ring");
-                mr.PopulateObject(); //...just like dr Frankenstein...\
-                return selectionRing;
-            }*/
             return null;
         }
 

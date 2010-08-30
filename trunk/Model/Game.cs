@@ -37,12 +37,17 @@ namespace ICGame
             Content.RootDirectory = "Content";
 
             Campaign = new Campaign();
-            Camera=new Camera();
-            UserInterface = new UserInterface(Campaign);
-            UserInterfaceController = new UserInterfaceController(Camera, Campaign,UserInterface);
-            
-            Campaign.GameState = GameState.Initialize;
 
+            Camera=new Camera();
+            UserInterface = new UserInterface();
+
+            MissionController = new MissionController(this);
+            CampaignController = new CampaignController(this, MissionController);
+
+            UserInterfaceController = new UserInterfaceController(Camera, CampaignController,UserInterface);
+
+        
+        
         }
 
         #region Subclasses
@@ -90,6 +95,16 @@ namespace ICGame
         }
         #endregion
 
+        public MissionController MissionController
+        {
+            get; set;
+        }
+
+        public CampaignController CampaignController
+        {
+            get; set;
+        }
+
 
 
         /// <summary>
@@ -101,13 +116,22 @@ namespace ICGame
         protected override void Initialize()
         {
             base.Initialize();
-            Display = new Display(graphics, UserInterface, Camera, Campaign, effect);
-            Campaign.GameState = GameState.MainMenu;
-            this.IsMouseVisible = true;
-            this.GraphicsDevice.RenderState.AlphaBlendEnable = true;
-            this.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
-            //this.GraphicsDevice.RenderState.DepthBufferEnable = false;
-            this.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+            CampaignController.StartCampaign();
+            CampaignController.CampaignState = GameState.MainMenu;
+
+            Display = new Display(graphics, UserInterface, Camera, CampaignController, effect);
+            
+            
+
+            IsMouseVisible = true;
+
+            UserInterfaceController.InitializeUserInterface(this);
+
+            //Alpha blending
+            GraphicsDevice.RenderState.AlphaBlendEnable = true;
+            GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
+          //GraphicsDevice.RenderState.DepthBufferEnable = false;
+            GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
             
         }
 
@@ -120,16 +144,6 @@ namespace ICGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("Resources/effects");
-            UserInterface.LoadGraphics(this);
-            Campaign.GameObjectFactory.LoadModels(this);
-            Campaign.BuyUnit(GameObjectID.FireTruck);
-            //damn...
-            //Campaign.Mission.ObjectContainer.GameObjects.Add(
-                //Campaign.GameObjectFactory.CreateGameObject(GameObjectID.SelectionRing));
-            Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
-
-            Texture2D heightMap = Content.Load<Texture2D>("Resources/heightmap");
-            Campaign.Mission.Board.LoadHeightData(heightMap);
         }
 
         /// <summary>
@@ -148,13 +162,12 @@ namespace ICGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-
+            
             UserInterfaceController.UpdateInput();
             UserInterfaceController.UpdateUserInterfaceState(gameTime);
-            Campaign.Mission.ObjectContainer.UpdateGameObjects(); //temp
-
-            switch (Campaign.GameState)
+            MissionController.UpdateMission();
+            
+            switch (CampaignController.CampaignState)
             {
                 case GameState.Initialize:
                     break;
