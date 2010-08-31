@@ -165,7 +165,7 @@ namespace ICGame
             
             UserInterfaceController.UpdateInput();
             UserInterfaceController.UpdateUserInterfaceState(gameTime);
-            MissionController.UpdateMission();
+            MissionController.UpdateMission(gameTime);
             
             switch (CampaignController.CampaignState)
             {

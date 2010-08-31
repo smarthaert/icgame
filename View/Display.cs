@@ -47,14 +47,14 @@ namespace ICGame
             graphicsDevice.Clear(Color.CornflowerBlue);
             Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
             Camera.CalculateCamera();
-
+            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, effect, Camera.CameraMatrix, projection, Camera.CameraPosition);
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
                 if(gameObject is IAnimated) 
                 ((IAnimated)gameObject).Animate(gameTime);
                 gameObject.GetDrawer().Draw(projection,Camera,graphicsDevice);
             }
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,projection);
+  
             UserInterface.Drawer.Draw();
 
         }
