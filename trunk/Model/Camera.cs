@@ -35,7 +35,7 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateLookAt(cameraPosition, new Vector3(lookAtPosition.X,0,lookAtPosition.Z), Vector3.Transform(new Vector3(0,1,0),Matrix.CreateFromQuaternion(rotation)));
+                return Matrix.CreateLookAt(cameraPosition, new Vector3(lookAtPosition.X,0,lookAtPosition.Z), Vector3.Transform(new Vector3(0,5,0),Matrix.CreateFromQuaternion(rotation)));
                 
             }
         }
@@ -54,7 +54,7 @@ namespace ICGame
 
         public void CalculateCamera()
         {
-            cameraPosition = Vector3.Transform(new Vector3(0, 80, 20.0f), Matrix.CreateFromQuaternion(rotation*rotation2))+ lookAtPosition;
+            cameraPosition = Vector3.Transform(new Vector3(0, 70, 20.0f), Matrix.CreateFromQuaternion(rotation*rotation2))+ lookAtPosition;
 
         }
 
@@ -69,7 +69,6 @@ namespace ICGame
         {
             Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), angle);
             rotation2 *= additionalRot;
-
         }
 
         /// <summary>
@@ -89,7 +88,8 @@ namespace ICGame
         {
             lookAtPosition += dY * Vector3.Transform(new Vector3(0, 1, 0), Matrix.CreateFromQuaternion(rotation));
             //Cofnij odrobinę, dla lepszego efektu...
-            Move(0,-dY/3);
+            Move(0,-dY/2);
+            
         }
 
 
@@ -145,8 +145,8 @@ namespace ICGame
         public void RotateCameraAccordingToMouseTravel(int dx, int dy)
         {
             Rotate(dx*rotationSpeed);
+            RotateX(dy*rotationSpeed);
         }
-
 
         public void ChangeHeightAccordingToMouseWheel(int dScroll)
         {

@@ -9,8 +9,10 @@ namespace ICGame
 {
     public class Board
     {
-        private int terrainWidth;
-        private int terrainHeight;
+        
+
+        public int terrainWidth;
+        public int terrainHeight;
         private float[,] heightMap;
         private int[,] difficultyMap;
         private int[,] textureMap;
@@ -18,10 +20,28 @@ namespace ICGame
         private const int tileSize = 32;
         private VertexPositionColor[] vertexPositionColor;
         private int[] indices;
+
+        public SkyDome SkyDome
+        {
+            get; set;
+        }
     
         public Board()
         {
+          
+        }
 
+        public Model SkyDomeModel
+        {
+            get; set;
+        }
+
+        public Texture2D CloudMap
+        {
+            get
+            {
+                return SkyDome.CloudMap;
+            }
         }
 
         public VertexPositionColor[] VertexPositionColor1
@@ -147,5 +167,13 @@ namespace ICGame
             CreateTerrain();
         }
         //\TEMP
+
+        public void PrepareSkyDome( Model skyDome, Effect effect, GraphicsDevice device)
+        {
+          //  CloudMap = cloudMap;
+            SkyDomeModel = skyDome;
+            SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
+            SkyDome = new SkyDome(device,effect);
+        }
     }
 }

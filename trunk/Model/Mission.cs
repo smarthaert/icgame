@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
@@ -22,9 +23,11 @@ namespace ICGame
             get; set;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
+            float time = (float) gameTime.TotalGameTime.TotalMilliseconds/100.0f;
             ObjectContainer.UpdateGameObjects();
+            Board.SkyDome.GeneratePerlinNoise(time);
         }
 
         public void LoadObjects(GameObjectFactory gameObjectFactory)

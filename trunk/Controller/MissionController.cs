@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
@@ -20,9 +21,10 @@ namespace ICGame
             get; set;
         }
 
-        public void UpdateMission()
+        public void UpdateMission(GameTime gameTime)
         {
-            Mission.Update();
+            Mission.Update(gameTime);
+           
             
         }
         
@@ -35,6 +37,7 @@ namespace ICGame
         public void LoadMissionData(GameObjectFactory gameObjectFactory)
         {
             Texture2D heightMap = MainGame.Content.Load<Texture2D>("Resources/heightmap");
+            Mission.Board.PrepareSkyDome(MainGame.Content.Load<Model>("Resources/dome"), MainGame.effect, MainGame.GraphicsDevice);
             Mission.Board.LoadHeightData(heightMap);
             Mission.LoadObjects(gameObjectFactory);
         }
