@@ -58,10 +58,13 @@ namespace ICGame
             {
                 Matrix result = Matrix.Identity;
                 result *= Matrix.CreateScale(scale,scale,scale) /** Matrix.CreateRotationY(3*MathHelper.PiOver2)*/ * Matrix.CreateRotationZ(-MathHelper.PiOver2);// *result;
+                //if(this is Unit)
+                //    return result;
                 if (this is IPhysical)
                 {
                     result *= ((IPhysical)this).PhysicalTransforms;// *result;
                 }
+				result *= Matrix.CreateRotationX(Angle.X) * Matrix.CreateRotationY(Angle.Y) * Matrix.CreateRotationZ(Angle.Z);
                 result *= Matrix.CreateTranslation(Position);
                 return result;
             }

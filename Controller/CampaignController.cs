@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
@@ -63,6 +65,11 @@ namespace ICGame
         public GameObject GetActiveObject()
         {
             return MissionController.GetActiveObject();
+        }
+
+        public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
+        {
+            return MissionController.CheckSelection(x, y, camera, projection, gd);
         }
     }
 }

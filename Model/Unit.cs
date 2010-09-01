@@ -9,10 +9,11 @@ namespace ICGame
 {
     public class Unit : GameObject, IAnimated, IPhysical, IInteractive, IDestructible, IControllable
     {
-        public StaticObject SelectionRing
+		public StaticObject SelectionRing
         {
             get; set;
         }
+        private BoundingBox boundingBox;
 
         protected Matrix[] BasicTransforms
         {
@@ -80,14 +81,12 @@ namespace ICGame
                     max.Z = bb.Max.Z;
                 }
             }
-            BoundingBox = new BoundingBox(scale*min,scale*max);
+            boundingBox = new BoundingBox(min,max);     //Siedlisko śmierdzącego zła... Zatkaj nos Boo...
 
-            Length = (BoundingBox.Max.Z - BoundingBox.Min.Z);
-            Width = BoundingBox.Max.Y - BoundingBox.Min.Y;
-            Height = BoundingBox.Max.X - BoundingBox.Min.X;
+            Length = (boundingBox.Max.Z - boundingBox.Min.Z);
+            Width = boundingBox.Max.Y - boundingBox.Min.Y;
+            Height = boundingBox.Max.X - boundingBox.Min.X;
             PhysicalTransforms = Matrix.Identity;
-
-            
         }
 
         #region BoundingBox calculations
@@ -140,7 +139,14 @@ namespace ICGame
 
         public BoundingBox BoundingBox
         {
-            get; set;
+            get
+            {
+                return boundingBox;
+            }
+            set
+            {
+                boundingBox = value;
+            }
         }
  
 
@@ -193,7 +199,7 @@ namespace ICGame
 
         public bool Selected
         {
-            get; set;
+			get;set;
         }
 
         #endregion
@@ -352,6 +358,23 @@ namespace ICGame
 
             get;
             set;
+        }
+
+        public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+        {
+            Vector3 near = new Vector3((float)x, (float)y, 0f);
+            Vector3 far = new Vector3((float)x, (float)y, 1f);
+
+            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, ModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, ModelMatrix);
+
+            Vector3 direction = farpt - nearpt;
+
+            direction.Normalize();
+
+            Ray ray = new Ray(nearpt, direction);
+
+            return BoundingBox.Intersects(ray);
         }
 
         #endregion

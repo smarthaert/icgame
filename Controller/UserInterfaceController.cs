@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
@@ -59,12 +60,20 @@ namespace ICGame
             mouseCurState = Mouse.GetState();
             if(mouseCurState.LeftButton==ButtonState.Pressed&&mouseCurState!=mousePrevState)
             {
+                bool uiPressed = false;
                 if (mouseCurState.X >= UserInterface.ZuneUIModel.PositionX && mouseCurState.X <= UserInterface.ZuneUIModel.PositionX+UserInterface.ZuneUIModel.ZuneUI.Width
                  && mouseCurState.Y >= UserInterface.ZuneUIModel.PositionY && mouseCurState.Y <= UserInterface.ZuneUIModel.PositionY+20)
                 {
                     UserInterface.ZuneUIModel.State = UserInterface.ZuneUIModel.IsUp() == true
                                                           ? ZuneState.Down
                                                           : ZuneState.Up;
+                    uiPressed = true;
+                }
+            
+                if (!uiPressed)
+                {
+                    CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
+                        mainGame.GraphicsDevice);
                 }
             }
 
@@ -169,6 +178,14 @@ namespace ICGame
             if (curState.IsKeyDown(Keys.L))
             {
                 ((Unit)CampaignController.GetActiveObject()).Position += new Vector3(-0.2f, 0, 0);
+			}
+            if (curState.IsKeyDown(Keys.U))
+            {
+                ((Unit)CampaignController.GetActiveObject()).Angle += new Vector3(0, 0.01f, 0);
+            }
+            if (curState.IsKeyDown(Keys.O))
+            {
+                ((Unit)CampaignController.GetActiveObject()).Angle += new Vector3(0, -0.01f, 0);
             }
 
 
