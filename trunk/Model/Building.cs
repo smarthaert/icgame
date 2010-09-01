@@ -19,14 +19,8 @@ namespace ICGame
 
         public BoundingBox BoundingBox
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get;
+            set;
         }
 
         #endregion
@@ -107,11 +101,6 @@ namespace ICGame
             get; set;
         }
 
-        #endregion
-
-        #region IPhysical Members
-
-
         public float Width
         {
             get; set;
@@ -122,15 +111,16 @@ namespace ICGame
             get; set;
         }
 
-        #endregion
-
-        #region IPhysical Members
-
-
         public float Length
         {
             get; set;
         }
+
+        public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+        {
+            return null;
+        }
+
 
         #endregion
     }

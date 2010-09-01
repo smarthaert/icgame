@@ -23,10 +23,12 @@ namespace ICGame
             UserInterface = userInterface;
             Camera = camera;
             CampaignController = campaignController;
+            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
             this.effect = effect;
+
         }
 
-        public CampaignController CampaignController
+        public ContentManager Content
         {
             get; set;
         }
@@ -41,20 +43,33 @@ namespace ICGame
             get; set;
         }
 
-     
+        public CampaignController CampaignController
+
+        {
+            get; set;
+        }
+
+        public Matrix Projection
+        {
+            get;
+            set;
+        }
+
         public void Draw(GameTime gameTime)
         {
             graphicsDevice.Clear(Color.CornflowerBlue);
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
+
+            // TODO: Add your drawing code here
+
             Camera.CalculateCamera();
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, effect, Camera.CameraMatrix, projection, Camera.CameraPosition);
+            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,Projection,Camera.CameraPosition);
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
                 if(gameObject is IAnimated) 
                 ((IAnimated)gameObject).Animate(gameTime);
-                gameObject.GetDrawer().Draw(projection,Camera,graphicsDevice);
+                gameObject.GetDrawer().Draw(Projection,Camera,graphicsDevice);
             }
-  
+            
             UserInterface.Drawer.Draw();
 
         }

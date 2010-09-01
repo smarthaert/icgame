@@ -128,6 +128,10 @@ namespace ICGame
             }
         }
 
+		public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
