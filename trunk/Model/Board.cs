@@ -25,10 +25,15 @@ namespace ICGame
         {
             get; set;
         }
-    
-        public Board()
+
+        public Game MainGame
         {
-          
+            get; set;
+        }
+    
+        public Board(Game game)
+        {
+            MainGame = game;
         }
 
         public Model SkyDomeModel
@@ -174,6 +179,78 @@ namespace ICGame
             SkyDomeModel = skyDome;
             SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
             SkyDome = new SkyDome(device,effect);
+        }
+
+
+
+        private Ray GetPointerRay(Vector2 pointerPosition)
+        {
+            Vector3 nearScreenPoint = new Vector3(pointerPosition.X, pointerPosition.Y, 0);
+            Vector3 farScreenPoint = new Vector3(pointerPosition.X, pointerPosition.Y, 1);
+
+            Vector3 near3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(nearScreenPoint, MainGame.Display.Projection, MainGame.Display.Camera.CameraMatrix, Matrix.Identity);
+            Vector3 far3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(farScreenPoint, MainGame.Display.Projection, MainGame.Display.Camera.CameraMatrix, Matrix.Identity);
+
+            Vector3 pointerRayDirection = far3DWorldPoint - near3DWorldPoint;
+            Ray pointerRay = new Ray(near3DWorldPoint, pointerRayDirection);
+
+            return pointerRay;
+        }
+
+        public Vector3 GetPosition(int posX, int posY)
+        {
+            return BinarySearch(LinearSearch(ClipRay(GetPointerRay(new Vector2(posX, posY)), 30, 0)));
+        }
+
+        private Ray ClipRay(Ray ray, float highest, float lowest)
+        {
+            Vector3 oldStartPoint = ray.Position;
+
+            float factorH = -(oldStartPoint.Y - highest) / ray.Direction.Y;
+            Vector3 pointA = oldStartPoint + factorH * ray.Direction;
+
+            float factorL = -(oldStartPoint.Y - lowest) / ray.Direction.Y;
+            Vector3 pointB = oldStartPoint + factorL * ray.Direction;
+
+            Vector3 newDirection = pointB - pointA;
+            return new Ray(pointA, newDirection);
+        }
+
+        private Ray LinearSearch(Ray ray)
+        {
+            ray.Direction /= 50.0f;
+
+            Vector3 nextPoint = ray.Position + ray.Direction;
+            float heightAtNextPoint = GetHeight(nextPoint.X, -nextPoint.Z);//terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
+            while (heightAtNextPoint < nextPoint.Y)
+            {
+                ray.Position = nextPoint;
+
+                nextPoint = ray.Position + ray.Direction;
+                heightAtNextPoint = GetHeight(nextPoint.X, -nextPoint.Z); //terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
+            }
+            return ray;
+        }
+
+        private Vector3 BinarySearch(Ray ray)
+        {
+            float accuracy = 0.01f;
+            float heightAtStartingPoint = GetHeight(ray.Position.X, -ray.Position.Z);//terrain.GetExactHeightAt(ray.Position.X, -ray.Position.Z);
+            float currentError = ray.Position.Y - heightAtStartingPoint;
+            int counter = 0;
+            while (currentError > accuracy)
+            {
+                ray.Direction /= 2.0f;
+                Vector3 nextPoint = ray.Position + ray.Direction;
+                float heightAtNextPoint = GetHeight(nextPoint.X, -nextPoint.Z); //terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
+                if (nextPoint.Y > heightAtNextPoint)
+                {
+                    ray.Position = nextPoint;
+                    currentError = ray.Position.Y - heightAtNextPoint;
+                }
+                if (counter++ == 1000) break;
+            }
+            return ray.Position;
         }
     }
 }

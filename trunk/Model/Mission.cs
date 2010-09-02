@@ -7,9 +7,9 @@ namespace ICGame
 {
     public class Mission
     {
-        public Mission()
+        public Mission(Game game)
         {
-            Board = new Board();
+            Board = new Board(game);
             ObjectContainer=new GameObjectContainer(Board);
         }
        

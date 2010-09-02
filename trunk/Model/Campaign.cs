@@ -38,8 +38,8 @@ namespace ICGame
 
         public void LoadMission()
         {
-            Mission = new Mission();
-            Mission.LoadObjects(GameObjectFactory);
+            //Mission = new Mission();
+            //Mission.LoadObjects(GameObjectFactory);
         }
 
         public void BuyUnit(GameObjectID gameObjectID)
