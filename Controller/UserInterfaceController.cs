@@ -72,8 +72,13 @@ namespace ICGame
             
                 if (!uiPressed)
                 {
-                    CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
-                        mainGame.GraphicsDevice);
+                    if(!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
+                        mainGame.GraphicsDevice))
+                    {
+                        GameInfo gi = new GameInfo();
+                        Vector3 xxx = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
+                        gi.ShowInfo(xxx.ToString());
+                    }
                 }
             }
 

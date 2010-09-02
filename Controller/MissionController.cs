@@ -30,7 +30,7 @@ namespace ICGame
         
         public void StartMission()
         {
-            Mission = new Mission();
+            Mission = new Mission(MainGame);
             
         }
 

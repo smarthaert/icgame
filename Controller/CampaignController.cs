@@ -57,7 +57,7 @@ namespace ICGame
             get; set;
         }
 
-        private MissionController MissionController
+        public MissionController MissionController
         { 
             get; set;
         }
