@@ -83,9 +83,9 @@ namespace ICGame
             }
             boundingBox = new BoundingBox(min,max);     //Siedlisko śmierdzącego zła... Zatkaj nos Boo...
 
-            Length = (boundingBox.Max.Z - boundingBox.Min.Z);
-            Width = boundingBox.Max.Y - boundingBox.Min.Y;
-            Height = boundingBox.Max.X - boundingBox.Min.X;
+            Length = scale*(boundingBox.Max.Z - boundingBox.Min.Z);
+            Width = scale*boundingBox.Max.Y - boundingBox.Min.Y;
+            Height = scale*boundingBox.Max.X - boundingBox.Min.X;
             PhysicalTransforms = Matrix.Identity;
         }
 
