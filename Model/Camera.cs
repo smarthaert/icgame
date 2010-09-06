@@ -11,21 +11,31 @@ namespace ICGame
         private Vector3 lookAtPosition = new Vector3(0, 0, 0);
         private Quaternion rotation = Quaternion.Identity;
         private Quaternion rotation2 = Quaternion.Identity;
-        private Vector3 cameraPosition=new Vector3(0,0,0);
+        private Vector3 cameraPosition=new Vector3(250,0,164);
+        private Vector3 cameraAdditionalPosition = new Vector3(0,70,20);
+        
+        //Kolizje
+        private Vector3 collisionFreeLookAt=new Vector3(0,0,0);
+        private Vector3 collisionFreeCameraAdditionalPosition = new Vector3(0, 0, 0);
 
         private const float rotationSpeed = 0.01f;
         private const float heightChangeSpeed = 0.3f;
         private const float movementSpeed = 0.2f;
 
-        public Camera()
+        
+        public Camera(Vector3 position, MissionController missionController)
         {
+            lookAtPosition = position;
+            MissionController = missionController;
+            collisionFreeLookAt = position;
+            
+            
         }
 
-        public Camera(Vector3 position)
+        public MissionController MissionController
         {
-            lookAtPosition = position;   
+            get; set;
         }
-
 
         /// <summary>
         /// Zwraca macierz kamery obliczoną dla aktualnej pozycji na .
@@ -35,7 +45,7 @@ namespace ICGame
         {
             get
             {
-                return Matrix.CreateLookAt(cameraPosition, new Vector3(lookAtPosition.X,0,lookAtPosition.Z), Vector3.Transform(new Vector3(0,5,0),Matrix.CreateFromQuaternion(rotation)));
+                return Matrix.CreateLookAt(cameraPosition, lookAtPosition, Vector3.Transform(new Vector3(0,5,0),Matrix.CreateFromQuaternion(rotation)));
                 
             }
         }
@@ -52,23 +62,50 @@ namespace ICGame
             }
         }
 
-        public void CalculateCamera()
+        public Vector3 CalculateCamera()
         {
-            cameraPosition = Vector3.Transform(new Vector3(0, 70, 20.0f), Matrix.CreateFromQuaternion(rotation*rotation2))+ lookAtPosition;
-
+            
+            CameraPosition = Vector3.Transform(cameraAdditionalPosition, Matrix.CreateFromQuaternion(rotation*rotation2)) + lookAtPosition;
+            return CameraPosition;
         }
 
         protected void Rotate(float angle)
         {
-            Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0),angle);     
-            rotation *= additionalRot;            
+            
+            if (!TerrainCollision(0))
+            {
+                Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), angle);
+                rotation *= additionalRot;
+                CalculateCamera();
+            }
 
         }
 
         protected void RotateX(float angle)
         {
             Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), angle);
-            rotation2 *= additionalRot;
+            if (!TerrainCollision(-angle))
+            {
+                //Quaternion tempRotation = rotation2;
+              
+                rotation2 *= additionalRot;
+                CalculateCamera();
+         //       if ((Math.Abs(CameraPosition.X - lookAtPosition.X) < Math.Abs(angle) + 10) && (Math.Abs(CameraPosition.Z - lookAtPosition.Z) < Math.Abs(angle) + 10))
+                //if (rotation2.W - 0.1f < 0 && angle<0)
+//                return atan2(2 * (y * z + w * x), w * w - x * x - y * y + z * z);
+                double quatAngle = Math.Atan2(2*(rotation2.Y*rotation2.Z+rotation2.W*rotation2.X),rotation2.W*rotation2.W-rotation2.X*rotation2.X-rotation2.Y*rotation2.Y+rotation2.Z*rotation2.Z);
+                if(quatAngle<0)
+                {
+                    rotation2 /= additionalRot;
+                    CalculateCamera();
+                }
+            }
+
+            if(TerrainCollision(-angle))
+            {
+                rotation2 /= additionalRot;
+                CalculateCamera();
+            }
         }
 
         /// <summary>
@@ -80,16 +117,48 @@ namespace ICGame
 
         protected void Move(float dX, float dZ)
         {
+            if(!TerrainCollision(0))
+                collisionFreeLookAt = new Vector3(lookAtPosition.X,lookAtPosition.Y, lookAtPosition.Z);
+            
             lookAtPosition += dZ * Vector3.Transform(new Vector3(0, 0, -1), Matrix.CreateFromQuaternion(rotation));
-            lookAtPosition += dX * Vector3.Transform(new Vector3(1, 0, 0), Matrix.CreateFromQuaternion(rotation)); 
+            lookAtPosition += dX * Vector3.Transform(new Vector3(1, 0, 0), Matrix.CreateFromQuaternion(rotation));
+            CalculateCamera();
+            if (TerrainCollision(0))
+            {
+                lookAtPosition = collisionFreeLookAt;
+                
+                CalculateCamera();
+            }
+        }
+
+        public bool TerrainCollision(float dY)
+        {
+            if ((MissionController.Mission.Board.GetHeight(CameraPosition.X, CameraPosition.Z) + 10.0f<= CameraPosition.Y)||dY>0)
+                return false;
+            return true;
         }
 
         protected void ChangeHeight(float dY)
         {
-            lookAtPosition += dY * Vector3.Transform(new Vector3(0, 1, 0), Matrix.CreateFromQuaternion(rotation));
+            if(!TerrainCollision(dY))
+                collisionFreeCameraAdditionalPosition = cameraAdditionalPosition;
+            Vector3 heightValue = cameraAdditionalPosition + dY * Vector3.Transform(new Vector3(0, 1, 0), Matrix.CreateFromQuaternion(rotation));
+
+            if (heightValue.Y < 200.0f)
+            {
+                cameraAdditionalPosition = heightValue;
+
+            }
             //Cofnij odrobinę, dla lepszego efektu...
-            Move(0,-dY/2);
-            
+            CalculateCamera();
+
+            if (TerrainCollision(dY))
+            {
+                cameraAdditionalPosition = collisionFreeCameraAdditionalPosition;
+          
+                CalculateCamera();
+            }
+
         }
 
 

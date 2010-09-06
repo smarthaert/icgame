@@ -23,7 +23,7 @@ namespace ICGame
             UserInterface = userInterface;
             Camera = camera;
             CampaignController = campaignController;
-            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
+            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 600.0f);
             this.effect = effect;
 
         }

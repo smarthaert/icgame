@@ -36,7 +36,14 @@ namespace ICGame
 
         public void LoadMissionData(GameObjectFactory gameObjectFactory)
         {
-            Texture2D heightMap = MainGame.Content.Load<Texture2D>("Resources/heightmap");
+            Microsoft.Xna.Framework.Content.ContentManager contentManager = MainGame.Content;
+            Texture2D heightMap = contentManager.Load<Texture2D>("Resources/heightmap");
+
+            Mission.Board.LoadTextures(contentManager.Load<Texture2D>("Texture2D/Board/grass"),
+                contentManager.Load<Texture2D>("Texture2D/Board/rock"),
+                contentManager.Load<Texture2D>("Texture2D/Board/sand"),
+                contentManager.Load<Texture2D>("Texture2D/Board/snow")
+                );
             Mission.Board.PrepareSkyDome(MainGame.Content.Load<Model>("Resources/dome"), MainGame.effect, MainGame.GraphicsDevice);
             Mission.Board.LoadHeightData(heightMap);
             Mission.LoadObjects(gameObjectFactory);
@@ -59,7 +66,11 @@ namespace ICGame
 
         public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
         {
-            return Mission.ObjectContainer.CheckSelection(x, y, camera, projection, gd);
+            bool selected = Mission.ObjectContainer.CheckSelection(x, y, camera, projection, gd);
+
+
+
+            return selected;
         }
     }
 }

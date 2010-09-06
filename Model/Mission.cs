@@ -32,7 +32,14 @@ namespace ICGame
 
         public void LoadObjects(GameObjectFactory gameObjectFactory)
         {
-            ObjectContainer.GameObjects.Add(gameObjectFactory.CreateGameObject(GameObjectID.Home0));
+            GameObject obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
+            obj.Position=new Vector3(244.0f,Board.GetHeight(244.0f,164.0f),164.0f);
+            ObjectContainer.GameObjects.Add(obj);
+
+            obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
+            obj.Position = new Vector3(274.0f, Board.GetHeight(274.0f, 134.0f), 134.0f);
+            ObjectContainer.GameObjects.Add(obj);
+            
         }
     }
 }

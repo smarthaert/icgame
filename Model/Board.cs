@@ -16,10 +16,32 @@ namespace ICGame
         private float[,] heightMap;
         private int[,] difficultyMap;
         private int[,] textureMap;
-        private List<Microsoft.Xna.Framework.Graphics.Texture2D> textures;
+        private Dictionary<string,Texture2D> textures;
         private const int tileSize = 32;
-        private VertexPositionColor[] vertexPositionColor;
+        private VertexMultitextured[] vertexPositionColor;
         private int[] indices;
+
+        public VertexBuffer TerrainVertexBuffer
+        { 
+            get; set;
+        }
+
+        public IndexBuffer TerrainIndexBuffer
+        {
+            get; set;
+        }
+            
+        public Dictionary<string, Texture2D> Textures
+        {
+            get
+            {
+                return textures;
+            }
+            set
+            {
+                textures = value;
+            }
+        }
 
         public SkyDome SkyDome
         {
@@ -49,7 +71,7 @@ namespace ICGame
             }
         }
 
-        public VertexPositionColor[] VertexPositionColor1
+        public VertexMultitextured[] VertexPositionColor1
         {
             get { return vertexPositionColor; }
         }
@@ -60,17 +82,38 @@ namespace ICGame
 
         public void CreateTerrain()
         {
-             ArrayList vertexArray = new ArrayList();
-            for (int i = 0; i < terrainWidth; i++)
+            VertexMultitextured[] terrainVertices = new VertexMultitextured[terrainWidth * terrainHeight];
+            for (int x = 0; x < terrainWidth; x++)
             {
-                for (int j = 0; j < terrainHeight; j++)
+                for (int y = 0; y < terrainHeight; y++)
                 {
-                    vertexArray.Add(new VertexPositionColor(new Vector3(i, heightMap[i, j], j),
-                                                            new Color(0, 0, (byte)(heightMap[i, j]*10+20),255)));
+                    float height = heightMap[x, y];// GetHeight(x, y); //* 10 +20;
+                    terrainVertices[x + y * terrainWidth].Position = new Vector3(x, heightMap[x, y], y);
+                    terrainVertices[x + y * terrainWidth].TextureCoordinate.X = (float)x / 30.0f;
+                    terrainVertices[x + y * terrainWidth].TextureCoordinate.Y = (float)y / 30.0f;
+
+                    terrainVertices[x + y * terrainWidth].TexWeights.X = MathHelper.Clamp(1.0f - Math.Abs(height - 0) / 8.0f, 0, 1);
+                    terrainVertices[x + y * terrainWidth].TexWeights.Y = MathHelper.Clamp(1.0f - Math.Abs(height - 12) / 6.0f, 0, 1);
+                    terrainVertices[x + y * terrainWidth].TexWeights.Z = MathHelper.Clamp(1.0f - Math.Abs(height - 20) / 6.0f, 0, 1);
+                    terrainVertices[x + y * terrainWidth].TexWeights.W = MathHelper.Clamp(1.0f - Math.Abs(height - 30) / 6.0f, 0, 1);
+
+                    float total = terrainVertices[x + y * terrainWidth].TexWeights.X;
+                    total += terrainVertices[x + y * terrainWidth].TexWeights.Y;
+                    total += terrainVertices[x + y * terrainWidth].TexWeights.Z;
+                    total += terrainVertices[x + y * terrainWidth].TexWeights.W;
+
+                    terrainVertices[x + y * terrainWidth].TexWeights.X /= total;
+                    terrainVertices[x + y * terrainWidth].TexWeights.Y /= total;
+                    terrainVertices[x + y * terrainWidth].TexWeights.Z /= total;
+                    terrainVertices[x + y * terrainWidth].TexWeights.W /= total;
+
+                   /* vertexArray.Add(new VertexMultitextured(new Vector3(i, heightMap[i, j], j),
+                                                            new Color(0, 0, (byte)(heightMap[i, j]*10+20),255),));*/
                 }
             }
-            vertexPositionColor = (VertexPositionColor[]) vertexArray.ToArray(typeof (VertexPositionColor));
+            vertexPositionColor = terrainVertices;
             SetUpIndices();
+            PrepareBuffers();
         }
 
         private void SetUpIndices()
@@ -148,10 +191,10 @@ namespace ICGame
             }
             x = x - lx;
             y = y - ly;
-            return heightMap[lx, ly] + (heightMap[hx, ly] - heightMap[lx, ly]) * x + (heightMap[lx, hy] - heightMap[lx, ly]) * y + (heightMap[lx, ly] - heightMap[hx,ly] - heightMap[lx,hy] + heightMap[hx,hy])*x*y;
+            return (heightMap[lx, ly] + (heightMap[hx, ly] - heightMap[lx, ly]) * x + (heightMap[lx, hy] - heightMap[lx, ly]) * y + (heightMap[lx, ly] - heightMap[hx,ly] - heightMap[lx,hy] + heightMap[hx,hy])*x*y);
         }
 
-        public Microsoft.Xna.Framework.Vector3 GetNormal(float X, float Y, float objectWidth, float objectLength, float angle)
+        public Vector3 GetNormal(float X, float Y, float objectWidth, float objectLength, float angle)
         {
             return new Vector3();
         }
@@ -161,15 +204,33 @@ namespace ICGame
         {
             terrainWidth = heightMap.Width;
             terrainHeight = heightMap.Height;
-
+            float minimumHeight = 0;
+            float maximumHeight = 0;
             Color[] heightMapColors = new Color[terrainWidth * terrainHeight];
             heightMap.GetData(heightMapColors);
 
             this.heightMap = new float[terrainWidth, terrainHeight];
             for (int x = 0; x < terrainWidth; x++)
                 for (int y = 0; y < terrainHeight; y++)
-                    this.heightMap[x, y] = heightMapColors[x + y * terrainWidth].R / 5.0f;
+                {
+                    this.heightMap[x, y] = heightMapColors[x + y*terrainWidth].R;
+                    minimumHeight = this.heightMap[x, y] < minimumHeight ? this.heightMap[x, y] : minimumHeight;
+                    maximumHeight = this.heightMap[x, y] > maximumHeight ? this.heightMap[x, y] : maximumHeight;
+                }
+
+            for (int x = 0; x < terrainWidth; x++)
+                for (int y = 0; y < terrainHeight; y++)
+                     this.heightMap[x, y] = (this.heightMap[x, y] - minimumHeight) / (maximumHeight - minimumHeight) * 30.0f;
             CreateTerrain();
+        }
+
+        public void LoadTextures(Texture2D grass, Texture2D snow, Texture2D sand, Texture2D rock)
+        {
+            textures = new Dictionary<string, Texture2D>();
+            textures.Add("grass", grass);
+            textures.Add("snow", snow);
+            textures.Add("sand", sand);
+            textures.Add("rock", rock);
         }
         //\TEMP
 
@@ -179,6 +240,15 @@ namespace ICGame
             SkyDomeModel = skyDome;
             SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
             SkyDome = new SkyDome(device,effect);
+        }
+
+        public void PrepareBuffers()
+        {
+            TerrainVertexBuffer = new VertexBuffer(MainGame.GraphicsDevice, vertexPositionColor.Length * VertexMultitextured.SizeInBytes, BufferUsage.WriteOnly);
+            TerrainVertexBuffer.SetData(vertexPositionColor);
+
+            TerrainIndexBuffer = new IndexBuffer(MainGame.GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
+            TerrainIndexBuffer.SetData(indices);
         }
 
 
@@ -252,5 +322,23 @@ namespace ICGame
             }
             return ray.Position;
         }
+    }
+
+
+    public struct VertexMultitextured
+    {
+        public Vector3 Position;
+        public Vector3 Normal;
+        public Vector4 TextureCoordinate;
+        public Vector4 TexWeights;
+
+        public static int SizeInBytes = (3 + 3 + 4 + 4) * sizeof(float);
+        public static VertexElement[] VertexElements = new VertexElement[]
+     {
+         new VertexElement( 0, 0, VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Position, 0 ),
+         new VertexElement( 0, sizeof(float) * 3, VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Normal, 0 ),
+         new VertexElement( 0, sizeof(float) * 6, VertexElementFormat.Vector4, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 0 ),
+         new VertexElement( 0, sizeof(float) * 10, VertexElementFormat.Vector4, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 1 ),
+     };
     }
 }

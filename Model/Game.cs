@@ -38,11 +38,13 @@ namespace ICGame
 
             Campaign = new Campaign();
 
-            Camera=new Camera();
+            
             UserInterface = new UserInterface();
 
             MissionController = new MissionController(this);
             CampaignController = new CampaignController(this, MissionController);
+
+            Camera = new Camera(new Vector3(244, 0, 154),MissionController);
 
             UserInterfaceController = new UserInterfaceController(Camera, CampaignController,UserInterface);
 

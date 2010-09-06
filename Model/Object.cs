@@ -37,7 +37,7 @@ namespace ICGame
             Opacity = new List<float>();
             
 
-            position = new Vector3(0, 0, 0);
+            position = new Vector3(210, 0, 160);
             
         }
         public virtual GameObjectDrawer GetDrawer()
