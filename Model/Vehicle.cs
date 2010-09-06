@@ -27,6 +27,7 @@ namespace ICGame
         private float wheelAngle;
         private float turretAngle = 0;
         public float turretDestination;     //TEMP!
+        private GameInfo gi;    //TEMP
 
         #region Properties
 
@@ -92,8 +93,8 @@ namespace ICGame
 
         #endregion
 
-        public Vehicle(Model model, float speed, int wheelsCount)
-            : base(model, speed)
+        public Vehicle(Model model, float speed, float turnRadius, int wheelsCount)
+            : base(model, speed, turnRadius)
         {
             this.wheelsCount = wheelsCount;
 
@@ -108,7 +109,8 @@ namespace ICGame
             //TEMP
             leftDoorState = DoorState.Opening;
             rightDoorState = DoorState.Opening;
-            wheelState = WheelState.StraightLeft;
+            //wheelState = WheelState.StraightLeft;
+            gi = new GameInfo();
             //\TEMP
 
         }
@@ -152,7 +154,7 @@ namespace ICGame
                     {
                         wheelState = WheelState.Right;
                         //TEMP
-                        WheelState = WheelState.RightStraight;
+                        //WheelState = WheelState.RightStraight;
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
@@ -180,7 +182,7 @@ namespace ICGame
                     {
                         wheelState = WheelState.Straight;
                         //TEMP
-                        WheelState = WheelState.StraightLeft;
+                        //WheelState = WheelState.StraightLeft;
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
@@ -207,7 +209,7 @@ namespace ICGame
                     {
                         wheelState = WheelState.Left;
                         //TEMP
-                        WheelState = WheelState.LeftStraight;
+                        //WheelState = WheelState.LeftStraight;
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
@@ -234,7 +236,7 @@ namespace ICGame
                     {
                         wheelState = WheelState.Straight;
                         //TEMP
-                        WheelState = WheelState.StraightRight;
+                        //WheelState = WheelState.StraightRight;
                         //\TEMP
                         AnimationTransforms[Model.Bones["Wheel0"].Index] =
                             AnimationTransforms[Model.Bones["Wheel0"].Index] *
@@ -349,7 +351,7 @@ namespace ICGame
                     break;
             }
             AnimationTransforms[Model.Bones["Wheel" + Convert.ToString(wheelIndex)].Index] =
-                Matrix.CreateRotationY(0.01f*gameTime.ElapsedGameTime.Milliseconds*speed*sign)*
+                Matrix.CreateRotationY(0.01f*gameTime.ElapsedGameTime.Milliseconds*Speed*sign)*
                 AnimationTransforms[Model.Bones["Wheel" + Convert.ToString(wheelIndex)].Index];
         }
 
@@ -374,6 +376,161 @@ namespace ICGame
         public override GameObjectDrawer GetDrawer()
         {
             return new VehicleDrawer(this);
+        }
+
+        public override void CalculateNextStep(GameTime gameTime)
+        {
+            const float tolerance = 1f;
+
+            NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
+            NextStep = new Vector2(NextStep.X * Convert.ToSingle(Math.Cos(Angle.Y)) - NextStep.Y * Convert.ToSingle(Math.Sin(Angle.Y)),
+                NextStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
+
+            gi.ShowInfo("NextStep: " + NextStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString());
+
+            if (NextStep.X > tolerance)
+            {
+                if (NextStep.Y > tolerance)
+                {
+                    if(WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightLeft;
+                    }
+                    else if (WheelState == WheelState.Right)
+                    {
+                        WheelState = WheelState.RightStraight;
+                    }
+                    if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
+                    {
+                        Move(Direction.Forward, gameTime);
+                        Turn(Direction.Left, gameTime);
+                    }
+                }
+                else if (NextStep.Y < tolerance)
+                {
+                    if(WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightRight;
+                    }
+                    else if (WheelState == WheelState.Left)
+                    {
+                        WheelState = WheelState.LeftStraight;
+                    }
+                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
+                    {
+                        Move(Direction.Backward, gameTime);
+                        Turn(Direction.Left, gameTime);
+                    }
+                }
+                else
+                {
+                    if (WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightRight;
+                    }
+                    else if (WheelState == WheelState.Left)
+                    {
+                        WheelState = WheelState.LeftStraight;
+                    }
+                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
+                    {
+                        Move(Direction.Backward, gameTime);
+                        Turn(Direction.Right, gameTime);
+                    }
+                }
+            }
+            else if (Math.Abs(NextStep.X) <= tolerance)
+            {
+                if (Math.Abs(NextStep.Y) <= tolerance)
+                {
+                    Move(Direction.None, gameTime);
+                    Turn(Direction.None, gameTime);
+                }
+                else if (NextStep.Y > tolerance)
+                {
+                    if (WheelState == WheelState.Left)
+                    {
+                        WheelState = WheelState.LeftStraight;
+                    }
+                    else if (WheelState == WheelState.Right)
+                    {
+                        WheelState = WheelState.RightStraight;
+                    }
+
+                    if (WheelState == WheelState.Straight || WheelState == WheelState.LeftStraight || WheelState == WheelState.RightStraight)
+                    {
+                        Move(Direction.Forward, gameTime);
+                    }
+                }
+                else if (NextStep.Y < tolerance)
+                {
+
+                    if (WheelState == WheelState.Left)
+                    {
+                        WheelState = WheelState.LeftStraight;
+                    }
+                    else if (WheelState == WheelState.Right)
+                    {
+                        WheelState = WheelState.RightStraight;
+                    }
+
+                    if (WheelState == WheelState.Straight || WheelState == WheelState.LeftStraight || WheelState == WheelState.RightStraight)
+                    {
+                        Move(Direction.Backward, gameTime);
+                    }
+                }
+            }
+            else
+            {
+                if (NextStep.Y < tolerance)
+                {
+                    if (WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightRight;
+                    }
+                    else if (WheelState == WheelState.Left)
+                    {
+                        WheelState = WheelState.LeftStraight;
+                    }
+                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
+                    {
+                        Move(Direction.Backward, gameTime);
+                        Turn(Direction.Left, gameTime);
+                    }
+                }
+                else if (NextStep.Y > tolerance)
+                {
+                    if (WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightRight;
+                    }
+                    else if (WheelState == WheelState.Left)
+                    {
+                        WheelState = WheelState.LeftStraight;
+                    }
+                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
+                    {
+                        Move(Direction.Forward, gameTime);
+                        Turn(Direction.Right, gameTime);
+                    }
+                }
+                else
+                {
+                    if (WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightLeft;
+                    }
+                    else if (WheelState == WheelState.Right)
+                    {
+                        WheelState = WheelState.RightStraight;
+                    }
+                    if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
+                    {
+                        Move(Direction.Backward, gameTime);
+                        Turn(Direction.Left, gameTime);
+                    }
+                }
+            }
         }
 
     }

@@ -8,8 +8,8 @@ namespace ICGame
 {
     public class Infantry : Unit
     {
-        public Infantry(Model model, float speed, GameTime gameTime)
-            : base(model, speed)
+        public Infantry(Model model, float speed, float turnRadius, GameTime gameTime)
+            : base(model, speed, turnRadius)
         {
             
         }

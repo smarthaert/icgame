@@ -18,11 +18,28 @@ namespace ICGame
          */
         private int selectedObject;
 
-        public int SelectedObject
+        private int SelectedObject
         {
-            get
-            {
+            get 
+            { 
                 return selectedObject;
+            }
+            set
+            {
+                if (selectedObject < GameObjects.Count && selectedObject != -1)
+                {
+                    if(GameObjects[selectedObject] is IInteractive)
+                    {
+                        IInteractive interactive = GameObjects[selectedObject] as IInteractive;
+                        interactive.Selected = false;
+                    }
+                }
+                selectedObject = value;
+                if (selectedObject != -1 && GameObjects[selectedObject] is IInteractive)
+                {
+                    IInteractive interactive = GameObjects[selectedObject] as IInteractive;
+                    interactive.Selected = true;
+                }
             }
         }
 
@@ -34,7 +51,7 @@ namespace ICGame
         {
             Board = board;
             GameObjects=new List<GameObject>();
-            selectedObject = -1;
+            SelectedObject = -1;
             //TEMP
             gi = new GameInfo();
             //\TEMP
@@ -56,18 +73,13 @@ namespace ICGame
                     if (check != null && (selected == null || check < selected))
                     {
                         selected = check;
-                        selectedObject = i;
+                        SelectedObject = i;
                     }
                 }
             }
             if (selected == null)
             {
-                selectedObject = -1;
-            }
-            else
-            {
-                //Potencjalny BUG, ale jest pozno, poprawie pozniej
-                (GameObjects[selectedObject] as Unit).Selected = true;
+                SelectedObject = -1;
             }
             return selected!=null;
         }
@@ -97,20 +109,20 @@ namespace ICGame
                         GameObjects[i].Position.Z);
                     go.AdjustToGround(
                         Board.GetHeight(
-                            GameObjects[i].Position.Z + cosl,
-                            GameObjects[i].Position.X + sinl
+                            GameObjects[i].Position.X + sinl,
+                            GameObjects[i].Position.Z + cosl
                             ),
                         Board.GetHeight(
-                            GameObjects[i].Position.Z - cosl,
-                            GameObjects[i].Position.X - sinl
+                            GameObjects[i].Position.X - sinl,
+                            GameObjects[i].Position.Z - cosl
                             ),
                         Board.GetHeight(
-                            GameObjects[i].Position.Z - sinw,
-                            GameObjects[i].Position.X + cosw
+                            GameObjects[i].Position.X + cosw,
+                            GameObjects[i].Position.Z - sinw
                             ),
                         Board.GetHeight(
-                            GameObjects[i].Position.Z + sinw,
-                            GameObjects[i].Position.X - cosw
+                            GameObjects[i].Position.X - cosw,
+                            GameObjects[i].Position.Z + sinw
                             ),
                         go.Length,
                         go.Width
@@ -134,9 +146,29 @@ namespace ICGame
                 //\TEMP
             }
             //TEMP
-            logText += "Selected:\t" + selectedObject.ToString() + "\r\n";
+            logText += "Selected:\t" + SelectedObject.ToString() + "\r\n";
             gi.ShowInfo(logText);
             //\TEMP
+        }
+
+        public void MoveToLocation(float x, float z)
+        {
+            if(SelectedObject == -1)
+            {
+                return;
+            }
+
+            if(SelectedObject >= GameObjects.Count)
+            {
+                throw new ArgumentOutOfRangeException("dupa");
+            }
+
+            if(GameObjects[SelectedObject] is IControllable)
+            {
+                IControllable controllable = GameObjects[SelectedObject] as IControllable;
+
+                controllable.Destination = new Vector2(x,z);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
@@ -18,10 +19,22 @@ namespace ICGame
             set;
         }
 
-        void CalculateNextStep();
+        float Speed
+        {
+            get;
+            set;
+        }
 
-        void Move(Direction direction);
+        float TurnRadius
+        {
+            get;
+            set;
+        }
 
-        void Turn(Direction direction);
+        void CalculateNextStep(GameTime gameTime);
+
+        void Move(Direction direction, GameTime gameTime);
+
+        void Turn(Direction direction, GameTime gameTime);
     }
 }

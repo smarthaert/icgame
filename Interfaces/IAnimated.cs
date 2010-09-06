@@ -7,7 +7,7 @@ namespace ICGame
 {
     public interface IAnimated
     {
-    
+
         void Animate(GameTime gameTime);
     }
 }
