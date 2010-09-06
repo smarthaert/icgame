@@ -60,17 +60,18 @@ namespace ICGame
             mouseCurState = Mouse.GetState();
             if(mouseCurState.LeftButton==ButtonState.Pressed&&mouseCurState!=mousePrevState)
             {
-                bool uiPressed = false;
+                //Do poprawki
                 if (mouseCurState.X >= UserInterface.ZuneUIModel.PositionX && mouseCurState.X <= UserInterface.ZuneUIModel.PositionX+UserInterface.ZuneUIModel.ZuneUI.Width
                  && mouseCurState.Y >= UserInterface.ZuneUIModel.PositionY && mouseCurState.Y <= UserInterface.ZuneUIModel.PositionY+20)
                 {
                     UserInterface.ZuneUIModel.State = UserInterface.ZuneUIModel.IsUp() == true
                                                           ? ZuneState.Down
                                                           : ZuneState.Up;
-                    uiPressed = true;
+               
                 }
+
             
-                if (!uiPressed)
+                if (!UserInterface.InterfaceOverlaped(mouseCurState.X,mouseCurState.Y))
                 {
                     if(!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
                         mainGame.GraphicsDevice))
@@ -107,10 +108,7 @@ namespace ICGame
             //Scroll control
             Camera.ChangeHeightAccordingToMouseWheel(mouseCurState.ScrollWheelValue - mousePrevState.ScrollWheelValue);
 
-            if(UserInterface.InterfaceOverlaped(mouseCurState.X,mouseCurState.Y))
-            {
-                
-            }
+
         }
 
         private void UpdateKeyboardState()

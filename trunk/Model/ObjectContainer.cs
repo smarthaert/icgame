@@ -18,6 +18,14 @@ namespace ICGame
          */
         private int selectedObject;
 
+        public int SelectedObject
+        {
+            get
+            {
+                return selectedObject;
+            }
+        }
+
         private Board Board
         {
             get; set;
@@ -56,6 +64,11 @@ namespace ICGame
             {
                 selectedObject = -1;
             }
+            else
+            {
+                //Potencjalny BUG, ale jest pozno, poprawie pozniej
+                (GameObjects[selectedObject] as Unit).Selected = true;
+            }
             return selected!=null;
         }
 
@@ -80,7 +93,7 @@ namespace ICGame
                     //\TEMP
 
                     GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,
-                        (Board.GetHeight(GameObjects[i].Position.Z,GameObjects[i].Position.X)),
+                        (Board.GetHeight(GameObjects[i].Position.X,GameObjects[i].Position.Z)),
                         GameObjects[i].Position.Z);
                     go.AdjustToGround(
                         Board.GetHeight(

@@ -31,8 +31,8 @@
       <Property Name="GameInfo" />
       <Property Name="Camera" />
       <Property Name="UserInterface" />
-      <Property Name="CampaignController" />
       <Property Name="MissionController" />
+      <Property Name="CampaignController" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.UserInterfaceController">
@@ -42,14 +42,14 @@
       <FileName>Controller\UserInterfaceController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Camera" />
       <Property Name="CampaignController" />
+      <Property Name="Camera" />
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.Camera">
     <Position X="5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAFAMAAAAZgAABEAAACAAAAEEBEAACAIQEBAAAAAIAA=</HashCode>
+      <HashCode>AAFAMAIAAZgAABEAAACAAAAEEBEAASAIQEBAAQAAKEA=</HashCode>
       <FileName>Model\Camera.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -79,7 +79,7 @@
   <Class Name="ICGame.Board">
     <Position X="10.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAQAQAEAAUAAAQABAAAAAABAABIAEAgAACAEABAAAgA=</HashCode>
+      <HashCode>CQQEQAEAAWAABQBBgASAAABAAJIAEAgAACAEEBAAAnE=</HashCode>
       <FileName>Model\Board.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -93,14 +93,14 @@
   <Class Name="ICGame.GameObjectContainer">
     <Position X="8.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <HashCode>AAQAAAAEAEAAAAAAEAAQAAAAEAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Model\ObjectContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Display">
     <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAACCAAAAAAAAgAAAAAAAAAAAAAAACwAAAAAAAAAAAA=</HashCode>
+      <HashCode>EAACCAAAAgAAAgAAAAAAAAAAAAAAACwAAAAAAAAQAAA=</HashCode>
       <FileName>View\Display.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -148,7 +148,7 @@
   <Class Name="ICGame.Unit">
     <Position X="16.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAgCDBMAIAAEIAABSRERAQCBAAQAEAABAAEAAJAI=</HashCode>
+      <HashCode>AAAgAgCDBMAIAAEIAABSRERAUCBAAQAkAABAAEAAJAI=</HashCode>
       <FileName>Model\Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -163,7 +163,7 @@
   <Class Name="ICGame.StaticObject">
     <Position X="18.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCABEAAAAAAAAAABEBAQCBAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgCABEAAAAAAAAAABEBAUCBAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\StaticObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -178,7 +178,7 @@
   <Class Name="ICGame.Building">
     <Position X="20.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCABEAAAAAAAAAABERAQCBAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAgCABEAAAAAAAAAABERAUCBAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Model\Building.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -193,7 +193,7 @@
   <Class Name="ICGame.Civilian">
     <Position X="22" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCABEAAAAAAAAAABERAQCBAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAgCABEAAAAAAAAAABERAUCBAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Model\Civilian.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -208,7 +208,7 @@
   <Class Name="ICGame.GameInfo">
     <Position X="7" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAABAABAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Model\GameInfo.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -275,7 +275,7 @@
   <Class Name="ICGame.BoardDrawer">
     <Position X="12.75" Y="10.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgAAAAAACAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>View\BoardDrawer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -285,7 +285,7 @@
   <Class Name="ICGame.MissionController">
     <Position X="7.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAABAAAAAAAAAAgCABAAAgAAQAAAgAAAAAAAAAAA=</HashCode>
+      <HashCode>AABAAABAAAAAAAAAEgCABAAAgAAQAAAgAAAAAAAAAAA=</HashCode>
       <FileName>Controller\MissionController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -295,7 +295,7 @@
   <Class Name="ICGame.CampaignController">
     <Position X="8.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAIAAAAACAAAAIAAEQAAIAAAAAAAAACAA=</HashCode>
+      <HashCode>AAAAAAAABAAAIAAAEACAAAAIAAEQAAIAAAAAAAAACAA=</HashCode>
       <FileName>Controller\CampaignController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -320,7 +320,7 @@
   <Interface Name="ICGame.IPhysical">
     <Position X="14" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAABEAAAAAAAAAAAEBAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgAABEAAAAAAAAAAAEBAECAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IPhysical.cs</FileName>
     </TypeIdentifier>
   </Interface>
