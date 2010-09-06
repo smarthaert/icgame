@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
+using Microsoft.Xna.Framework.Input;
 
 namespace ICGame
 {
@@ -251,7 +252,7 @@ namespace ICGame
             TerrainIndexBuffer.SetData(indices);
         }
 
-
+        
 
         private Ray GetPointerRay(Vector2 pointerPosition)
         {
@@ -262,14 +263,14 @@ namespace ICGame
             Vector3 far3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(farScreenPoint, MainGame.Display.Projection, MainGame.Display.Camera.CameraMatrix, Matrix.Identity);
 
             Vector3 pointerRayDirection = far3DWorldPoint - near3DWorldPoint;
+            //pointerRayDirection.Normalize();
             Ray pointerRay = new Ray(near3DWorldPoint, pointerRayDirection);
-
             return pointerRay;
         }
 
         public Vector3 GetPosition(int posX, int posY)
         {
-            return BinarySearch(LinearSearch(ClipRay(GetPointerRay(new Vector2(posX, posY)), 30, 0)));
+            return BinarySearch(LinearSearch(ClipRay(GetPointerRay(new Vector2(posX, posY)), 30, -30)));
         }
 
         private Ray ClipRay(Ray ray, float highest, float lowest)
@@ -291,13 +292,13 @@ namespace ICGame
             ray.Direction /= 50.0f;
 
             Vector3 nextPoint = ray.Position + ray.Direction;
-            float heightAtNextPoint = GetHeight(nextPoint.X, -nextPoint.Z);//terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
+            float heightAtNextPoint = GetHeight(nextPoint.X, nextPoint.Z);//terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
             while (heightAtNextPoint < nextPoint.Y)
             {
                 ray.Position = nextPoint;
 
                 nextPoint = ray.Position + ray.Direction;
-                heightAtNextPoint = GetHeight(nextPoint.X, -nextPoint.Z); //terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
+                heightAtNextPoint = GetHeight(nextPoint.X, nextPoint.Z); //terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
             }
             return ray;
         }
@@ -305,20 +306,21 @@ namespace ICGame
         private Vector3 BinarySearch(Ray ray)
         {
             float accuracy = 0.01f;
-            float heightAtStartingPoint = GetHeight(ray.Position.X, -ray.Position.Z);//terrain.GetExactHeightAt(ray.Position.X, -ray.Position.Z);
+            float heightAtStartingPoint = GetHeight(ray.Position.X, ray.Position.Z);//terrain.GetExactHeightAt(ray.Position.X, -ray.Position.Z);
             float currentError = ray.Position.Y - heightAtStartingPoint;
             int counter = 0;
             while (currentError > accuracy)
             {
                 ray.Direction /= 2.0f;
                 Vector3 nextPoint = ray.Position + ray.Direction;
-                float heightAtNextPoint = GetHeight(nextPoint.X, -nextPoint.Z); //terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
+                float heightAtNextPoint = GetHeight(nextPoint.X, nextPoint.Z); //terrain.GetExactHeightAt(nextPoint.X, -nextPoint.Z);
                 if (nextPoint.Y > heightAtNextPoint)
                 {
                     ray.Position = nextPoint;
                     currentError = ray.Position.Y - heightAtNextPoint;
                 }
-                if (counter++ == 1000) break;
+                if (counter++ == 1000) 
+                    break;
             }
             return ray.Position;
         }

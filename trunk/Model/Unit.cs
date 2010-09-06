@@ -332,7 +332,7 @@ namespace ICGame
             }
         }
 
-        public void Move(Direction direction, GameTime gameTime)
+        public virtual void Move(Direction direction, GameTime gameTime)
         {
             switch(direction)
             {
