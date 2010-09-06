@@ -76,13 +76,17 @@ namespace ICGame
                     if(!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
                         mainGame.GraphicsDevice))
                     {
-                        GameInfo gi = new GameInfo();
-                        Vector3 xxx = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
-                        gi.ShowInfo(xxx.ToString());
+                        //GameInfo gi = new GameInfo();
+                        Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
+                        //gi.ShowInfo(pos3D.ToString());
                     }
                 }
             }
-
+            if (mouseCurState.RightButton == ButtonState.Pressed && mouseCurState != mousePrevState)
+            {
+                Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
+                    CampaignController.MissionController.Mission.ObjectContainer.MoveToLocation(pos3D.X, pos3D.Z);
+            }
             
             //Drag control
             if (mouseCurState.RightButton == ButtonState.Pressed && mouseCurState != mousePrevState)

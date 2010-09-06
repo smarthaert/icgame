@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,12 +26,13 @@ namespace ICGame
             get; set;
         }
 
-        public Unit(Model model, float speed):
+        public Unit(Model model, float speed, float turnRadius):
             base(model)
         {
             moving = Direction.None;
             turning = Direction.None;
-            this.speed = speed;
+            Speed = speed;
+            TurnRadius = turnRadius;
             lastGameTime = new GameTime();
             moving = Direction.None;
             //TEMP
@@ -84,8 +86,8 @@ namespace ICGame
             boundingBox = new BoundingBox(min,max);     //Siedlisko śmierdzącego zła... Zatkaj nos Boo...
 
             Length = scale*(boundingBox.Max.Z - boundingBox.Min.Z);
-            Width = scale*boundingBox.Max.Y - boundingBox.Min.Y;
-            Height = scale*boundingBox.Max.X - boundingBox.Min.X;
+            Width = scale*(boundingBox.Max.Y - boundingBox.Min.Y);
+            Height = scale*(boundingBox.Max.X - boundingBox.Min.X);
             PhysicalTransforms = Matrix.Identity;
         }
 
@@ -148,8 +150,10 @@ namespace ICGame
                 boundingBox = value;
             }
         }
- 
 
+        #endregion
+
+        /*
         private Vector3 GetMinVertex()
         {
             Vector3 result = new Vector3(0,0,0);
@@ -192,8 +196,7 @@ namespace ICGame
             }
             return result;
         }
-
-        #endregion
+        */
 
         #region IInteractive Members
 
@@ -242,38 +245,12 @@ namespace ICGame
 
         #endregion
 
-        #region IControllable Members
-
-        public Microsoft.Xna.Framework.Vector2 Destination
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public Microsoft.Xna.Framework.Vector2 NextStep
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        #endregion
 
         #region IAnimated Members
 
         public virtual void Animate(GameTime gameTime)
         {
+            CalculateNextStep(gameTime);
             for(int i = 0; i < Model.Bones.Count; ++i)
             {
                 Model.Bones[i].Transform = AnimationTransforms[i]*BasicTransforms[i];
@@ -290,26 +267,107 @@ namespace ICGame
 
         protected Direction moving;
         protected Direction turning;
-        protected float speed;
         protected GameTime lastGameTime;
         protected float dstAngle;
 
         #region IControllable Members
 
-
-        public void CalculateNextStep()
+        public Microsoft.Xna.Framework.Vector2 Destination
         {
-            throw new NotImplementedException();
+            get; set;
         }
 
-        public void Move(Direction direction)
+        public Microsoft.Xna.Framework.Vector2 NextStep
         {
-            throw new NotImplementedException();
+            get; set;
         }
 
-        public void Turn(Direction direction)
+        public virtual void CalculateNextStep(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
+            NextStep = new Vector2(NextStep.X*Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.Y*Convert.ToSingle(Math.Sin(Angle.Y)),
+                NextStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
+
+            if(NextStep.X > 0)
+            {
+                Move(Direction.Forward, gameTime);
+                if(NextStep.Y > 0)
+                {
+                    Turn(Direction.Left, gameTime);
+                }
+                else if(NextStep.Y < 0)
+                {
+                    Turn(Direction.Right, gameTime);
+                }
+            }
+            else if(NextStep.X == 0)
+            {
+                if (NextStep.Y == 0)
+                {
+                    Move(Direction.None, gameTime);
+                    Turn(Direction.None, gameTime);
+                }
+                else if(NextStep.Y > 0)
+                {
+                    Move(Direction.Backward, gameTime);
+                    Turn(Direction.Right, gameTime);
+                }
+                else if (NextStep.Y < 0)
+                {
+                    Move(Direction.Backward, gameTime);
+                    Turn(Direction.Left, gameTime);
+                }
+            }
+            else
+            {
+                Move(Direction.Backward, gameTime);
+                if (NextStep.Y > 0)
+                {
+                    Turn(Direction.Left, gameTime);
+                }
+                else if (NextStep.Y < 0)
+                {
+                    Turn(Direction.Right, gameTime);
+                }
+            }
+        }
+
+        public void Move(Direction direction, GameTime gameTime)
+        {
+            switch(direction)
+            {
+                case Direction.Forward:
+                    float x = Convert.ToSingle(Speed*Math.Cos(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds);
+                    float z = Convert.ToSingle(Speed*Math.Sin(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds);
+                    Position = new Vector3(Position.X + Convert.ToSingle(Speed*Math.Sin(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds),
+                        Position.Y, Position.Z + Convert.ToSingle(Speed*Math.Cos(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds));
+                    break;
+                case Direction.Backward:
+                    Position = new Vector3(Position.X - Convert.ToSingle(Speed * Math.Sin(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds), 
+                        Position.Y, Position.Z - Convert.ToSingle(Speed * Math.Cos(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds));
+                    break;
+                case Direction.None:
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException("Ruch tylko do przodu lub do tylu");
+            }
+        }
+
+        public void Turn(Direction direction, GameTime gameTime)
+        {
+            switch (direction)
+            {
+                case Direction.Left:
+                    Angle = new Vector3(Angle.X, Angle.Y + Speed * gameTime.ElapsedGameTime.Milliseconds / TurnRadius, Angle.Z);
+                    break;
+                case Direction.Right:
+                    Angle = new Vector3(Angle.X, Angle.Y - Speed * gameTime.ElapsedGameTime.Milliseconds / TurnRadius, Angle.Z);
+                    break;
+                case Direction.None:
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException("Skret tylko w lewo lub w prawo");
+            }
         }
 
         #endregion
@@ -319,20 +377,10 @@ namespace ICGame
 
         public void AdjustToGround(float front, float back, float left, float right, float length, float width)
         {
-            /*Vector3 u = new Vector3(-1, 0, topLeft - topRight);
-            Vector3 v = new Vector3(0, 1, downLeft - topRight);
-
-            Vector3 normal = Vector3.Cross(v, u);
-
-            float pitch = Convert.ToSingle(Math.Atan2(normal.X, Math.Sqrt(normal.Z * normal.Z + normal.Y * normal.Y)));
-            float roll = Convert.ToSingle(Math.Atan2(-normal.Y, Math.Sqrt(normal.X * normal.X + normal.Z * normal.Z)));
-
-            this.PhysicalTransforms = Matrix.CreateRotationX(pitch) *Matrix.CreateRotationY(roll);*/
-
             float pitch = Convert.ToSingle(Math.Atan((front - back) / length));
             float roll = Convert.ToSingle(Math.Atan((left - right) / width));
 
-            this.PhysicalTransforms = Matrix.CreateRotationX(-pitch) *Matrix.CreateRotationZ(roll);
+            PhysicalTransforms = Matrix.CreateRotationX(-pitch) *Matrix.CreateRotationZ(roll);
         }
 
         public Matrix PhysicalTransforms
@@ -375,6 +423,21 @@ namespace ICGame
             Ray ray = new Ray(nearpt, direction);
 
             return BoundingBox.Intersects(ray);
+        }
+
+        #endregion
+
+        #region IControllable Members
+
+
+        public float Speed
+        {
+            get; set;
+        }
+
+        public float TurnRadius
+        {
+            get; set;
         }
 
         #endregion

@@ -81,7 +81,7 @@ namespace ICGame
             switch (loadedModel.objectClass) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
-                    newObject = new Vehicle(loadedModel.model, 1.0f, 6);
+                    newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 6);
                     (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
                     break;
                 case ObjectClass.StaticObject:
