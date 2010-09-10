@@ -8,6 +8,6 @@ namespace ICGame
     public interface IAnimated
     {
 
-        void Animate(GameTime gameTime);
+        void Animate(GameTime gameTime, List<GameObject> gameObjects);
     }
 }

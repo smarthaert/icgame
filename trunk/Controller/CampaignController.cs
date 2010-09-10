@@ -26,6 +26,8 @@ namespace ICGame
             Campaign.GameObjectFactory.LoadModels(MainGame);
             Campaign.BuyUnit(GameObjectID.FireTruck);
             Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
+            //Campaign.BuyUnit(GameObjectID.FireTruck);
+            //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
             MissionController.LoadMissionData(Campaign.GameObjectFactory);
         }
 

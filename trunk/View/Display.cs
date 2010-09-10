@@ -66,7 +66,8 @@ namespace ICGame
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
                 if(gameObject is IAnimated) 
-                ((IAnimated)gameObject).Animate(gameTime);
+                ((IAnimated)gameObject).Animate(gameTime, CampaignController.GetObjectsToDraw());
+                //TODO: CampaignController.GetObjectsToCheck(IPhysical physical) -> lista obiektów które mogą kolidować z animowanym
                 gameObject.GetDrawer().Draw(Projection,Camera,graphicsDevice);
             }
             

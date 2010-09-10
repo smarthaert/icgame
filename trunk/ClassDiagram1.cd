@@ -93,7 +93,7 @@
   <Class Name="ICGame.GameObjectContainer">
     <Position X="8.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAEAEAAAAAAEAAQAAAAEAAAAAAAAAAAACAAAAA=</HashCode>
+      <HashCode>AAQAAAAEAEAAAAAAEAAQAAAAEAAAAAAEAAAAACAAAAA=</HashCode>
       <FileName>Model\ObjectContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -148,7 +148,7 @@
   <Class Name="ICGame.Unit">
     <Position X="16.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAgCDBMAIAAEIAABSRERAUCBAAQAkAABAAEAAJAI=</HashCode>
+      <HashCode>AAAgAgCDBMAIAAEIAABSRERBUCBCAAAkAABAAAAAIAI=</HashCode>
       <FileName>Model\Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -156,7 +156,7 @@
   <Class Name="ICGame.Vehicle">
     <Position X="18.75" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AFDAFEIAQBAACAAAAEgAAAQAAAAAAAAAAAAABBAAAgQ=</HashCode>
+      <HashCode>AFDEFEIAQNAACAAAAEjAAAQAAAAAAAAAgABABBAAAgQ=</HashCode>
       <FileName>Model\Vehicle.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -318,14 +318,14 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IPhysical">
-    <Position X="14" Y="3.25" Width="1.5" />
+    <Position X="14" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAABEAAAAAAAAAAAEBAECAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgAABEAAAAAAAAAABEBAECAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IPhysical.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="ICGame.IDestructible">
-    <Position X="14.5" Y="5" Width="1.5" />
+    <Position X="15.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAAAAAAAAAABAAAQABAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IDestructible.cs</FileName>
@@ -341,7 +341,7 @@
   <Interface Name="ICGame.IControllable">
     <Position X="14.5" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAACAIAAAAAAAAACAAAAAAAAAAAEAABAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAACAIAAAAAAAAACAAABAAACAAAEAABAAAAAAAA=</HashCode>
       <FileName>Interfaces\IControllable.cs</FileName>
     </TypeIdentifier>
   </Interface>

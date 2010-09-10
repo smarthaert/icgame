@@ -90,7 +90,7 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public void Animate(GameTime gameTime)
+        public void Animate(GameTime gameTime, List<GameObject> gameObjects)
         {
             throw new NotImplementedException();
         }
@@ -154,6 +154,21 @@ namespace ICGame
         }
 
         public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region IPhysical Members
+
+
+        public bool CheckMove(IPhysical physical, Direction directionFB, Direction directionLR, GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
         {
             throw new NotImplementedException();
         }
