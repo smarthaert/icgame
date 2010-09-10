@@ -52,8 +52,8 @@ namespace ICGame
                 AnimationTransforms[i] = Matrix.Identity;
             }
             //BoundingBox = new BoundingBox(GetMinVertex(),GetMaxVertex());
-            Vector3 min = new Vector3(0,0,0);
-            Vector3 max = new Vector3(0,0,0);
+            Vector3 min = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue,float.MinValue,float.MinValue);
             for(int i = 0; i < this.Model.Meshes.Count;++i)
             {
                 BoundingBox bb;
@@ -248,9 +248,9 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public virtual void Animate(GameTime gameTime)
+        public virtual void Animate(GameTime gameTime, List<GameObject> gameObjects)
         {
-            CalculateNextStep(gameTime);
+            CalculateNextStep(gameTime, gameObjects);
             for(int i = 0; i < Model.Bones.Count; ++i)
             {
                 Model.Bones[i].Transform = AnimationTransforms[i]*BasicTransforms[i];
@@ -282,7 +282,7 @@ namespace ICGame
             get; set;
         }
 
-        public virtual void CalculateNextStep(GameTime gameTime)
+        public virtual void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
         {
             NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
             NextStep = new Vector2(NextStep.X*Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.Y*Convert.ToSingle(Math.Sin(Angle.Y)),
@@ -441,5 +441,110 @@ namespace ICGame
         }
 
         #endregion
+
+        #region IPhysical Members
+
+
+        public bool CheckMove(IPhysical physical, Direction directionFB, Direction directionLR, GameTime gameTime)
+        {
+            float spd = 0;
+            if(directionFB == Direction.Forward)
+            {
+                spd = Speed;
+            }
+            else
+            {
+                spd = -Speed;
+            }
+            Vector3 oldpos = new Vector3(Position.X, Position.Y, Position.Z);
+            Vector3 oldangle = new Vector3(Angle.X,Angle.Y,Angle.Z);
+            if(directionLR == Direction.Left)
+            {
+                Angle = new Vector3(Angle.X, Angle.Y + Speed*gameTime.ElapsedGameTime.Milliseconds/TurnRadius, Angle.Z);
+            }
+            else if (directionLR == Direction.Right)
+            {
+                Angle = new Vector3(Angle.X, Angle.Y - Speed*gameTime.ElapsedGameTime.Milliseconds/TurnRadius, Angle.Z);
+            }
+            Position = new Vector3(Position.X + Convert.ToSingle(spd * Math.Sin(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds),
+                Position.Y, Position.Z + Convert.ToSingle(spd * Math.Cos(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds));
+            BoundingBox thisBB = TransformBoundingBox(BoundingBox, ModelMatrix);
+            Position = oldpos;
+            Angle = oldangle;
+            GameObject go = physical as GameObject;
+            BoundingBox checkBB = TransformBoundingBox(physical.BoundingBox, go.ModelMatrix);
+
+            return !thisBB.Intersects(checkBB);
+        }
+
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
+        {
+            foreach (GameObject gameObject in gameObjects)
+            {
+                if(gameObject is IPhysical && gameObject != this)
+                {
+                    IPhysical physical = gameObject as IPhysical;
+                    if(!CheckMove(physical, directionFB, directionLR, gameTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        #endregion
+
+        private BoundingBox TransformBoundingBox(BoundingBox boundingBox, Matrix matrix)
+        {
+            Vector3[] nodes = new Vector3[8];
+            
+            nodes[0] = boundingBox.Min;
+            nodes[1] = new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z);
+            nodes[2] = new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z);
+            nodes[3] = new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z);
+            nodes[4] = new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z);
+            nodes[5] = new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z);
+            nodes[6] = new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z);
+            nodes[7] = boundingBox.Max;
+
+            for (int i = 0; i < 8; ++i)
+            {
+                nodes[i] = Vector3.Transform(nodes[i],matrix);
+            }
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            for (int i = 0; i < 8; i++)
+            {
+                if(nodes[i].X < min.X)
+                {
+                    min.X = nodes[i].X;
+                }
+                else if(nodes[i].X > max.X)
+                {
+                    max.X = nodes[i].X;
+                }
+                if (nodes[i].Y < min.Y)
+                {
+                    min.Y = nodes[i].Y;
+                }
+                else if (nodes[i].Y > max.Y)
+                {
+                    max.Y = nodes[i].Y;
+                }
+                if (nodes[i].Z < min.Z)
+                {
+                    min.Z = nodes[i].Z;
+                }
+                else if (nodes[i].Z > max.Z)
+                {
+                    max.Z = nodes[i].Z;
+                }
+            }
+
+            return new BoundingBox(min,max);
+        }
     }
+
 }

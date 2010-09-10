@@ -365,14 +365,14 @@ namespace ICGame
             }
         }
 
-        public override void Animate(GameTime gameTime)
+        public override void Animate(GameTime gameTime, List<GameObject> gameObjects)
         {
             
             AnimateTurn(gameTime);
             AnimateDriving(gameTime);
             AnimateDoor(gameTime);
             AnimateTurret(gameTime);
-            base.Animate(gameTime);
+            base.Animate(gameTime, gameObjects);
         }
 
         public override GameObjectDrawer GetDrawer()
@@ -386,7 +386,7 @@ namespace ICGame
         private float toleranceX = toleranceSmall;
         private float toleranceY = toleranceSmall;
 
-        public override void CalculateNextStep(GameTime gameTime)
+        public override void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
         {
             NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
             NextStep = new Vector2(NextStep.X * Convert.ToSingle(Math.Cos(Angle.Y)) - NextStep.Y * Convert.ToSingle(Math.Sin(Angle.Y)),
@@ -410,8 +410,11 @@ namespace ICGame
                     }
                     if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
                     {
-                        Move(Direction.Forward, gameTime);
-                        Turn(Direction.Left, gameTime);
+                        if (CheckMoveList(Direction.Forward, Direction.Left, gameObjects, gameTime))
+                        {
+                            Move(Direction.Forward, gameTime);
+                            Turn(Direction.Left, gameTime);
+                        }
                     }
                 }
                 else if (NextStep.Y < toleranceY)
@@ -427,8 +430,11 @@ namespace ICGame
                     }
                     if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
                     {
-                        Move(Direction.Backward, gameTime);
-                        Turn(Direction.Left, gameTime);
+                        if (CheckMoveList(Direction.Backward, Direction.Left, gameObjects, gameTime))
+                        {
+                            Move(Direction.Backward, gameTime);
+                            Turn(Direction.Left, gameTime);
+                        }
                     }
                 }
                 else
@@ -444,8 +450,11 @@ namespace ICGame
                     }
                     if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
                     {
-                        Move(Direction.Backward, gameTime);
-                        Turn(Direction.Right, gameTime);
+                        if (CheckMoveList(Direction.Backward, Direction.Right, gameObjects, gameTime))
+                        {
+                            Move(Direction.Backward, gameTime);
+                            Turn(Direction.Right, gameTime);
+                        }
                     }
                 }
             }
@@ -472,7 +481,10 @@ namespace ICGame
 
                     if (WheelState == WheelState.Straight || WheelState == WheelState.LeftStraight || WheelState == WheelState.RightStraight)
                     {
-                        Move(Direction.Forward, gameTime);
+                        if (CheckMoveList(Direction.Forward, Direction.None, gameObjects, gameTime))
+                        {
+                            Move(Direction.Forward, gameTime);
+                        }
                     }
                 }
                 else if (NextStep.Y < toleranceY)
@@ -490,8 +502,12 @@ namespace ICGame
 
                     if (WheelState == WheelState.Straight || WheelState == WheelState.LeftStraight || WheelState == WheelState.RightStraight)
                     {
-                        Move(Direction.Backward, gameTime);
+                        if (CheckMoveList(Direction.Backward, Direction.None, gameObjects, gameTime))
+                        {
+                            Move(Direction.Backward, gameTime);
+                        }
                     }
+
                 }
             }
             else
@@ -510,8 +526,11 @@ namespace ICGame
                     }
                     if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
                     {
-                        Move(Direction.Backward, gameTime);
-                        Turn(Direction.Left, gameTime);
+                        if (CheckMoveList(Direction.Backward, Direction.Left, gameObjects, gameTime))
+                        {
+                            Move(Direction.Backward, gameTime);
+                            Turn(Direction.Left, gameTime);
+                        }
                     }
                 }
                 else if (NextStep.Y > toleranceY)
@@ -527,8 +546,11 @@ namespace ICGame
                     }
                     if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
                     {
-                        Move(Direction.Forward, gameTime);
-                        Turn(Direction.Right, gameTime);
+                        if (CheckMoveList(Direction.Forward, Direction.Right, gameObjects, gameTime))
+                        {
+                            Move(Direction.Forward, gameTime);
+                            Turn(Direction.Right, gameTime);
+                        }
                     }
                 }
                 else
@@ -544,8 +566,11 @@ namespace ICGame
                     }
                     if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
                     {
-                        Move(Direction.Backward, gameTime);
-                        Turn(Direction.Left, gameTime);
+                        if (CheckMoveList(Direction.Backward, Direction.Left, gameObjects, gameTime))
+                        {
+                            Move(Direction.Backward, gameTime);
+                            Turn(Direction.Left, gameTime);
+                        }
                     }
                 }
             }

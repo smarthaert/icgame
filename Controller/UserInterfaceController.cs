@@ -76,9 +76,9 @@ namespace ICGame
                     if(!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
                         mainGame.GraphicsDevice))
                     {
-                        GameInfo gi = new GameInfo();
+                        //GameInfo gi = new GameInfo();
                         Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
-                        gi.ShowInfo(pos3D.ToString());
+                        //gi.ShowInfo(pos3D.ToString());
                     }
                 }
             }

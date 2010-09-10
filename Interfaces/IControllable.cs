@@ -31,7 +31,7 @@ namespace ICGame
             set;
         }
 
-        void CalculateNextStep(GameTime gameTime);
+        void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects);
 
         void Move(Direction direction, GameTime gameTime);
 
