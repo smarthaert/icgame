@@ -130,11 +130,14 @@ namespace ICGame
             UserInterfaceController.InitializeUserInterface(this);
 
             //Alpha blending
-            GraphicsDevice.RenderState.AlphaBlendEnable = true;
-            GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
-          //GraphicsDevice.RenderState.DepthBufferEnable = false;
-            GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+            //GraphicsDevice.RenderState.AlphaBlendEnable = true;
+            //GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
+            //CONV
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
             
+          //GraphicsDevice.RenderState.DepthBufferEnable = false;
+            //GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+            //CONV
         }
 
         /// <summary>

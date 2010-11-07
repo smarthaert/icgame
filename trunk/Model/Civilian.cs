@@ -160,10 +160,10 @@ namespace ICGame
 
         #endregion
 
-        #region IPhysical Members
+        #region IInteractive Members
 
 
-        public bool CheckMove(IPhysical physical, Direction directionFB, Direction directionLR, GameTime gameTime)
+        public bool CheckMove(IPhysical physical, BoundingBox thisBB, GameTime gameTime)
         {
             throw new NotImplementedException();
         }

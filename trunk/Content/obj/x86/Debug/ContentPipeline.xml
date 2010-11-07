@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline" xmlns:Graphics="Microsoft.Xna.Framework.Graphics" xmlns:Processors="Microsoft.Xna.Framework.Content.Pipeline.Processors">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>Resources\effects.fx</Source>
+      <Name>Resources\effects</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Resources\effects.xnb</Output>
+      <Time>2010-09-06T19:55:43.9969476+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Texture2D\UI\rightUIPanel.png</Source>
+      <Name>Texture2D\UI\rightUIPanel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Texture2D\UI\rightUIPanel.xnb</Output>
+      <Time>2010-08-31T13:20:26.4674171+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Resources\heightmap.bmp</Source>
+      <Name>Resources\heightmap</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Resources\heightmap.xnb</Output>
+      <Time>2010-09-06T19:55:43.9909472+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Texture2D\UI\zune.png</Source>
+      <Name>Texture2D\UI\zune</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Texture2D\UI\zune.xnb</Output>
+      <Time>2010-08-31T13:20:26.4614167+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\firetruck.fbx</Source>
+      <Name>Model\firetruck</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>FBXProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\firetruck.xnb</Output>
+      <Time>2010-08-31T13:20:25.6333694+02:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Model\firetruck_0.xml</Key>
+        <Value>2010-08-31T15:55:25.1512714+02:00</Value>
+      </Dependency>
+      <Request>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\firetruck_2\frontwheel_0.xnb</Request>
+      <Request>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\firetruck_2\backwheel_0.xnb</Request>
+      <Request>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\firetruck_2\bodywork_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Model\selection_ring.fbx</Source>
+      <Name>Model\selection_ring</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>FBXProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\selection_ring.xnb</Output>
+      <Time>2010-08-31T13:20:25.5903669+02:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Model\selection_ring_0.xml</Key>
+        <Value>2010-08-31T15:55:30.9926055+02:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>Model\home0.fbx</Source>
+      <Name>Model\home0</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>FBXProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\home0.xnb</Output>
+      <Time>2010-08-31T13:20:25.5953672+02:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Model\home0_0.xml</Key>
+        <Value>2010-08-31T15:55:32.2236759+02:00</Value>
+      </Dependency>
+      <Request>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\home0\home0_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Model\firetruck.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Model\firetruck_0.xml</Output>
+      <Time>2010-08-31T13:20:25.6333694+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\textures\firetruck_2\frontwheel.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\firetruck_2\frontwheel_0.xnb</Output>
+      <Time>2010-08-31T13:19:48.9762727+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\textures\firetruck_2\backwheel.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\firetruck_2\backwheel_0.xnb</Output>
+      <Time>2010-08-31T13:19:49.0192752+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\textures\firetruck_2\bodywork.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\firetruck_2\bodywork_0.xnb</Output>
+      <Time>2010-08-31T13:19:48.9932737+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\selection_ring.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Model\selection_ring_0.xml</Output>
+      <Time>2010-08-31T13:20:25.5903669+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\home0.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Model\home0_0.xml</Output>
+      <Time>2010-08-31T13:20:25.5953672+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\textures\home0\home0.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\textures\home0\home0_0.xnb</Output>
+      <Time>2010-08-31T13:19:57.3537519+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Resources\dome.x</Source>
+      <Name>Resources\dome</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Resources\dome.xnb</Output>
+      <Time>2010-09-01T14:51:05.4426686+02:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Resources\dome_0.xml</Key>
+        <Value>2010-09-01T14:59:24.6142196+02:00</Value>
+      </Dependency>
+      <Request>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Resources\cloudMap_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Resources\dome.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Resources\dome_0.xml</Output>
+      <Time>2010-09-01T14:51:05.4426686+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Resources\cloudMap.jpg</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Resources\cloudMap_0.xnb</Output>
+      <Time>2010-09-01T14:51:05.4366682+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Texture2D\Board\grass.dds</Source>
+      <Name>Texture2D\Board\grass</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Texture2D\Board\grass.xnb</Output>
+      <Time>2010-09-06T19:55:42.0208346+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Texture2D\Board\rock.dds</Source>
+      <Name>Texture2D\Board\rock</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Texture2D\Board\rock.xnb</Output>
+      <Time>2010-09-06T19:55:42.0068338+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Texture2D\Board\sand.dds</Source>
+      <Name>Texture2D\Board\sand</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Texture2D\Board\sand.xnb</Output>
+      <Time>2010-09-06T19:55:42.0668372+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Texture2D\Board\snow.dds</Source>
+      <Name>Texture2D\Board\snow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Texture2D\Board\snow.xnb</Output>
+      <Time>2010-09-06T19:55:41.9878327+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\animfigure.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Model\animfigure_0.xml</Output>
+      <Time>2010-10-28T11:55:28.5142254+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Model\animfigure.fbx</Source>
+      <Name>Model\animfigure</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>FBXProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\Model\animfigure.xnb</Output>
+      <Time>2010-10-28T11:55:28.5142254+02:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Model\animfigure_0.xml</Key>
+        <Value>2010-10-28T12:04:04.1267167+02:00</Value>
+      </Dependency>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Windows</TargetPlatform>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2009-05-28T01:16:14+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2009-05-28T01:16:06+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2009-05-28T01:16:16+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2009-05-28T01:16:26+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2009-05-28T01:16:12+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.1\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2009-05-28T01:16:06+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Users\Piotrek\Documents\Visual Studio 2008\Projects\ICGame\ICGame\FBXPipeline\bin\x86\Debug\FBXPipeline.dll</Key>
+        <Value>2010-07-27T18:49:48.7242666+02:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2010-03-23T12:35:09.4105197+01:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>

@@ -49,10 +49,15 @@ namespace ICGame
             {
                 UnitContainer.Units.Add(gameObject as Vehicle);
             }
+            else if (gameObject.GetType() == typeof(Infantry))
+            {
+                UnitContainer.Units.Add(gameObject as Infantry);
+            }
         }
 
         public void SendToMission(Unit unit)
         {
+            unit.Mission = Mission;
             Mission.ObjectContainer.GameObjects.Add(unit);
         }
     }

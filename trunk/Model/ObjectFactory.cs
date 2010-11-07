@@ -10,7 +10,7 @@ namespace ICGame
     {
         private enum ObjectClass
         {
-            Vehicle, StaticObject, Unit, Building, GameObject
+            Vehicle, StaticObject, Unit, Building, GameObject, Infantry
         }
 
         private class LoadedModel
@@ -25,7 +25,8 @@ namespace ICGame
                                  {
                                      {GameObjectID.FireTruck,"firetruck"},
                                      {GameObjectID.SelectionRing,"selection_ring"},
-                                     {GameObjectID.Home0,"home0"}
+                                     {GameObjectID.Home0,"home0"},
+                                     {GameObjectID.AnimFigure, "animfigure"}                                     
                                  };
         private Dictionary<GameObjectID, LoadedModel> loadedModels = new Dictionary<GameObjectID, LoadedModel>();
 
@@ -47,7 +48,9 @@ namespace ICGame
                 {
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
-                        meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
+                        //meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
+                        //CONV
+                        meshPart.Effect = game.effect.Clone();
                     }
                 }
                 loadedModels[pair.Key].model = tempModel;
@@ -64,6 +67,9 @@ namespace ICGame
                         break;
                     case "home0":
                         loadedModels[pair.Key].objectClass = ObjectClass.Building;
+                        break;
+                    case "animfigure":
+                        loadedModels[pair.Key].objectClass = ObjectClass.Infantry;
                         break;
                     default:
                         loadedModels[pair.Key].objectClass = ObjectClass.GameObject;
@@ -89,6 +95,9 @@ namespace ICGame
                     break;
                 case ObjectClass.Building:
                     newObject = new Building(loadedModel.model);
+                    break;
+                case ObjectClass.Infantry:
+                    newObject = new Infantry(loadedModel.model,0.01f,1.0f);
                     break;
             }
 

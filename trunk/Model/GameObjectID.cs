@@ -9,5 +9,6 @@ namespace ICGame
         Home0,
         FireTruck,
         SelectionRing,
+        AnimFigure,
     }
 }

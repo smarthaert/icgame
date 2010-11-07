@@ -123,16 +123,6 @@ namespace ICGame
             throw new NotImplementedException();
         }
 
-        public bool CheckMove(IPhysical physical, Direction directionFB, Direction directionLR, GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
     }
 }

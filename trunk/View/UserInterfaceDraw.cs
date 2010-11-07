@@ -22,7 +22,9 @@ namespace ICGame
         public void Draw()
         {
             SpriteBatch spriteBatch=new SpriteBatch(graphicsDevice);
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Texture,SaveStateMode.SaveState);
+            //spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Texture,SaveStateMode.SaveState);
+            //CONV
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
             for (int i = 0; i < UserInterface.ScreenSizeY; i++)
             {
                 spriteBatch.Draw(UserInterface.RightUI, new Vector2(UserInterface.ScreenSizeX - UserInterface.RightUI.Width, UserInterface.ScreenSizeY - UserInterface.RightUI.Height * i),new Color(1.0f,1.0f,1.0f,1.0f));

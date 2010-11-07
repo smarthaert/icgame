@@ -222,6 +222,11 @@ namespace ICGame
             for (int x = 0; x < terrainWidth; x++)
                 for (int y = 0; y < terrainHeight; y++)
                      this.heightMap[x, y] = (this.heightMap[x, y] - minimumHeight) / (maximumHeight - minimumHeight) * 30.0f;
+            //TEMP TEMP TEMP!
+            difficultyMap = new int[terrainWidth,terrainHeight];
+            for (int x = 0; x < terrainWidth; x++)
+                for (int y = 0; y < terrainHeight; y++)
+                    difficultyMap[x, y] = 1;
             CreateTerrain();
         }
 
@@ -239,13 +244,18 @@ namespace ICGame
         {
           //  CloudMap = cloudMap;
             SkyDomeModel = skyDome;
-            SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
+            //SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
+            //CONV
+            SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone();
             SkyDome = new SkyDome(device,effect);
         }
 
         public void PrepareBuffers()
         {
-            TerrainVertexBuffer = new VertexBuffer(MainGame.GraphicsDevice, vertexPositionColor.Length * VertexMultitextured.SizeInBytes, BufferUsage.WriteOnly);
+            //TerrainVertexBuffer = new VertexBuffer(MainGame.GraphicsDevice, vertexPositionColor.Length * VertexMultitextured.SizeInBytes, BufferUsage.WriteOnly);
+            //CONV
+            TerrainVertexBuffer = new VertexBuffer(MainGame.GraphicsDevice, typeof(VertexMultitextured),
+                vertexPositionColor.Length, BufferUsage.WriteOnly);
             TerrainVertexBuffer.SetData(vertexPositionColor);
 
             TerrainIndexBuffer = new IndexBuffer(MainGame.GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
@@ -327,7 +337,7 @@ namespace ICGame
     }
 
 
-    public struct VertexMultitextured
+    public struct VertexMultitextured : IVertexType
     {
         public Vector3 Position;
         public Vector3 Normal;
@@ -337,10 +347,14 @@ namespace ICGame
         public static int SizeInBytes = (3 + 3 + 4 + 4) * sizeof(float);
         public static VertexElement[] VertexElements = new VertexElement[]
      {
-         new VertexElement( 0, 0, VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Position, 0 ),
-         new VertexElement( 0, sizeof(float) * 3, VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Normal, 0 ),
-         new VertexElement( 0, sizeof(float) * 6, VertexElementFormat.Vector4, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 0 ),
-         new VertexElement( 0, sizeof(float) * 10, VertexElementFormat.Vector4, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 1 ),
+         new VertexElement( 0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0 ),
+         new VertexElement(/* 0, */sizeof(float) * 3, VertexElementFormat.Vector3/*, VertexElementMethod.Default*/, VertexElementUsage.Normal, 0 ),
+         new VertexElement(/* 0, */sizeof(float) * 6, VertexElementFormat.Vector4/*, VertexElementMethod.Default*/, VertexElementUsage.TextureCoordinate, 0 ),
+         new VertexElement(/* 0, */sizeof(float) * 10, VertexElementFormat.Vector4/*, VertexElementMethod.Default*/, VertexElementUsage.TextureCoordinate, 1 ),
      };
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration(VertexElements);
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+
     }
 }
