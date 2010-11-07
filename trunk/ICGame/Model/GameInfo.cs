@@ -27,5 +27,9 @@ namespace ICGame
         {
             tb.Text = text;
         }
+        public void SetTopMost()
+        {
+            info.TopMost = true;
+        }
     }
 }
