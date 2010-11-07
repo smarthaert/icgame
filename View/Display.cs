@@ -19,7 +19,9 @@ namespace ICGame
         {
             graphics = graphicsDeviceManager;
             graphicsDevice = graphics.GraphicsDevice;
-            graphicsDevice.RenderState.CullMode = CullMode.None;
+            //graphicsDevice.RenderState.CullMode = CullMode.None;
+            //CONV
+            graphicsDevice.RasterizerState = RasterizerState.CullNone;
             UserInterface = userInterface;
             Camera = camera;
             CampaignController = campaignController;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using ICGame.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -36,7 +37,7 @@ namespace ICGame
             lastGameTime = new GameTime();
             moving = Direction.None;
             //TEMP
-            moving = Direction.Forward;
+            //moving = Direction.Forward;
             //\TEMP
 
             BasicTransforms = new Matrix[Model.Bones.Count];
@@ -57,7 +58,7 @@ namespace ICGame
             for(int i = 0; i < this.Model.Meshes.Count;++i)
             {
                 BoundingBox bb;
-                CalculateBoundingBox(this.Model.Meshes[i],out bb);
+                BoundingBoxTools.CalculateBoundingBox(Model.Meshes[i],out bb);
                 if(min.X > bb.Min.X)
                 {
                     min.X = bb.Min.X;
@@ -91,52 +92,6 @@ namespace ICGame
             PhysicalTransforms = Matrix.Identity;
         }
 
-        #region BoundingBox calculations
-
-        protected Vector3[] tempVecs3 = new Vector3[512]; 
-        protected ushort[] tempUshorts = new ushort[512 * 3]; 
-     
-        protected void CalculateBoundingBox(ModelMesh mm, out BoundingBox bb) 
-        { 
-          bb = new BoundingBox(); 
-          bool first = true; 
-          Matrix x = Matrix.Identity; 
-          ModelBone mb = mm.ParentBone; 
-          while (mb != null) 
-          { 
-            x = x * mb.Transform; 
-            mb = mb.Parent; 
-          } 
-          foreach (ModelMeshPart mp in mm.MeshParts) 
-          { 
-            int n = mp.NumVertices; 
-            if (n > tempVecs3.Length) 
-              tempVecs3 = new Vector3[n + 128]; 
-            int l = mp.PrimitiveCount * 3; 
-            if (l > tempUshorts.Length) 
-              tempUshorts = new ushort[l + 128]; 
-            if (n == 0 || l == 0) 
-              continue; 
-            mm.IndexBuffer.GetData<ushort>(tempUshorts, mp.StartIndex, l); 
-            mm.VertexBuffer.GetData<Vector3>(mp.StreamOffset, tempVecs3, mp.BaseVertex, n, mp.VertexStride); 
-            if (first) 
-            { 
-              bb.Min = Vector3.Transform(tempVecs3[tempUshorts[0]], x); 
-              bb.Max = bb.Min; 
-              first = false; 
-            } 
-            for (int i = 0; i != l; ++i) 
-            { 
-              ushort us = tempUshorts[i]; 
-              Vector3 v = Vector3.Transform(tempVecs3[us], x); 
-              Vector3.Max(ref v, ref bb.Max, out bb.Max); 
-              Vector3.Min(ref v, ref bb.Min, out bb.Min); 
-            } 
-          }
-        }
-
-        #endregion
-
         #region IPhysical Members
 
         public BoundingBox BoundingBox
@@ -153,50 +108,11 @@ namespace ICGame
 
         #endregion
 
-        /*
-        private Vector3 GetMinVertex()
+        public Mission Mission       //jak jest lepszy pomysł na przekazanie Board'a to jestem otwarty na propozycje
         {
-            Vector3 result = new Vector3(0,0,0);
-            foreach (ModelMesh mesh in Model.Meshes)
-            {
-                if(mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius < result.X)
-                {
-                    result.X = mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius;
-                }
-                if (mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius < result.Y)
-                {
-                    result.Y = mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius;
-                }
-                if (mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius < result.Z)
-                {
-                    result.Z = mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius;
-                }
-                
-            }
-            return result;
+            get;
+            set;
         }
-
-        private Vector3 GetMaxVertex()
-        {
-            Vector3 result = new Vector3(0, 0, 0);
-            foreach (ModelMesh mesh in Model.Meshes)
-            {
-                if (mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius > result.X)
-                {
-                    result.X = mesh.BoundingSphere.Center.X - mesh.BoundingSphere.Radius;
-                }
-                if (mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius > result.Y)
-                {
-                    result.Y = mesh.BoundingSphere.Center.Y - mesh.BoundingSphere.Radius;
-                }
-                if (mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius > result.Z)
-                {
-                    result.Z = mesh.BoundingSphere.Center.Z - mesh.BoundingSphere.Radius;
-                }
-            }
-            return result;
-        }
-        */
 
         #region IInteractive Members
 
@@ -284,7 +200,7 @@ namespace ICGame
 
         public virtual void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
         {
-            NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
+            /*NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
             NextStep = new Vector2(NextStep.X*Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.Y*Convert.ToSingle(Math.Sin(Angle.Y)),
                 NextStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
 
@@ -329,7 +245,7 @@ namespace ICGame
                 {
                     Turn(Direction.Right, gameTime);
                 }
-            }
+            }*/
         }
 
         public virtual void Move(Direction direction, GameTime gameTime)
@@ -337,8 +253,6 @@ namespace ICGame
             switch(direction)
             {
                 case Direction.Forward:
-                    float x = Convert.ToSingle(Speed*Math.Cos(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds);
-                    float z = Convert.ToSingle(Speed*Math.Sin(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds);
                     Position = new Vector3(Position.X + Convert.ToSingle(Speed*Math.Sin(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds),
                         Position.Y, Position.Z + Convert.ToSingle(Speed*Math.Cos(Angle.Y)*gameTime.ElapsedGameTime.Milliseconds));
                     break;
@@ -442,13 +356,21 @@ namespace ICGame
 
         #endregion
 
-        #region IPhysical Members
+        #region IInteractive Members
 
 
-        public bool CheckMove(IPhysical physical, Direction directionFB, Direction directionLR, GameTime gameTime)
+        public bool CheckMove(IPhysical physical, BoundingBox thisBB, GameTime gameTime)
+        {
+            GameObject go = physical as GameObject;
+            BoundingBox checkBB = BoundingBoxTools.TransformBoundingBox(physical.BoundingBox, go.ModelMatrix);
+
+            return !thisBB.Intersects(checkBB);
+        }
+
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
         {
             float spd = 0;
-            if(directionFB == Direction.Forward)
+            if (directionFB == Direction.Forward)
             {
                 spd = Speed;
             }
@@ -457,94 +379,61 @@ namespace ICGame
                 spd = -Speed;
             }
             Vector3 oldpos = new Vector3(Position.X, Position.Y, Position.Z);
-            Vector3 oldangle = new Vector3(Angle.X,Angle.Y,Angle.Z);
-            if(directionLR == Direction.Left)
+            Vector3 oldangle = new Vector3(Angle.X, Angle.Y, Angle.Z);
+            Position = new Vector3(Position.X + Convert.ToSingle(spd * Math.Sin(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds),
+                Position.Y, Position.Z + Convert.ToSingle(spd * Math.Cos(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds));
+            if (directionLR == Direction.Left)
             {
-                Angle = new Vector3(Angle.X, Angle.Y + Speed*gameTime.ElapsedGameTime.Milliseconds/TurnRadius, Angle.Z);
+                Angle = new Vector3(Angle.X, Angle.Y + Speed * gameTime.ElapsedGameTime.Milliseconds / TurnRadius, Angle.Z);
             }
             else if (directionLR == Direction.Right)
             {
-                Angle = new Vector3(Angle.X, Angle.Y - Speed*gameTime.ElapsedGameTime.Milliseconds/TurnRadius, Angle.Z);
-            }
-            Position = new Vector3(Position.X + Convert.ToSingle(spd * Math.Sin(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds),
-                Position.Y, Position.Z + Convert.ToSingle(spd * Math.Cos(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds));
-            BoundingBox thisBB = TransformBoundingBox(BoundingBox, ModelMatrix);
-            Position = oldpos;
-            Angle = oldangle;
-            GameObject go = physical as GameObject;
-            BoundingBox checkBB = TransformBoundingBox(physical.BoundingBox, go.ModelMatrix);
-
-            return !thisBB.Intersects(checkBB);
-        }
-
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
-        {
+                Angle = new Vector3(Angle.X, Angle.Y - Speed * gameTime.ElapsedGameTime.Milliseconds / TurnRadius, Angle.Z);
+            } 
+            float sinl = Convert.ToSingle(Math.Sin(Angle.Y) * Length / 2);
+            float cosl = Convert.ToSingle(Math.Cos(Angle.Y) * Length / 2);
+            float sinw = Convert.ToSingle(Math.Sin(Angle.Y) * Width / 2);
+            float cosw = Convert.ToSingle(Math.Cos(Angle.Y) * Width / 2);
+            
+            AdjustToGround(
+                        Mission.Board.GetHeight(
+                            Position.X + sinl,
+                            Position.Z + cosl
+                            ),
+                        Mission.Board.GetHeight(
+                            Position.X - sinl,
+                            Position.Z - cosl
+                            ),
+                        Mission.Board.GetHeight(
+                            Position.X + cosw,
+                            Position.Z - sinw
+                            ),
+                        Mission.Board.GetHeight(
+                            Position.X - cosw,
+                            Position.Z + sinw
+                            ),
+                        Length,
+                        Width);
+            BoundingBox thisBB = BoundingBoxTools.TransformBoundingBox(BoundingBox, ModelMatrix);
             foreach (GameObject gameObject in gameObjects)
             {
                 if(gameObject is IPhysical && gameObject != this)
                 {
                     IPhysical physical = gameObject as IPhysical;
-                    if(!CheckMove(physical, directionFB, directionLR, gameTime))
+                    if(!CheckMove(physical, thisBB, gameTime))
                     {
+                        Position = oldpos;
+                        Angle = oldangle;
                         return false;
                     }
                 }
             }
+            Position = oldpos;
+            Angle = oldangle;
             return true;
         }
 
         #endregion
-
-        private BoundingBox TransformBoundingBox(BoundingBox boundingBox, Matrix matrix)
-        {
-            Vector3[] nodes = new Vector3[8];
-            
-            nodes[0] = boundingBox.Min;
-            nodes[1] = new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z);
-            nodes[2] = new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z);
-            nodes[3] = new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z);
-            nodes[4] = new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z);
-            nodes[5] = new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z);
-            nodes[6] = new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z);
-            nodes[7] = boundingBox.Max;
-
-            for (int i = 0; i < 8; ++i)
-            {
-                nodes[i] = Vector3.Transform(nodes[i],matrix);
-            }
-            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-
-            for (int i = 0; i < 8; i++)
-            {
-                if(nodes[i].X < min.X)
-                {
-                    min.X = nodes[i].X;
-                }
-                else if(nodes[i].X > max.X)
-                {
-                    max.X = nodes[i].X;
-                }
-                if (nodes[i].Y < min.Y)
-                {
-                    min.Y = nodes[i].Y;
-                }
-                else if (nodes[i].Y > max.Y)
-                {
-                    max.Y = nodes[i].Y;
-                }
-                if (nodes[i].Z < min.Z)
-                {
-                    min.Z = nodes[i].Z;
-                }
-                else if (nodes[i].Z > max.Z)
-                {
-                    max.Z = nodes[i].Z;
-                }
-            }
-
-            return new BoundingBox(min,max);
-        }
     }
 
 }

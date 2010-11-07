@@ -4,7 +4,7 @@
     <Position X="1.435" Y="9.035" Height="0.75" Width="1.7" />
   </Comment>
   <Comment CommentText="TODO">
-    <Position X="17.859" Y="7" Height="0.75" Width="1.7" />
+    <Position X="17.776" Y="7.083" Height="0.75" Width="1.7" />
   </Comment>
   <Class Name="ICGame.Game">
     <Position X="3.5" Y="0.5" Width="2.75" />
@@ -146,9 +146,9 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Unit">
-    <Position X="16.75" Y="5.5" Width="1.5" />
+    <Position X="16.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAgCDBMAIAAEIAABSRERBUCBCAAAkAABAAAAAIAI=</HashCode>
+      <HashCode>AAAgAgDDBMAIgAEAAAASRERBUCBCAAAkAABAAAAAIAI=</HashCode>
       <FileName>Model\Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -169,16 +169,16 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ICGame.Infantry">
-    <Position X="18.5" Y="6.25" Width="1.5" />
+    <Position X="19" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Interfaces\Infantry.cs</FileName>
+      <FileName>Model\Infantry.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ICGame.Building">
     <Position X="20.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCABEAAAAAAAAAABERAUCBAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAgCABEAAgAAAAAAABERAUCBAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Model\Building.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -193,7 +193,7 @@
   <Class Name="ICGame.Civilian">
     <Position X="22" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgCABEAAAAAAAAAABERAUCBAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAgCABEAAgAAAAAAABERAUCBAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Model\Civilian.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -283,7 +283,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ICGame.MissionController">
-    <Position X="7.5" Y="2.75" Width="1.5" />
+    <Position X="6.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAABAAAAAAAAAEgCABAAAgAAQAAAgAAAAAAAAAAA=</HashCode>
       <FileName>Controller\MissionController.cs</FileName>
@@ -320,7 +320,7 @@
   <Interface Name="ICGame.IPhysical">
     <Position X="14" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAABEAAAAAAAAAABEBAECAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgAABEAAAAAAAAAAAEBAECAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\IPhysical.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -334,7 +334,7 @@
   <Interface Name="ICGame.IInteractive">
     <Position X="14.25" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <HashCode>AAAAAAAAAAAAgAAAAAAABAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Interfaces\IInteractive.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -348,7 +348,7 @@
   <Enum Name="ICGame.GameObjectID">
     <Position X="12.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAABAABAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>AAAABAABAAAAAAAAAAAAAAAAAAAAAAAACAQAAAAAAAA=</HashCode>
       <FileName>Model\GameObjectID.cs</FileName>
     </TypeIdentifier>
   </Enum>

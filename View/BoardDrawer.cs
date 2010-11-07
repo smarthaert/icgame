@@ -20,7 +20,9 @@ namespace ICGame
 
         public void DrawSkyDome(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition)
         {
-            graphicsDevice.RenderState.DepthBufferWriteEnable = false;
+            //graphicsDevice.RenderState.DepthBufferWriteEnable = false;
+            //CONV
+            graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
             Matrix[] modelTransforms = new Matrix[Board.SkyDomeModel.Bones.Count];
             Board.SkyDomeModel.CopyAbsoluteBoneTransformsTo(modelTransforms);
@@ -42,7 +44,9 @@ namespace ICGame
                 }
                 mesh.Draw();
             }
-            graphicsDevice.RenderState.DepthBufferWriteEnable = true;
+            //graphicsDevice.RenderState.DepthBufferWriteEnable = true;
+            //CONV
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
         public void Draw(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition)
@@ -61,26 +65,36 @@ namespace ICGame
             effect.Parameters["xAmbient"].SetValue(0.4f);
             effect.Parameters["xLightDirection"].SetValue(new Vector3(-0.5f, -1, -0.5f));
 
-            effect.Begin();
+            //effect.Begin();
+            //CONV
+
+            graphicsDevice.RasterizerState = RasterizerState.CullNone;
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
-                pass.Begin();
+                //pass.Begin();
+                pass.Apply();
 
-                graphicsDevice.VertexDeclaration = new VertexDeclaration(graphicsDevice,VertexMultitextured.VertexElements);
+                //graphicsDevice.VertexDeclaration = new VertexDeclaration(graphicsDevice,VertexMultitextured.VertexElements);
+                //CONV
 
-                graphicsDevice.Vertices[0].SetSource(Board.TerrainVertexBuffer, 0, VertexMultitextured.SizeInBytes);
+                //graphicsDevice.Vertices[0].SetSource(Board.TerrainVertexBuffer, 0, VertexMultitextured.SizeInBytes);
+                //CONV
+                graphicsDevice.SetVertexBuffer(Board.TerrainVertexBuffer);
                 graphicsDevice.Indices = Board.TerrainIndexBuffer;
 
 
-                int noVertices = Board.TerrainVertexBuffer.SizeInBytes / VertexMultitextured.SizeInBytes;
-                int noTriangles = Board.TerrainIndexBuffer.SizeInBytes / sizeof(int) / 3;
+                //int noVertices = Board.TerrainVertexBuffer.SizeInBytes / VertexMultitextured.SizeInBytes;
+                //int noTriangles = Board.TerrainIndexBuffer.SizeInBytes / sizeof(int) / 3;
+                //CONV
+                int noVertices = Board.TerrainVertexBuffer.VertexCount;
+                int noTriangles = Board.TerrainIndexBuffer.IndexCount/3;
                 graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, noVertices, 0, noTriangles);
                 //graphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList,Board.VertexPositionColor1,0,Board.VertexPositionColor1.GetLength(0),Board.Indices,0,Board.Indices.Length/3);
 
-                pass.End();
+                //pass.End();
             }
             
-            effect.End();
+            //effect.End();
         }
     }
 }
