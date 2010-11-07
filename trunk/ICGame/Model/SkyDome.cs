@@ -28,9 +28,13 @@ namespace ICGame
             this.device = device;
             this.effect = effect;
 
-            cloudsRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,  device.PresentationParameters.BackBufferHeight, 1, device.DisplayMode.Format);
+            //cloudsRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,  device.PresentationParameters.BackBufferHeight, 1, device.DisplayMode.Format);
+            //CONV
+            cloudsRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth, device.PresentationParameters.BackBufferHeight);
             fullScreenVertices = SetUpFullscreenVertices();
-            fullScreenVertexDeclaration = new VertexDeclaration(device, VertexPositionTexture.VertexElements);
+            //fullScreenVertexDeclaration = new VertexDeclaration(device, VertexPositionTexture.VertexElements);
+            //CONV
+            fullScreenVertexDeclaration = new VertexDeclaration(VertexPositionTexture.VertexDeclaration.GetVertexElements());
             cloudStaticMap = CreateStaticMap(32);
         }
 
@@ -42,7 +46,9 @@ namespace ICGame
                 for (int y = 0; y < resolution; y++)
                     noisyColors[x + y * resolution] = new Color(new Vector3((float)rand.Next(1000) / 1000.0f, 0, 0));
 
-            Texture2D noiseImage = new Texture2D(device, resolution, resolution, 1, TextureUsage.None, SurfaceFormat.Color);
+            //Texture2D noiseImage = new Texture2D(device, resolution, resolution, 1, TextureUsage.None, SurfaceFormat.Color);
+            //CONV
+            Texture2D noiseImage = new Texture2D(device, resolution, resolution, false, SurfaceFormat.Color);
             noiseImage.SetData(noisyColors);
             return noiseImage;
         }
@@ -61,27 +67,38 @@ namespace ICGame
 
          public void GeneratePerlinNoise(float time)
          {
-             device.SetRenderTarget(0, cloudsRenderTarget);
-             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-                         
+             //device.SetRenderTarget(0, cloudsRenderTarget);
+             //CONV
+             device.SetRenderTarget(cloudsRenderTarget);
+             device.Clear(ClearOptions.Target/* | ClearOptions.DepthBuffer*/, Color.Black, 1.0f, 0);
+                                                //CONV
              effect.CurrentTechnique = effect.Techniques["PerlinNoise"];
              effect.Parameters["xTexture"].SetValue(cloudStaticMap);
              effect.Parameters["xOvercast"].SetValue(1.1f);
              effect.Parameters["xTime"].SetValue(time/1000.0f);
-             effect.Begin();
+             //effect.Begin();
+             //CONV
              foreach (EffectPass pass in effect.CurrentTechnique.Passes)
              {
-                 pass.Begin();
+                 pass.Apply();//.Begin();
  
-                 device.VertexDeclaration = fullScreenVertexDeclaration;
+                 //device.VertexDeclaration = fullScreenVertexDeclaration;
+                 //CONV
+                 
                  device.DrawUserPrimitives(PrimitiveType.TriangleStrip, fullScreenVertices, 0, 2);
  
-                 pass.End();
+                 //pass.End();
              }
-             effect.End();
+             //effect.End();
  
-             device.SetRenderTarget(0, null);
-             CloudMap = cloudsRenderTarget.GetTexture();
+             //device.SetRenderTarget(0, null);
+             //CONV
+             device.SetRenderTarget(null);
+             //CloudMap = cloudsRenderTarget.GetTexture();
+             //CONV
+             CloudMap = cloudsRenderTarget;
+             
+             //CloudMap.SetData();
          }
      
     }

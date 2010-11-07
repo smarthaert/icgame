@@ -98,8 +98,11 @@ technique Pretransformed
 {
 	pass Pass0
 	{   
-		VertexShader = compile vs_1_1 PretransformedVS();
-		PixelShader  = compile ps_1_1 PretransformedPS();
+		//VertexShader = compile vs_1_1 PretransformedVS();
+		//PixelShader  = compile ps_1_1 PretransformedPS();
+		//CONV
+		VertexShader = compile vs_2_0 PretransformedVS();
+		PixelShader  = compile ps_2_0 PretransformedPS();
 	}
 }
 
@@ -145,8 +148,85 @@ technique Colored
 {
 	pass Pass0
 	{   
-		VertexShader = compile vs_1_1 ColoredVS();
-		PixelShader  = compile ps_1_1 ColoredPS();
+		//VertexShader = compile vs_1_1 ColoredVS();
+		//PixelShader  = compile ps_1_1 ColoredPS();
+		//CONV
+		VertexShader = compile vs_2_0 ColoredVS();
+		PixelShader  = compile ps_2_0 ColoredPS();
+	}
+}
+
+//------- Technique: NotReallyTexturedShaded --------
+
+VertexToPixel NotRlyTexturedShadedVS( float4 inPos : POSITION, float3 inNormal: NORMAL)
+{	
+	VertexToPixel Output = (VertexToPixel)0;
+	float4x4 preViewProjection = mul (xView, xProjection);
+	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
+    
+	Output.Position = mul(inPos, preWorldViewProjection);	
+		
+	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
+		
+	float4 V = normalize(float4(xCameraPosition.x,xCameraPosition.y,xCameraPosition.z,0)-mul(xView,mul(xWorld,inPos)));
+	float4 R = normalize(reflect(float4(xLightDirection,0),normalize(mul(xView,mul(xWorld,float4(inNormal.x,inNormal.y,inNormal.z,0))))));
+	
+	float RV = saturate(dot(R,V));
+	
+	Output.calcRS=pow(RV,1)*xSpecularFactor;
+	Output.LightingFactor = 1;
+	
+	
+	if(!xHasTexture)
+	Output.Color=float4(xDiffuseColor,0)*xDiffuseFactor;
+	else
+	Output.Color=float4(1,1,1,0);
+	if (xEnableLighting)
+		Output.LightingFactor=saturate(dot(Normal, -xLightDirection))+xAmbient;
+		//Output.LightingFactor = saturate(dot(Normal, -xLightDirection));
+		
+	
+	
+    
+	return Output;    
+}
+
+PixelToFrame NotRlyTexturedShadedPS(VertexToPixel PSIn) 
+{
+	PixelToFrame Output = (PixelToFrame)0;		
+
+	//Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
+	
+	Output.Color = 1;
+
+	Output.Color.rgb*=PSIn.Color;
+		
+	Output.Color +=float4(PSIn.calcRS*xSpecularColor,0);
+	Output.Color.rgb *= saturate(PSIn.LightingFactor);
+
+	Output.Color.a=xTransparency;
+
+	return Output;
+}
+
+technique NotRlyTexturedShaded_2_0
+{
+	pass Pass0
+	{   
+		VertexShader = compile vs_2_0 NotRlyTexturedShadedVS();
+		PixelShader  = compile ps_2_0 NotRlyTexturedShadedPS();
+	}
+}
+
+technique NotRlyTexturedShaded
+{
+	pass Pass0
+	{   
+		//VertexShader = compile vs_1_1 TexturedShadedVS();
+		//PixelShader  = compile ps_1_1 TexturedShadedPS();
+		//CONV
+		VertexShader = compile vs_2_0 NotRlyTexturedShadedVS();
+		PixelShader  = compile ps_2_0 NotRlyTexturedShadedPS();
 	}
 }
 
@@ -159,7 +239,8 @@ VertexToPixel TexturedShadedVS( float4 inPos : POSITION, float3 inNormal: NORMAL
 	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
     
 	Output.Position = mul(inPos, preWorldViewProjection);	
-	Output.TextureCoords = inTexCoords;
+	if(xHasTexture)
+		Output.TextureCoords = inTexCoords;
 	
 	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
 		
@@ -190,7 +271,11 @@ PixelToFrame TexturedShadedPS(VertexToPixel PSIn)
 {
 	PixelToFrame Output = (PixelToFrame)0;		
 
-    Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
+
+    if(xHasTexture)
+		Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
+	else
+		Output.Color = 1;
 	Output.Color.rgb*=PSIn.Color;
 		
 	Output.Color +=float4(PSIn.calcRS*xSpecularColor,0);
@@ -214,8 +299,11 @@ technique TexturedShaded
 {
 	pass Pass0
 	{   
-		VertexShader = compile vs_1_1 TexturedShadedVS();
-		PixelShader  = compile ps_1_1 TexturedShadedPS();
+		//VertexShader = compile vs_1_1 TexturedShadedVS();
+		//PixelShader  = compile ps_1_1 TexturedShadedPS();
+		//CONV
+		VertexShader = compile vs_2_0 TexturedShadedVS();
+		PixelShader  = compile ps_2_0 TexturedShadedPS();
 	}
 }
 
@@ -262,8 +350,11 @@ technique Textured
 {
 	pass Pass0
 	{   
+		//VertexShader = compile vs_1_1 TexturedVS();
+		//PixelShader  = compile ps_1_1 TexturedPS();
+		//CONV
 		VertexShader = compile vs_1_1 TexturedVS();
-		PixelShader  = compile ps_1_1 TexturedPS();
+		PixelShader  = compile ps_2_0 TexturedPS();
 	}
 }
 
@@ -315,7 +406,8 @@ technique PointSprites_2_0
 {
 	pass Pass0
 	{   
-		PointSpriteEnable = true;
+		//PointSpriteEnable = true;
+		//CONV
 		VertexShader = compile vs_2_0 PointSpritesVS();
 		PixelShader  = compile ps_2_0 PointSpritesPS();
 	}
@@ -325,9 +417,13 @@ technique PointSprites
 {
 	pass Pass0
 	{   
-		PointSpriteEnable = true;
+		//PointSpriteEnable = true;
+		//CONV
+		//VertexShader = compile vs_1_1 PointSpritesVS();
+		//PixelShader  = compile ps_1_1 PointSpritesPS();
+		//CONV
 		VertexShader = compile vs_1_1 PointSpritesVS();
-		PixelShader  = compile ps_1_1 PointSpritesPS();
+		PixelShader  = compile ps_2_0 PointSpritesPS();
 	}
 }
 
@@ -365,7 +461,7 @@ technique PointSprites
      perlin += tex2D(TextureSampler, (PSIn.TextureCoords)*16+xTime*move)/32;
      perlin += tex2D(TextureSampler, (PSIn.TextureCoords)*32+xTime*move)/32;    
      
-     Output.Color.rgb = 1.0f-pow(perlin.r, xOvercast)*2.0f;
+     Output.Color.rgb = 1.0f-pow(abs(perlin.r), xOvercast)*2.0f;
      Output.Color.a =1;
  
      return Output;
