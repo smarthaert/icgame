@@ -11,6 +11,7 @@ namespace ICGame
 {
     public class Unit : GameObject, IAnimated, IPhysical, IInteractive, IDestructible, IControllable
     {
+        
 		public StaticObject SelectionRing
         {
             get; set;
@@ -39,7 +40,6 @@ namespace ICGame
             //TEMP
             //moving = Direction.Forward;
             //\TEMP
-
             BasicTransforms = new Matrix[Model.Bones.Count];
             int j = 0;
             foreach (ModelBone bone in Model.Bones)
@@ -53,38 +53,8 @@ namespace ICGame
                 AnimationTransforms[i] = Matrix.Identity;
             }
             //BoundingBox = new BoundingBox(GetMinVertex(),GetMaxVertex());
-            Vector3 min = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue,float.MinValue,float.MinValue);
-            for(int i = 0; i < this.Model.Meshes.Count;++i)
-            {
-                BoundingBox bb;
-                BoundingBoxTools.CalculateBoundingBox(Model.Meshes[i],out bb);
-                if(min.X > bb.Min.X)
-                {
-                    min.X = bb.Min.X;
-                }
-                if(min.Y > bb.Min.Y)
-                {
-                    min.Y = bb.Min.Y;
-                }
-                if(min.Z > bb.Min.Z)
-                {
-                    min.Z = bb.Min.Z;
-                }
-                if(max.X < bb.Max.X)
-                {
-                    max.X = bb.Max.X;
-                }
-                if(max.Y < bb.Max.Y)
-                {
-                    max.Y = bb.Max.Y;
-                }
-                if(max.Z < bb.Max.Z)
-                {
-                    max.Z = bb.Max.Z;
-                }
-            }
-            boundingBox = new BoundingBox(min,max);     //Siedlisko śmierdzącego zła... Zatkaj nos Boo...
+
+            BoundingBoxTools.CalculateBoundingBox(Model, out boundingBox);
 
             Length = scale*(boundingBox.Max.Z - boundingBox.Min.Z);
             Width = scale*(boundingBox.Max.Y - boundingBox.Min.Y);
@@ -363,7 +333,7 @@ namespace ICGame
         {
             GameObject go = physical as GameObject;
             BoundingBox checkBB = BoundingBoxTools.TransformBoundingBox(physical.BoundingBox, go.ModelMatrix);
-
+            
             return !thisBB.Intersects(checkBB);
         }
 
@@ -415,6 +385,7 @@ namespace ICGame
                         Length,
                         Width);
             BoundingBox thisBB = BoundingBoxTools.TransformBoundingBox(BoundingBox, ModelMatrix);
+            
             foreach (GameObject gameObject in gameObjects)
             {
                 if(gameObject is IPhysical && gameObject != this)
