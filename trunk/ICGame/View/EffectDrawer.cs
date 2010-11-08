@@ -4,7 +4,19 @@ using System.Text;
 
 namespace ICGame
 {
-    public class EffectDrawer
+    public abstract class EffectDrawer
     {
+        protected IObjectEffect objectEffect; 
+        protected GameObject gameObject; 
+
+        public EffectDrawer(IObjectEffect _objectEffect, GameObject _gameObject)
+        {
+            objectEffect = _objectEffect;
+            gameObject = _gameObject;
+        }
+        
+
+        public abstract void Draw(Microsoft.Xna.Framework.Matrix projection, Camera camera,
+                          Microsoft.Xna.Framework.Graphics.GraphicsDevice gd);
     }
 }

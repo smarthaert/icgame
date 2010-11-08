@@ -25,14 +25,13 @@ namespace ICGame
 
     public class Game : Microsoft.Xna.Framework.Game
     {
-
-        GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         SpriteBatch spriteBatch; 
         public Effect effect;   //nie patrzeæ
 
         public Game()
         {
-            graphics = new GraphicsDeviceManager(this);
+            GraphicsDeviceManager = new GraphicsDeviceManager(this);
             
             Content.RootDirectory = "Content";
 
@@ -121,7 +120,7 @@ namespace ICGame
             CampaignController.StartCampaign();
             CampaignController.CampaignState = GameState.MainMenu;
 
-            Display = new Display(graphics, UserInterface, Camera, CampaignController, effect);
+            Display = new Display(GraphicsDeviceManager, UserInterface, Camera, CampaignController, effect);
             
             
 
@@ -130,14 +129,11 @@ namespace ICGame
             UserInterfaceController.InitializeUserInterface(this);
 
             //Alpha blending
-            //GraphicsDevice.RenderState.AlphaBlendEnable = true;
-            //GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
-            //CONV
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            
+          //  GraphicsDevice.RenderState.AlphaBlendEnable = true;
+          //  GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
           //GraphicsDevice.RenderState.DepthBufferEnable = false;
-            //GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
-            //CONV
+          //  GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+            
         }
 
         /// <summary>
@@ -167,8 +163,8 @@ namespace ICGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
-            UserInterfaceController.UpdateInput();
+
+         
             UserInterfaceController.UpdateUserInterfaceState(gameTime);
             MissionController.UpdateMission(gameTime);
             

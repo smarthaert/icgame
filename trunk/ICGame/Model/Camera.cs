@@ -13,6 +13,7 @@ namespace ICGame
         private Quaternion rotation2 = Quaternion.Identity;
         private Vector3 cameraPosition=new Vector3(250,0,164);
         private Vector3 cameraAdditionalPosition = new Vector3(0,70,20);
+        private Vector3 cameraInitialPosition = new Vector3(0,0,0); //Wykorzystywana przez hologram
         
         //Kolizje
         private Vector3 collisionFreeLookAt=new Vector3(0,0,0);
@@ -20,17 +21,34 @@ namespace ICGame
 
         private const float rotationSpeed = 0.01f;
         private const float heightChangeSpeed = 0.3f;
-        private const float movementSpeed = 0.2f;
+        private const float movementSpeed = 1.5f;
+        private const float mouseMovementSpeed = 0.3f;
 
         
         public Camera(Vector3 position, MissionController missionController)
         {
             lookAtPosition = position;
+            cameraInitialPosition = position;
             MissionController = missionController;
             collisionFreeLookAt = position;
             
             
         }
+
+        public Camera (Camera camera)
+        {
+            cameraInitialPosition = camera.lookAtPosition;
+            lookAtPosition = cameraInitialPosition;
+            collisionFreeLookAt = cameraInitialPosition;
+            cameraPosition = camera.cameraPosition;
+            MissionController = camera.MissionController;
+            rotation = camera.rotation;
+            rotation2 = camera.rotation2;
+
+            
+
+        }
+
 
         public MissionController MissionController
         {
@@ -155,7 +173,7 @@ namespace ICGame
             if (TerrainCollision(dY))
             {
                 cameraAdditionalPosition = collisionFreeCameraAdditionalPosition;
-          
+                
                 CalculateCamera();
             }
 
@@ -208,7 +226,7 @@ namespace ICGame
 
         public void TransformCameraAccordingToMouseTravel(int dx, int dy)
         {
-            Move(dx*-movementSpeed,dy*movementSpeed);
+            Move(dx*-mouseMovementSpeed,dy*mouseMovementSpeed);
         }
 
         public void RotateCameraAccordingToMouseTravel(int dx, int dy)

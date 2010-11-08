@@ -26,7 +26,7 @@ namespace ICGame
         public void Update(GameTime gameTime)
         {
             float time = (float) gameTime.TotalGameTime.TotalMilliseconds/100.0f;
-            ObjectContainer.UpdateGameObjects();
+            ObjectContainer.UpdateGameObjects(gameTime);
             Board.SkyDome.GeneratePerlinNoise(time);
         }
 
@@ -39,6 +39,7 @@ namespace ICGame
             obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
             obj.Position = new Vector3(274.0f, Board.GetHeight(274.0f, 134.0f), 134.0f);
             ObjectContainer.GameObjects.Add(obj);
+            
         }
     }
 }

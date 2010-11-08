@@ -16,9 +16,11 @@ namespace ICGame
         public override void Draw(Microsoft.Xna.Framework.Matrix projection, Camera camera, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
         {
             Vehicle vehicle = GameObject as Vehicle;
-            if(vehicle.Selected)
-                vehicle.SelectionRing.GetDrawer().Draw(projection,camera,gd);
-                
+            if (vehicle.Selected)
+            {
+                vehicle.SelectionRing.GetDrawer().Draw(projection, camera, gd);
+            }
+
             base.Draw(projection, camera, gd);
         }
     }

@@ -14,7 +14,8 @@ namespace ICGame
 
         /* -1 gdy nic nie jest zaznaczone
          * w przeciwnym przypadku indeks
-         * TODO:(?)multiple selecton
+         * TODO:(?)multiple selecton - Poprawki również w kontrolerach, Displayu (mały model), 
+         * tam jest wszystko na jedna jednostke napisane
          */
         private int selectedObject;
 
@@ -84,7 +85,22 @@ namespace ICGame
             return selected!=null;
         }
 
-        public void UpdateGameObjects()
+        public GameObject GetSelectedObject()
+        {
+            foreach (GameObject gameObject in GameObjects)
+            {
+                if (gameObject is Vehicle)
+                {
+                    if (((Vehicle)gameObject).Selected)
+                    {
+                        return gameObject;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void UpdateGameObjects(GameTime gameTime)
         {
             //TEMP
             string logText = "";
@@ -149,6 +165,8 @@ namespace ICGame
             logText += "Selected:\t" + SelectedObject.ToString() + "\r\n";
             gi.ShowInfo(logText);
             //\TEMP
+
+            UpdateEffects(gameTime);
         }
 
         public void MoveToLocation(float x, float z)
@@ -168,6 +186,18 @@ namespace ICGame
                 IControllable controllable = GameObjects[SelectedObject] as IControllable;
 
                 controllable.Destination = new Vector2(x,z);
+            }
+        }
+        
+        public void UpdateEffects(GameTime gameTime)
+        {
+            foreach (GameObject gameObject in GameObjects)
+            {
+                foreach (IObjectEffect effect in gameObject.EffectList)
+                {
+                    if(effect.IsActive)
+                        effect.Update(gameTime);
+                }
             }
         }
     }
