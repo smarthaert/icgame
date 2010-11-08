@@ -113,6 +113,13 @@ namespace ICGame
             rightDoorState = DoorState.Opening;
             //wheelState = WheelState.StraightLeft;
             gi = new GameInfo();
+
+
+            //UBER TEMP
+            EffectList.Add(new WaterEffect(this));
+            EffectList[0].IsActive = true;
+
+            
             //\TEMP
 
         }

@@ -15,6 +15,10 @@ namespace ICGame
         private bool isMouseDragging = false;
         private bool isMouseRotating = false;
 
+        private double lastDraging = 0;
+        private int lastDraggingX = 0;
+        private int lastDraggingY = 0;
+
         //Konieczne do obslugi kursora
         private Game mainGame;
 
@@ -52,12 +56,15 @@ namespace ICGame
         public void UpdateUserInterfaceState(GameTime gameTime)
         {
             UserInterface.ZuneUIModel.Animate(gameTime);
+            UpdateInput(gameTime);
         }
 
-        private void UpdateMouseState()
+        private void UpdateMouseState(GameTime gameTime)
         {
             mousePrevState = mouseCurState;
             mouseCurState = Mouse.GetState();
+            
+            //TODO: Wysuwanie Modelu Zune'a - do refaktoringu
             if(mouseCurState.LeftButton==ButtonState.Pressed&&mouseCurState!=mousePrevState)
             {
                 //Do poprawki
@@ -70,7 +77,7 @@ namespace ICGame
                
                 }
 
-            
+                //Okienko informacyjne
                 if (!UserInterface.InterfaceOverlaped(mouseCurState.X,mouseCurState.Y))
                 {
                     if(!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
@@ -82,26 +89,61 @@ namespace ICGame
                     }
                 }
             }
-            if (mouseCurState.RightButton == ButtonState.Pressed && mouseCurState != mousePrevState)
-            {
-                Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
-                    CampaignController.MissionController.Mission.ObjectContainer.MoveToLocation(pos3D.X, pos3D.Z);
-            }
+          
             
             //Drag control
-            if (mouseCurState.RightButton == ButtonState.Pressed && mouseCurState != mousePrevState)
+            if (mouseCurState.RightButton == ButtonState.Pressed && (Math.Abs(mouseCurState.X - mousePrevState.X) > 3 || Math.Abs(mouseCurState.Y - mousePrevState.Y) > 3))
+            {
+                if (!isMouseDragging)
+                {
+                    //If turning dragging on... 
+                    //rember the mouse coords...
+                    lastDraggingX = mouseCurState.X;
+                    lastDraggingY = mouseCurState.Y;
+                }
+
                 isMouseDragging = true;
+                
+                mainGame.IsMouseVisible = false;
+            }
             else
+            {
+                //Stop dragging! //Shitty, doesnt work yet
+             //   if (isMouseDragging)
+             //       Mouse.SetPosition(lastDraggingX, lastDraggingY);
+
                 isMouseDragging = false;
+            }
+            
+            
+            
+            
 
             if (mouseCurState.MiddleButton == ButtonState.Pressed && mouseCurState != mousePrevState)
                 isMouseRotating = true;
-            else
+            else 
                 isMouseRotating = false;
 
             if(isMouseDragging)
             {
+                lastDraging = gameTime.TotalGameTime.TotalMilliseconds;
                 Camera.TransformCameraAccordingToMouseTravel(mouseCurState.X-mousePrevState.X,mouseCurState.Y-mousePrevState.Y);
+            }
+            else 
+            {
+                if (gameTime.TotalGameTime.TotalMilliseconds - lastDraging > 200)
+                {
+                    mainGame.IsMouseVisible = true;
+
+                }
+                // WYDAWANIE POLECEN JEDNOSTKOM - Tylko jesli minelo pol sekundy od puszczenia prawego    
+                // przycisku - zabezpiecza nas przed przypadkowym kliknieciem przy przesuwaniu
+                // Sposob scrollowania moze sie zmienic w wersji finalnej (fullscrenowej) na przesuwanie                  // po brzegach - wiec aktualnie to troche hotfix
+                if (mouseCurState.RightButton == ButtonState.Released && mousePrevState.RightButton == ButtonState.Pressed  && mouseCurState != mousePrevState && (gameTime.TotalGameTime.TotalMilliseconds-lastDraging)>500)
+                {
+                    Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
+                    CampaignController.MissionController.Mission.ObjectContainer.MoveToLocation(pos3D.X, pos3D.Z);
+                }
             }
 
             if (isMouseRotating)
@@ -109,9 +151,26 @@ namespace ICGame
                 Camera.RotateCameraAccordingToMouseTravel(mouseCurState.X - mousePrevState.X, mouseCurState.Y - mousePrevState.Y);
             }
 
+
+         
+
             //Scroll control
             Camera.ChangeHeightAccordingToMouseWheel(mouseCurState.ScrollWheelValue - mousePrevState.ScrollWheelValue);
 
+
+            //Scroll na brzegach
+            if (UserInterface.IsFullscreen)
+            {
+                if (UserInterface.GetHorizontalEdge(mouseCurState.X) == WindowPosition.LEFT)
+                    Camera.MoveLeft();
+                else if (UserInterface.GetHorizontalEdge(mouseCurState.X) == WindowPosition.RIGHT)
+                    Camera.MoveRight();
+
+                if (UserInterface.GetVerticalEdge(mouseCurState.Y) == WindowPosition.UP)
+                    Camera.MoveForward();
+                else if (UserInterface.GetVerticalEdge(mouseCurState.Y) == WindowPosition.DOWN)
+                    Camera.MoveBack();
+            }
 
         }
 
@@ -222,12 +281,17 @@ namespace ICGame
             {
                 ((Vehicle)CampaignController.GetActiveObject()).turretDestination = 2 * MathHelper.Pi;
             }
+
             //\TEMP
+            if (curState.IsKeyDown(Keys.F5) && prevState.IsKeyUp(Keys.F5))
+            {
+                UserInterface.ToggleFullscreen();
+            }
         }
 
-        public void UpdateInput()
+        public void UpdateInput(GameTime gameTime)
         {
-            UpdateMouseState();
+            UpdateMouseState(gameTime);
             UpdateKeyboardState();
         }
     }

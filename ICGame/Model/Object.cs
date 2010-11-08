@@ -35,7 +35,9 @@ namespace ICGame
             SpecularFactor=new List<float>();
             Shininess = new List<Vector3>();
             Opacity = new List<float>();
-            
+
+            EffectList = new List<IObjectEffect>();
+          
 
             position = new Vector3(210, 0, 160);
             
@@ -70,6 +72,21 @@ namespace ICGame
             }
             
 
+        }
+
+        public Matrix GetSmallModelMatrix(Vector3 newPosition, int screenWidth)
+        {
+            Matrix result = Matrix.Identity;
+            result *= Matrix.CreateScale(scale / (screenWidth / 8), scale / (screenWidth / 8), scale / (screenWidth / 8)) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
+            
+            if (this is IPhysical)
+            {
+                result *= ((IPhysical)this).PhysicalTransforms;// *result;
+            }
+            result *= Matrix.CreateRotationX(Angle.X) * Matrix.CreateRotationY(Angle.Y) * Matrix.CreateRotationZ(Angle.Z);
+            result *= Matrix.CreateTranslation(newPosition);
+
+            return result;
         }
 
         public Model Model
@@ -126,6 +143,12 @@ namespace ICGame
             get;
             set;
         }
+
+        public List<IObjectEffect> EffectList
+        {
+            get; set;
+        }
+    
 
         #region IDrawable Members
 

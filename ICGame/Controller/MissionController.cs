@@ -48,16 +48,31 @@ namespace ICGame
             Mission.Board.LoadHeightData(heightMap);
             Mission.LoadObjects(gameObjectFactory);
         }
-
+        /// <summary>
+        /// Do wywalenia w przyszłości
+        /// </summary>
+        /// <returns></returns>
         public List<GameObject> GetMissionObjects()
         {
             return Mission.ObjectContainer.GameObjects;
+        }
+
+        public GameObject GetSeletedObject()
+        {
+            return Mission.ObjectContainer.GetSelectedObject();
         }
 
         public BoardDrawer GetBoardDrawer()
         {
             return Mission.Board.GetDrawer();
         }
+
+        /// <summary>
+        /// Zwraca aktualnie aktywną jednostkę. UWAGA: TEMP, zwraca pierwszą jednostkę z listy aktualnej 
+        /// misji, powinno być zastąpione przez GetSelectedObject i zwracać również inne zaznaczone 
+        /// jednostki
+        /// </summary>
+        /// <returns>Zaznaczona jednostka</returns>
 
         public GameObject GetActiveObject()
         {
