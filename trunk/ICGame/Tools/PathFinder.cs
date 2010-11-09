@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework;
 using Point=System.Drawing.Point;
 using System.Threading;
 
@@ -281,16 +282,66 @@ namespace ICGame
             AStar(aStarArg.Start, aStarArg.Goal, out path);
             if(pathTime > aStarArg.Controllable.PathTime)
             {
+                this.OpitmizePath(ref path);
                 aStarArg.Controllable.Path = path;
+                aStarArg.Controllable.NextStep = new Vector2(((GameObject) aStarArg.Controllable).Position.X,((GameObject) aStarArg.Controllable).Position.Z);
                 aStarArg.Controllable.PathTime = pathTime;
             }
-            string msg = "";
+            /*string msg = "";
             for(int i = 0; i < path.Count; ++i)
             {
                 msg += path[i].ToString() + " " + lastProcessed[path[i].Y, path[i].X].ToString() + " " +
                        map[path[i].Y, path[i].X].ToString() + "  |  ";
             }
-            MessageBox.Show(msg);
+            MessageBox.Show(msg);*/
+        }
+
+        private void OpitmizePath(ref List<Point> path)
+        {
+            int i = 0;
+            while(i < path.Count-2)
+            {
+                int difY1 = path[i + 1].Y - path[i].Y;
+                int difY2 = path[i + 2].Y - path[i + 1].Y;
+                if ((difY1 == 0 && difY2 == 0) || (difY1 != 0 && difY2 != 0 && (path[i + 1].X - path[i].X) / difY1 == (path[i + 2].X - path[i + 1].X) / difY2))
+                {
+                    path.RemoveAt(i+1);
+                }
+                else if (lastProcessed[path[i].X, path[i].Y] == lastProcessed[path[i+1].X, path[i+1].Y] && 
+                    lastProcessed[path[i].X, path[i].Y] == lastProcessed[path[i+2].X, path[i+2].Y])
+                {
+                    bool remove = true;
+
+                    int val = lastProcessed[path[i].X, path[i].Y];
+                    int minX = path[i].X < path[i + 2].X ? path[i].X : path[i+2].X;
+                    int maxX = path[i].X > path[i + 2].X ? path[i].X : path[i+2].X;
+                    int minY = path[i].Y < path[i + 2].Y ? path[i].Y : path[i+2].Y;
+                    int maxY = path[i].Y > path[i + 2].Y ? path[i].Y : path[i+2].Y;
+                    for(int k = minX; k < maxX; ++k)
+                    {
+                        for (int l = minY; l < maxY; l++)
+                        {
+                            if(lastProcessed[k,l] != val)
+                            {
+                                remove = false;
+                            }
+                        }
+                    }
+
+                    if(remove)
+                    {
+                        path.RemoveAt(i+1);
+                    }
+                    else
+                    {
+                        ++i;
+                    }
+                }
+                else
+                {
+                    ++i;
+                }
+            }
         }
 
         private void AStar(Point start, Point goal, out List<Point> path)
