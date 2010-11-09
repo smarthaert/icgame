@@ -402,7 +402,7 @@ namespace ICGame
 
             gi.ShowInfo("NextStep: " + curStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString());
 
-            if(curStep.X <= toleranceX && curStep.Y <= toleranceY)
+            if(Math.Abs(curStep.X) <= toleranceX && Math.Abs(curStep.Y) <= toleranceY)
             {
                 if(Path != null && Path.Count > 0)
                 {
