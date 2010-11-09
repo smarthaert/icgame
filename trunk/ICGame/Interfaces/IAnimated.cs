@@ -9,5 +9,7 @@ namespace ICGame
     {
 
         void Animate(GameTime gameTime, List<GameObject> gameObjects);
+
+        Matrix[] GetBasicTransforms();
     }
 }

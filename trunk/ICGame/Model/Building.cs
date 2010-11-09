@@ -125,6 +125,13 @@ namespace ICGame
             
         }
 
+        public Matrix[] GetBasicTransforms()
+        {
+            Matrix[] transforms = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(transforms);
+            return transforms;
+        }
+
         #endregion
 
         #region IPhysical Members

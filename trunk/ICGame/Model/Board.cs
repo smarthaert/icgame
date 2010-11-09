@@ -146,6 +146,11 @@ namespace ICGame
             return new BoardDrawer(this);
         }
 
+        public int[,] GetDifficultyMap()
+        {
+            return difficultyMap;
+        }
+
         public void GetTileInfo(int X, int Y)
         {
             

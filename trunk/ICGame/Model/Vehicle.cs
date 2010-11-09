@@ -106,7 +106,7 @@ namespace ICGame
             wheelAngle = 0;
             wheelState = WheelState.Straight;
 
-            Destination = new Vector2(Position.X,Position.Z);
+            NextStep = new Vector2(Position.X,Position.Z);
 
             //TEMP
             leftDoorState = DoorState.Opening;
@@ -395,16 +395,30 @@ namespace ICGame
 
         public override void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
         {
-            NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
-            NextStep = new Vector2(NextStep.X * Convert.ToSingle(Math.Cos(Angle.Y)) - NextStep.Y * Convert.ToSingle(Math.Sin(Angle.Y)),
-                NextStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
+            Vector2 curStep = new Vector2(NextStep.X - Position.X, NextStep.Y - Position.Z);
 
-            gi.ShowInfo("NextStep: " + NextStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString());
+            curStep = new Vector2(curStep.X * Convert.ToSingle(Math.Cos(Angle.Y)) - curStep.Y * Convert.ToSingle(Math.Sin(Angle.Y)),
+                curStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + curStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
 
-            if (NextStep.X > toleranceX)
+            gi.ShowInfo("NextStep: " + curStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString());
+
+            if(curStep.X <= toleranceX && curStep.Y <= toleranceY)
+            {
+                if(Path != null && Path.Count > 0)
+                {
+                    NextStep = new Vector2(Path[0].X,Path[0].Y);
+                    Path.RemoveAt(0);
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (curStep.X > toleranceX)
             {
                 toleranceX = toleranceSmall;
-                if (NextStep.Y > toleranceY)
+                if (curStep.Y > toleranceY)
                 {
                     toleranceY = toleranceSmall;
                     if(WheelState == WheelState.Straight)
@@ -424,7 +438,7 @@ namespace ICGame
                         }
                     }
                 }
-                else if (NextStep.Y < toleranceY)
+                else if (curStep.Y < toleranceY)
                 {
                     toleranceY = toleranceSmall;
                     if(WheelState == WheelState.Straight)
@@ -465,16 +479,16 @@ namespace ICGame
                     }
                 }
             }
-            else if (Math.Abs(NextStep.X) <= toleranceX)
+            else if (Math.Abs(curStep.X) <= toleranceX)
             {
                 toleranceX = toleranceBig;
-                if (Math.Abs(NextStep.Y) <= toleranceY)
+                if (Math.Abs(curStep.Y) <= toleranceY)
                 {
                     toleranceY = toleranceBig;
                     Move(Direction.None, gameTime);
                     Turn(Direction.None, gameTime);
                 }
-                else if (NextStep.Y > toleranceY)
+                else if (curStep.Y > toleranceY)
                 {
                     toleranceY = toleranceSmall;
                     if (WheelState == WheelState.Left)
@@ -494,7 +508,7 @@ namespace ICGame
                         }
                     }
                 }
-                else if (NextStep.Y < toleranceY)
+                else if (curStep.Y < toleranceY)
                 {
                     toleranceY = toleranceSmall;
 
@@ -520,7 +534,7 @@ namespace ICGame
             else
             {
                 toleranceX = toleranceSmall;
-                if (NextStep.Y < toleranceY)
+                if (curStep.Y < toleranceY)
                 {
                     toleranceY = toleranceSmall;
                     if (WheelState == WheelState.Straight)
@@ -540,7 +554,7 @@ namespace ICGame
                         }
                     }
                 }
-                else if (NextStep.Y > toleranceY)
+                else if (curStep.Y > toleranceY)
                 {
                     toleranceY = toleranceSmall;
                     if (WheelState == WheelState.Straight)

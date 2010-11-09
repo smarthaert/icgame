@@ -6,6 +6,7 @@ using System.Text;
 using ICGame.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Point = System.Drawing.Point;
 
 namespace ICGame
 {
@@ -26,6 +27,12 @@ namespace ICGame
         protected Matrix[] AnimationTransforms
         {
             get; set;
+        }
+
+        public DateTime PathTime
+        {
+            get;
+            set;
         }
 
         public Unit(Model model, float speed, float turnRadius):
@@ -141,6 +148,21 @@ namespace ICGame
             {
                 Model.Bones[i].Transform = AnimationTransforms[i]*BasicTransforms[i];
             }
+        }
+
+        public Matrix[] GetBasicTransforms()
+        {
+            Matrix[] transforms = new Matrix[Model.Bones.Count];
+            for (int i = 0; i < Model.Bones.Count; ++i)
+            {
+                Model.Bones[i].Transform = BasicTransforms[i];
+            }
+            Model.CopyAbsoluteBoneTransformsTo(transforms);
+            for (int i = 0; i < Model.Bones.Count; ++i)
+            {
+                Model.Bones[i].Transform = AnimationTransforms[i] * BasicTransforms[i];
+            }
+            return transforms;
         }
 
         #endregion
@@ -320,6 +342,11 @@ namespace ICGame
         }
 
         public float TurnRadius
+        {
+            get; set;
+        }
+
+        public List<Point> Path
         {
             get; set;
         }

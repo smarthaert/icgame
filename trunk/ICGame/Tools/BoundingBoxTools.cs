@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -125,8 +124,8 @@ namespace ICGame.Tools
                 if (n > tempVecs3.Length)
                     tempVecs3 = new Vector3[n + 128];
                 int l = mp.PrimitiveCount * 3;
-                if (l + mp.StartIndex > tempUshorts.Length)
-                    tempUshorts = new ushort[l + mp.StartIndex + 128];
+                if (l > tempUshorts.Length)
+                    tempUshorts = new ushort[l + 128];
                 if (n == 0 || l == 0)
                     continue;
                 
