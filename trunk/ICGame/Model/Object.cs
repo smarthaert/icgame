@@ -18,7 +18,8 @@ namespace ICGame
 
         private Vector3 position;
         private Model _model;
-
+        //temp
+        private float rot;
         private ArrayList meshesNames=new ArrayList();
 
         #region IDrawable Members
@@ -73,17 +74,14 @@ namespace ICGame
             
 
         }
-
-        public Matrix GetSmallModelMatrix(Vector3 newPosition, int screenWidth)
+        //TODO: WYWALIC DO OSODNEGO MODELU ASAP!
+        public Matrix GetSmallModelMatrix(Vector3 newPosition, int screenWidth, GameTime gameTime)
         {
             Matrix result = Matrix.Identity;
             result *= Matrix.CreateScale(scale / (screenWidth / 8), scale / (screenWidth / 8), scale / (screenWidth / 8)) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
-            
-            if (this is IPhysical)
-            {
-                result *= ((IPhysical)this).PhysicalTransforms;// *result;
-            }
-            result *= Matrix.CreateRotationX(Angle.X) * Matrix.CreateRotationY(Angle.Y) * Matrix.CreateRotationZ(Angle.Z);
+
+            rot += gameTime.ElapsedGameTime.Milliseconds*0.0001f;
+            result *=Matrix.CreateRotationY(rot);
             result *= Matrix.CreateTranslation(newPosition);
 
             return result;

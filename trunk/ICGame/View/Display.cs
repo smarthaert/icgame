@@ -78,7 +78,7 @@ namespace ICGame
             GameObject selectedObject = CampaignController.MissionController.GetSeletedObject();
             if (selectedObject != null)
             {
-                selectedObject.GetDrawer().DrawSmallModel(Projection, Camera, graphicsDevice);
+                selectedObject.GetDrawer().DrawSmallModel(Projection, Camera, graphicsDevice,gameTime);
             }
 
             
