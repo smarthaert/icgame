@@ -44,11 +44,18 @@ namespace ICGame
             MissionController = camera.MissionController;
             rotation = camera.rotation;
             rotation2 = camera.rotation2;
-
-            
-
         }
 
+        /// <summary>
+        /// Resetuje rotacji kamera i ustawia ja w polozeniu "poczatkowym". Uzywane przy rysowaniu minimodelu
+        /// </summary>
+        public void Reset()
+        {
+            rotation = Quaternion.Identity;
+            rotation2 = Quaternion.Identity;
+            CalculateCamera();
+            cameraPosition.Y = 5.0f;
+        }
 
         public MissionController MissionController
         {

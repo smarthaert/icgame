@@ -42,15 +42,13 @@ namespace ICGame
         /// <param name="projection">macierz rzutowania</param>
         /// <param name="camera">Obiekt klasy Camera</param>
         /// <param name="gd">Graphics device</param>
-        public virtual void DrawSmallModel(Matrix projection, Camera camera, GraphicsDevice gd)
+        public virtual void DrawSmallModel(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime)
         {
       
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
             Camera temporaryCamera = new Camera(camera);
-            
-            //temporaryCamera.MoveBack();
-            //Camera temporaryCamera = camera;          
+      
             
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)
@@ -74,9 +72,13 @@ namespace ICGame
                     effect.Parameters["xTexture"].SetValue(GameObject.Textures[i++]);
                     
                     //Macierze
-                    Vector3 unproject = gd.Viewport.Unproject(new Vector3(gd.Viewport.Width-100, 80, 0.1f), projection, temporaryCamera.CameraMatrix, Matrix.Identity);
-                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width));
-                    effect.Parameters["xView"].SetValue(camera.CameraMatrix);
+                    Vector3 unproject = gd.Viewport.Unproject(new Vector3(gd.Viewport.Width-100, 80, 0.13f), projection, temporaryCamera.CameraMatrix, Matrix.Identity);
+
+                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width, gameTime));
+
+                    temporaryCamera.Reset();        
+
+                    effect.Parameters["xView"].SetValue(temporaryCamera.CameraMatrix);
                     effect.Parameters["xProjection"].SetValue(projection);
                   //  effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                 }
