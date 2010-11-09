@@ -95,6 +95,11 @@ namespace ICGame
             throw new NotImplementedException();
         }
 
+        public Matrix[] GetBasicTransforms()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region IPhysical Members

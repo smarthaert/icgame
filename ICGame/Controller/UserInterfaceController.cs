@@ -281,8 +281,6 @@ namespace ICGame
             {
                 ((Vehicle)CampaignController.GetActiveObject()).turretDestination = 2 * MathHelper.Pi;
             }
-
-            //\TEMP
             if (curState.IsKeyDown(Keys.F5) && prevState.IsKeyUp(Keys.F5))
             {
                 UserInterface.ToggleFullscreen();

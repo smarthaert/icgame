@@ -37,7 +37,6 @@ namespace ICGame
 
             Campaign = new Campaign();
 
-            
             UserInterface = new UserInterface();
 
             MissionController = new MissionController(this);

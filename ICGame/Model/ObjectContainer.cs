@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Point = System.Drawing.Point;
 
 namespace ICGame
 {
@@ -18,6 +20,7 @@ namespace ICGame
          * tam jest wszystko na jedna jednostke napisane
          */
         private int selectedObject;
+        private PathFinder pathFinder;
 
         private int SelectedObject
         {
@@ -83,6 +86,11 @@ namespace ICGame
                 SelectedObject = -1;
             }
             return selected!=null;
+        }
+
+        public void InitializePathFinder()
+        {
+            pathFinder = new PathFinder(Board.GetDifficultyMap(), GameObjects);
         }
 
         public GameObject GetSelectedObject()
@@ -185,7 +193,22 @@ namespace ICGame
             {
                 IControllable controllable = GameObjects[SelectedObject] as IControllable;
 
-                controllable.Destination = new Vector2(x,z);
+                int radius = 0;
+
+                if(GameObjects[SelectedObject] is IPhysical)
+                {
+                    IPhysical physical = GameObjects[SelectedObject] as IPhysical;
+
+                    radius =
+                        Convert.ToInt32(
+                            Math.Sqrt(Math.Pow(physical.Width/2.0, 2) + Math.Pow(physical.Height/2.0, 2) +
+                                      Math.Pow(physical.Length/2, 2.0)));
+                }
+
+                new PathFinder().FindPath(new Point(Convert.ToInt32(GameObjects[SelectedObject].Position.X),
+                                                    Convert.ToInt32(GameObjects[SelectedObject].Position.Z)),
+                                          new Point(Convert.ToInt32(x),Convert.ToInt32(z)), radius, controllable);
+
             }
         }
         

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Point = System.Drawing.Point;
 
 namespace ICGame
 {
@@ -19,6 +20,11 @@ namespace ICGame
             set;
         }
 
+        List<Point> Path
+        {
+            get; set;
+        }
+
         float Speed
         {
             get;
@@ -29,6 +35,11 @@ namespace ICGame
         {
             get;
             set;
+        }
+
+        DateTime PathTime
+        {
+            get; set;
         }
 
         void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects);

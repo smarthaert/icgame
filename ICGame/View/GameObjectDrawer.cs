@@ -44,11 +44,18 @@ namespace ICGame
         /// <param name="gd">Graphics device</param>
         public virtual void DrawSmallModel(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime)
         {
-      
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
-            GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
+            if (GameObject is IAnimated)
+            {
+                transforms = ((IAnimated) GameObject).GetBasicTransforms();
+            }
+            else
+            {
+                GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
+            }
+            //GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
             Camera temporaryCamera = new Camera(camera);
-      
+            gd.RasterizerState = RasterizerState.CullNone;
             
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)
@@ -66,15 +73,18 @@ namespace ICGame
                     }
                     effect.Parameters["xCameraPosition"].SetValue(camera.CameraPosition);
 
-                    effect.Parameters["xHasTexture"].SetValue(GameObject.Textures[i] != null ? true : false); effect.Parameters["xDiffuseFactor"].SetValue(GameObject.DiffuseFactor[i]);
-                    effect.Parameters["xAmbient"].SetValue(GameObject.Ambient[i]);
+                    effect.Parameters["xHasTexture"].SetValue(GameObject.Textures[i] != null ? true : false); 
+                    effect.Parameters["xDiffuseFactor"].SetValue(GameObject.DiffuseFactor[i]);
+                    effect.Parameters["xAmbient"].SetValue(2*GameObject.Ambient[i]);
                     effect.Parameters["xTransparency"].SetValue(GameObject.Transparency[i]);
                     effect.Parameters["xTexture"].SetValue(GameObject.Textures[i++]);
                     
                     //Macierze
-                    Vector3 unproject = gd.Viewport.Unproject(new Vector3(gd.Viewport.Width-100, 80, 0.13f), projection, temporaryCamera.CameraMatrix, Matrix.Identity);
+                    Vector3 unproject = gd.Viewport.Unproject(new Vector3(gd.Viewport.Width-100, 80, 0.13f), projection, 
+                        temporaryCamera.CameraMatrix, Matrix.Identity);
 
-                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width, gameTime));
+                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * 
+                        GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width, gameTime));
 
                     temporaryCamera.Reset();        
 
