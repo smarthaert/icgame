@@ -71,7 +71,7 @@ namespace ICGame.Tools
             
             for (int i = 0; i < model.Meshes.Count; ++i)
             {
-                if (model.Meshes[i].BoundingSphere.Radius > 0)
+                //if (model.Meshes[i].BoundingSphere.Radius > 0)// && i > 31) //&& model.Meshes[i].Name == "Chassy")
                 {
                     BoundingBox bb;
                     BoundingBoxTools.CalculateBoundingBox(model.Meshes[i], out bb);
@@ -132,9 +132,9 @@ namespace ICGame.Tools
                 //mm.IndexBuffer.GetData<ushort>(tempUshorts, mp.StartIndex, l);
                 //mm.VertexBuffer.GetData<Vector3>(mp.StreamOffset, tempVecs3, mp.BaseVertex, n, mp.VertexStride);
                 //CONV
-                mp.IndexBuffer.GetData(tempUshorts, 0, l);
+                mp.IndexBuffer.GetData(mp.StartIndex*sizeof(ushort),tempUshorts, 0, l);
                 //mp.VertexBuffer.GetData(tempVecs3);
-                //mp.VertexBuffer.GetData(mp.VertexOffset,tempVecs3, mp.StartIndex, n, mp.VertexBuffer.VertexDeclaration.VertexStride);
+                //mp.VertexBuffer.GetData(0,tempVecs3, 0, n, mp.VertexBuffer.VertexDeclaration.VertexStride);
                 mp.VertexBuffer.GetData(mp.VertexOffset*mp.VertexBuffer.VertexDeclaration.VertexStride, 
                     tempVecs3, 0, n, mp.VertexBuffer.VertexDeclaration.VertexStride);
                

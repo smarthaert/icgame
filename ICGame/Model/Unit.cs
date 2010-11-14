@@ -42,6 +42,7 @@ namespace ICGame
             turning = Direction.None;
             Speed = speed;
             TurnRadius = turnRadius;
+            Path = new List<Point>();
             lastGameTime = new GameTime();
             moving = Direction.None;
             //TEMP
@@ -422,6 +423,9 @@ namespace ICGame
                     {
                         Position = oldpos;
                         Angle = oldangle;
+                        Path.Insert(0,new Point(Convert.ToInt32(NextStep.X),Convert.ToInt32(NextStep.Y)));
+
+                        NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
                         return false;
                     }
                 }
@@ -432,6 +436,34 @@ namespace ICGame
         }
 
         #endregion
+
+        #region IInteractive submethods
+
+        protected Vector2 CalculateBackingUp(double Angle, Vector2 Position, double distance)
+        {
+            //Angle = (Angle / 180.0) * Math.PI;
+            if (Angle % (2 * Math.PI) == 0)
+            {
+                return new Vector2(Position.X, Convert.ToSingle(Position.Y - distance));
+            }
+            if (Angle % Math.PI == 0)
+            {
+                return new Vector2(Position.X, Convert.ToSingle(Position.Y + distance));
+            }
+            Angle *= -1;
+            Angle -= Math.PI / 2.0;
+            double a = Math.Tan(Angle);
+            //double b = Position.Z - a*Position.X;
+            double sign = Math.Sign(Math.Cos(Angle)) != 0 ? Math.Sign(Math.Cos(Angle)) : 1;
+            double x2 = Position.X + sign * distance / Math.Sqrt(a * a + 1);      //creepy
+            double y2 = a * (x2 - Position.X) + Position.Y;
+
+            return new Vector2(Convert.ToSingle(x2), Convert.ToSingle(y2));
+
+        }
+
+        #endregion
+
     }
 
 }

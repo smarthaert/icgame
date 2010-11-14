@@ -10,5 +10,6 @@ namespace ICGame
         FireTruck,
         SelectionRing,
         AnimFigure,
+        Chassy,
     }
 }
