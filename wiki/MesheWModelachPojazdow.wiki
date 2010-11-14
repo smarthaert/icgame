@@ -31,13 +31,13 @@ _Pojazdy poziomu 3 nie posiadają poniższych punktów - z założenia pojazdy p
 
 == Meshe opisujące obiekt ==
 
+Mesh zawierający główny szkielet pojazdu nosi nazwę *BodyWrok*
+
 === Koła ===
 
 _Meshe kół są multiplikowane, nazewnictwo kolejnych zgodnie z wcześniej opisanym standardem._
 
 _Ilość kół należy odczytać z zewnątrz, ponieważ możemy mieć różne ilości kół - np. 2 osie skrętne, mesh opisujący całą oś kół, czy 8 osobnych opon. W przypadku dużego dźwigu możemy się spodziewać dwóch osi kół przednich._
-
-_*UWAGA!* w przypadku Firetruck2 w nazewnictwie meshy nie ma rozróżnienia pomiędzy koła przednie i tylne, zostanie to poprawione przy najbliższej aktualizacji mesha_
 
 _Przyjęto założenie, że pojazdy nie będą posiadały osi przeciwnie skrętnych (przykład: przy skręcie w lewo koła przedniej osi skręcają w lewo, tylnej w prawo) - zakładamy że tylna oś nie ma możliwości skrętu_
 
@@ -57,10 +57,8 @@ _Meshe są multiplikowane (ponieważ jedne drzwi mogą się składać z wielu ma
 
 _Nazewnictwo zgodnie z wcześniej przyjętym standardem, grupowane w grupy o nazwie bez sufiksu liczbowego - aczkolwiek nie wiem czy jesteście w stanie to odczytać). Punkty środkowe meshy są obrane w tym samym miejscu._
 
-_*UWAGA!* w przypadku Firetruck2 w nazewnictwie meshy nie ma sufiksu liczbowego, zostanie to poprawione przy najbliższej aktualizacji mesha_
-
-  * LeftDoor - _drzwi lewe_
-  * RightDoor - _drzwi prawe_
+  * DoorLeft - _drzwi lewe_
+  * DoorRight - _drzwi prawe_
 
 === Nadwozie ===
 
