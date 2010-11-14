@@ -16,7 +16,9 @@ namespace ICGame
         */
         private static int[,] map;
         private static bool initialized;
-        private int[,] lastProcessed;
+        private int[,] curProcessed;
+        private static List<int[,]> maps;
+        private static List<int> radiuses;
         private int lastRadius = -1;
         private List<Point> path;
         private DateTime pathTime;
@@ -24,6 +26,8 @@ namespace ICGame
         public PathFinder(int[,] map, List<GameObject> gameObjects)
         {
             PathFinder.map = PutObjects(ref map, gameObjects);
+            maps = new List<int[,]>();
+            radiuses = new List<int>();
             initialized = true;
         }
 
@@ -38,10 +42,19 @@ namespace ICGame
 
         public void FindPath(Point start, Point goal, int objectRadius, IControllable controllable)
         {
-            if(objectRadius != lastRadius)
+            if(!radiuses.Contains(objectRadius))
             {
-                lastProcessed = ProcessMap(map, objectRadius);
+                curProcessed = ProcessMap(map, objectRadius);
                 lastRadius = objectRadius;
+                lock (maps)
+                {
+                    radiuses.Add(lastRadius);
+                    maps.Add(curProcessed);
+                }
+            }
+            else
+            {
+                curProcessed = maps[radiuses.IndexOf(objectRadius)];
             }
             Thread th = new Thread(new ParameterizedThreadStart(AStar));
             pathTime = DateTime.Now;
@@ -224,14 +237,107 @@ namespace ICGame
             return nbrs;
         }
 
-        private static double EstimateDistance(Node start, Point goal)
+        private double EstimateDistance(Node start, Point goal)
         {
             int xDist = Math.Abs(start.X - goal.X);
             int yDist = Math.Abs(start.Y - goal.Y);
 
-            int sqDist = xDist < yDist ? xDist : yDist;
+            bool endObstacle = (curProcessed[goal.X, goal.Y] == M);
 
-            return Math.Sqrt(2)*sqDist + (double)(xDist - sqDist) + (double)(yDist - sqDist);
+            if (!endObstacle)
+            {
+                int sqDist = xDist < yDist ? xDist : yDist;
+
+                return Math.Sqrt(2)*sqDist + (double)(xDist - sqDist) + (double)(yDist - sqDist);
+            }
+
+            double ratio;
+            if(xDist < yDist)
+            {
+                ratio = (double) xDist/(double) yDist;
+            }
+            else
+            {
+                ratio = (double)yDist / (double)xDist;
+            }
+
+            int x = 0;
+            int y = 0;
+            int xToGo = xDist;
+            int yToGo = yDist;
+            int xSign = -Math.Sign(start.X - goal.X);
+            int ySign = -Math.Sign(start.Y - goal.Y);
+            int distance = 0;
+            double counter = 0;
+            bool obst = false;
+
+            while(xToGo > 0 && yToGo > 0)
+            {
+                int addDist = curProcessed[start.X + x, start.Y + y];
+                distance += addDist;
+                /*if(addDist == M && (!obst || endObstacle))
+                {
+                    distance += addDist;
+                    obst = true;
+                }
+                else if(addDist == M)
+                {
+                    distance += 1;
+                }
+                else
+                {
+                    distance += addDist;
+                    //obst = false;
+                }*/
+                /*if(addDist == M && endObstacle)
+                {
+                    distance += addDist;
+                }
+                else if(addDist == M)
+                {
+                    if(!obst)
+                    {
+                        distance += curDetours[start.X + x, start.Y + y];
+                        obst = true;
+                    }
+                }
+                else
+                {
+                    distance += addDist;
+                }*/
+
+                if(xDist < yDist)
+                {
+                    if(counter < 1.0)
+                    {
+                        y += ySign;
+                        --yToGo;
+                        counter += ratio;
+                    }
+                    else
+                    {
+                        x += xSign;
+                        --xToGo;
+                        counter -= 1.0;
+                    }
+                }
+                else
+                {
+                    if (counter < 1.0)
+                    {
+                        x += xSign;
+                        --xToGo;
+                        counter += ratio;
+                    }
+                    else
+                    {
+                        y += ySign;
+                        --yToGo;
+                        counter -= 1.0;
+                    }
+                }
+            }
+            return distance;
         }
 
         private static int GetClosest(List<Node> queue)
@@ -279,21 +385,30 @@ namespace ICGame
         private void AStar(Object obj)
         {
             AStarArg aStarArg = (AStarArg) obj;
-            AStar(aStarArg.Start, aStarArg.Goal, out path);
-            if(pathTime > aStarArg.Controllable.PathTime)
+            if (curProcessed[aStarArg.Goal.X, aStarArg.Goal.Y] == M)
             {
-                this.OpitmizePath(ref path);
-                aStarArg.Controllable.Path = path;
-                aStarArg.Controllable.NextStep = new Vector2(((GameObject) aStarArg.Controllable).Position.X,((GameObject) aStarArg.Controllable).Position.Z);
-                aStarArg.Controllable.PathTime = pathTime;
+                aStarArg.Controllable.Path = new List<Point>();
+                aStarArg.Controllable.Path.Add(aStarArg.Goal);
             }
-            /*string msg = "";
-            for(int i = 0; i < path.Count; ++i)
+            else
             {
-                msg += path[i].ToString() + " " + lastProcessed[path[i].Y, path[i].X].ToString() + " " +
-                       map[path[i].Y, path[i].X].ToString() + "  |  ";
+                AStar(aStarArg.Start, aStarArg.Goal, out path);
+                if (pathTime > aStarArg.Controllable.PathTime)
+                {
+                    this.OpitmizePath(ref path);
+                    aStarArg.Controllable.Path = path;
+                    aStarArg.Controllable.NextStep = new Vector2(((GameObject) aStarArg.Controllable).Position.X,
+                                                                 ((GameObject) aStarArg.Controllable).Position.Z);
+                    aStarArg.Controllable.PathTime = pathTime;
+                }
+                /*string msg = "";
+                for(int i = 0; i < path.Count; ++i)
+                {
+                    msg += path[i].ToString() + " " + curProcessed[path[i].Y, path[i].X].ToString() + " " +
+                           map[path[i].Y, path[i].X].ToString() + "  |  ";
+                }
+                MessageBox.Show(msg);*/
             }
-            MessageBox.Show(msg);*/
         }
 
         private void OpitmizePath(ref List<Point> path)
@@ -307,12 +422,20 @@ namespace ICGame
                 {
                     path.RemoveAt(i+1);
                 }
-                else if (lastProcessed[path[i].X, path[i].Y] == lastProcessed[path[i+1].X, path[i+1].Y] && 
-                    lastProcessed[path[i].X, path[i].Y] == lastProcessed[path[i+2].X, path[i+2].Y])
+                else
+                {
+                    ++i;
+                }
+            }
+            i = 0;
+            while(i<path.Count-2)
+            {
+                if (curProcessed[path[i].X, path[i].Y] == curProcessed[path[i+1].X, path[i+1].Y] && 
+                    curProcessed[path[i].X, path[i].Y] == curProcessed[path[i+2].X, path[i+2].Y])
                 {
                     bool remove = true;
 
-                    int val = lastProcessed[path[i].X, path[i].Y];
+                    int val = curProcessed[path[i].X, path[i].Y];
                     int minX = path[i].X < path[i + 2].X ? path[i].X : path[i+2].X;
                     int maxX = path[i].X > path[i + 2].X ? path[i].X : path[i+2].X;
                     int minY = path[i].Y < path[i + 2].Y ? path[i].Y : path[i+2].Y;
@@ -321,7 +444,7 @@ namespace ICGame
                     {
                         for (int l = minY; l < maxY; l++)
                         {
-                            if(lastProcessed[k,l] != val)
+                            if(curProcessed[k,l] != val)
                             {
                                 remove = false;
                             }
@@ -351,7 +474,7 @@ namespace ICGame
             List<Node> queue = new List<Node>();
             List<Node> done = new List<Node>();
 
-            queue.Add(new Node(start.X,start.Y,lastProcessed[start.X, start.Y]));
+            queue.Add(new Node(start.X,start.Y,curProcessed[start.X, start.Y]));
             queue[0].GScore = 0;
             queue[0].CameFrom = -1;
 
@@ -369,7 +492,7 @@ namespace ICGame
                 queue.RemoveAt(index);
                 done.Add(cur);
 
-                foreach (Node node in GetNeighbors(cur, lastProcessed))
+                foreach (Node node in GetNeighbors(cur, curProcessed))
                 {
                     if(!done.Contains(node))
                     {

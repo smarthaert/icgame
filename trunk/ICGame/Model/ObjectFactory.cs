@@ -23,10 +23,11 @@ namespace ICGame
 
         private Dictionary<GameObjectID, string> objectAccessList = new Dictionary<GameObjectID, string>()
                                  {
-                                     {GameObjectID.FireTruck,"firetruck"},
+                                     {GameObjectID.FireTruck,"firetruck_2"},
                                      {GameObjectID.SelectionRing,"selection_ring"},
                                      {GameObjectID.Home0,"home0"},
-                                     {GameObjectID.AnimFigure, "animfigure"}                                     
+                                     {GameObjectID.AnimFigure, "animfigure"},
+                                     {GameObjectID.Chassy, "chassy_1"}
                                  };
         private Dictionary<GameObjectID, LoadedModel> loadedModels = new Dictionary<GameObjectID, LoadedModel>();
 
@@ -59,7 +60,7 @@ namespace ICGame
                 //Temp, temp i po trzykroć temp! Należy dodac jakis plik przechowujacy informację o typie ładowanego obiektu 
                 switch (pair.Value)
                 {
-                    case "firetruck":
+                    case "firetruck_2":
                         loadedModels[pair.Key].objectClass = ObjectClass.Vehicle;
                         break;
                     case "selection_ring":
@@ -70,6 +71,9 @@ namespace ICGame
                         break;
                     case "animfigure":
                         loadedModels[pair.Key].objectClass = ObjectClass.Infantry;
+                        break;
+                    case "chassy_1":
+                        loadedModels[pair.Key].objectClass = ObjectClass.Vehicle;
                         break;
                     default:
                         loadedModels[pair.Key].objectClass = ObjectClass.GameObject;
@@ -87,7 +91,7 @@ namespace ICGame
             switch (loadedModel.objectClass) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
-                    newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 6);
+                    newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 4, 2, 1);
                     (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
                     break;
                 case ObjectClass.StaticObject:

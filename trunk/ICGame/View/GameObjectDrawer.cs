@@ -55,7 +55,7 @@ namespace ICGame
             }
             //GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
             Camera temporaryCamera = new Camera(camera);
-            gd.RasterizerState = RasterizerState.CullNone;
+            gd.RasterizerState = RasterizerState.CullClockwise;
             
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)

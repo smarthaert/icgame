@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Point = System.Drawing.Point;
 
 namespace ICGame
 {
@@ -18,7 +19,9 @@ namespace ICGame
 
     public class Vehicle : Unit
     {
-        private readonly int wheelsCount;
+        private readonly int rearWheelsCount;
+        private readonly int frontWheelsCount;
+        private readonly int doorCount;
         private DoorState leftDoorState;
         private DoorState rightDoorState;
         private WheelState wheelState;
@@ -93,10 +96,12 @@ namespace ICGame
 
         #endregion
 
-        public Vehicle(Model model, float speed, float turnRadius, int wheelsCount)
+        public Vehicle(Model model, float speed, float turnRadius, int rearWheelsCount, int frontWheelsCount, int doorCount)
             : base(model, speed, turnRadius)
         {
-            this.wheelsCount = wheelsCount;
+            this.rearWheelsCount = rearWheelsCount;
+            this.frontWheelsCount = frontWheelsCount;
+            this.doorCount = doorCount;
 
             leftDoorAngle = 0;
             rightDoorAngle = 0;
@@ -151,6 +156,7 @@ namespace ICGame
 
         private void AnimateTurn(GameTime gameTime)
         {
+            //TODO: Uogolnic na dowolna ilosc kol
             float rot = 0;
             const float turningSpeed = 0.003f;
             const float maxAngle = 0.5f*MathHelper.PiOver4;
@@ -165,23 +171,29 @@ namespace ICGame
                         //TEMP
                         //WheelState = WheelState.RightStraight;
                         //\TEMP
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(-maxAngle + wheelAngle-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                            Matrix.CreateRotationZ(maxAngle - wheelAngle+rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] *
+                                Matrix.CreateRotationZ(-maxAngle + wheelAngle - rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] *
+                                Matrix.CreateRotationZ(maxAngle - wheelAngle + rot);
+                        }
                         wheelAngle = maxAngle;
                     }
                     else
                     {
-                        
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index] * 
-                            Matrix.CreateRotationZ(-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                            Matrix.CreateRotationZ(rot);
+
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(-rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(rot);
+                        }
                     }
                     break;
                 case WheelState.RightStraight:
@@ -193,22 +205,28 @@ namespace ICGame
                         //TEMP
                         //WheelState = WheelState.StraightLeft;
                         //\TEMP
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(wheelAngle-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                            Matrix.CreateRotationZ(-wheelAngle+rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(wheelAngle - rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(-wheelAngle + rot);
+                        }
                         wheelAngle = 0;
                     }
                     else
                     {
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index]*
-                            Matrix.CreateRotationZ(-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index]*
-                            Matrix.CreateRotationZ(rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(-rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(rot);
+                        }
                     }
                     break;
                 case WheelState.StraightLeft:
@@ -220,22 +238,28 @@ namespace ICGame
                         //TEMP
                         //WheelState = WheelState.LeftStraight;
                         //\TEMP
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(maxAngle + wheelAngle - rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                            Matrix.CreateRotationZ(-maxAngle - wheelAngle + rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(maxAngle + wheelAngle - rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(-maxAngle - wheelAngle + rot);
+                        }
                         wheelAngle = -maxAngle;
                     }
                     else
                     {
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index]*
-                            Matrix.CreateRotationZ(-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index]*
-                            Matrix.CreateRotationZ(rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(-rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(rot);
+                        }
                     }
                     break;
                 case WheelState.LeftStraight:
@@ -247,22 +271,28 @@ namespace ICGame
                         //TEMP
                         //WheelState = WheelState.StraightRight;
                         //\TEMP
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index] *
-                            Matrix.CreateRotationZ(wheelAngle-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index] *
-                            Matrix.CreateRotationZ(-wheelAngle+rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(wheelAngle - rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(-wheelAngle + rot);
+                        }
                         wheelAngle = 0;
                     }
                     else
                     {
-                        AnimationTransforms[Model.Bones["Wheel0"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel0"].Index]*
-                            Matrix.CreateRotationZ(-rot);
-                        AnimationTransforms[Model.Bones["Wheel1"].Index] =
-                            AnimationTransforms[Model.Bones["Wheel1"].Index]*
-                            Matrix.CreateRotationZ(+rot);
+                        for (int i = 0; i < frontWheelsCount / 2; i++)
+                        {
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i)].Index]*
+                                Matrix.CreateRotationZ(-rot);
+                            AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index] =
+                                AnimationTransforms[Model.Bones["FrontWheel" + Convert.ToInt32(2*i + 1)].Index]*
+                                Matrix.CreateRotationZ(+rot);
+                        }
                     }
                     break;
             }
@@ -281,14 +311,20 @@ namespace ICGame
                     //TEMP
                     leftDoorState = DoorState.Closing;
                     //\TEMP
-                    AnimationTransforms[Model.Bones["DoorLeft"].Index] =
-                        Matrix.CreateRotationY(MathHelper.PiOver2);
+                    for (int i = 0; i < doorCount; i++)
+                    {
+                        AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
+                            Matrix.CreateRotationY(MathHelper.PiOver2);
+                    }
                 }
                 else
                 {
-                    AnimationTransforms[Model.Bones["DoorLeft"].Index] =
-                        Matrix.CreateRotationY(rot)*
-                        AnimationTransforms[Model.Bones["DoorLeft"].Index];
+                    for (int i = 0; i < doorCount; i++)
+                    {
+                        AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
+                            Matrix.CreateRotationY(rot)*
+                            AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index];
+                    }
                 }
             }
             else if (leftDoorState == DoorState.Closing)
@@ -301,12 +337,18 @@ namespace ICGame
                     //TEMP
                     leftDoorState = DoorState.Opening;
                     //\TEMP
-                    AnimationTransforms[Model.Bones["DoorLeft"].Index] =
-                        Matrix.Identity;
+                    for (int i = 0; i < doorCount; ++i)
+                    {
+                        AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
+                            Matrix.Identity;
+                    }
                 }
-                AnimationTransforms[Model.Bones["DoorLeft"].Index] =
-                    Matrix.CreateRotationY(rot) *
-                    AnimationTransforms[Model.Bones["DoorLeft"].Index];
+                for (int i = 0; i < doorCount; i++)
+                {
+                    AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
+                        Matrix.CreateRotationY(rot)*
+                        AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index];
+                }
             }
             if (rightDoorState == DoorState.Opening)
             {
@@ -318,12 +360,18 @@ namespace ICGame
                     //TEMP
                     rightDoorState = DoorState.Closing;
                     //\TEMP
-                    AnimationTransforms[Model.Bones["DoorRight"].Index] =
-                        Matrix.CreateRotationY(MathHelper.PiOver2);
+                    for (int i = 0; i < doorCount; i++)
+                    {
+                        AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
+                            Matrix.CreateRotationY(MathHelper.PiOver2);
+                    }
                 }
-                AnimationTransforms[Model.Bones["DoorRight"].Index] =
-                    Matrix.CreateRotationY(rot) *
-                    AnimationTransforms[Model.Bones["DoorRight"].Index];
+                for (int i = 0; i < doorCount; i++)
+                {
+                    AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
+                        Matrix.CreateRotationY(rot)*
+                        AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index];
+                }
             }
             else if (rightDoorState == DoorState.Closing)
             {
@@ -335,16 +383,22 @@ namespace ICGame
                     //TEMP
                     rightDoorState = DoorState.Opening;
                     //\TEMP
-                    AnimationTransforms[Model.Bones["DoorRight"].Index] =
-                        Matrix.Identity;
+                    for (int i = 0; i < doorCount; i++)
+                    {
+                        AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
+                            Matrix.Identity;
+                    }
                 }
-                AnimationTransforms[Model.Bones["DoorRight"].Index] =
-                    Matrix.CreateRotationY(rot) *
-                    AnimationTransforms[Model.Bones["DoorRight"].Index];
+                for (int i = 0; i < doorCount; i++)
+                {
+                    AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
+                        Matrix.CreateRotationY(rot)*
+                        AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index];
+                }
             }
         }
 
-        private void AnimateWheel(GameTime gameTime, int wheelIndex)
+        private void AnimateWheel(GameTime gameTime, int wheelIndex, bool front)
         {
             int sign;
             switch (moving)
@@ -359,16 +413,31 @@ namespace ICGame
                     sign = 0;
                     break;
             }
-            AnimationTransforms[Model.Bones["Wheel" + Convert.ToString(wheelIndex)].Index] =
+
+            string fr;
+            if(front)
+            {
+                fr = "Front";
+            }
+            else
+            {
+                fr = "Rear";
+            }
+
+            AnimationTransforms[Model.Bones[fr+"Wheel" + Convert.ToString(wheelIndex)].Index] =
                 Matrix.CreateRotationY(0.01f*gameTime.ElapsedGameTime.Milliseconds*Speed*sign)*
-                AnimationTransforms[Model.Bones["Wheel" + Convert.ToString(wheelIndex)].Index];
+                AnimationTransforms[Model.Bones[fr+"Wheel" + Convert.ToString(wheelIndex)].Index];
         }
 
         private void AnimateDriving(GameTime gameTime)
         {
-            for(int i =0; i < wheelsCount; ++i)
+            for(int i =0; i < rearWheelsCount; ++i)
             {
-                AnimateWheel(gameTime,i);
+                AnimateWheel(gameTime, i, false);
+            }
+            for(int i = 0; i < frontWheelsCount; ++i)
+            {
+                AnimateWheel(gameTime, i, true);
             }
         }
 
@@ -377,8 +446,8 @@ namespace ICGame
             
             AnimateTurn(gameTime);
             AnimateDriving(gameTime);
-            AnimateDoor(gameTime);
-            AnimateTurret(gameTime);
+            //AnimateDoor(gameTime);
+            //AnimateTurret(gameTime);
             base.Animate(gameTime, gameObjects);
         }
 
@@ -387,7 +456,7 @@ namespace ICGame
             return new VehicleDrawer(this);
         }
 
-        const float toleranceBig = 2f;
+        const float toleranceBig = 4f;
         const float toleranceSmall = 2f;
 
         private float toleranceX = toleranceSmall;
@@ -395,12 +464,24 @@ namespace ICGame
 
         public override void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
         {
+            if(Path.Count > 0)
+            {
+                toleranceX = toleranceBig;
+                toleranceY = toleranceBig;
+            }
+            else
+            {
+                toleranceX = toleranceSmall;
+                toleranceY = toleranceSmall;
+            }
+
             Vector2 curStep = new Vector2(NextStep.X - Position.X, NextStep.Y - Position.Z);
 
             curStep = new Vector2(curStep.X * Convert.ToSingle(Math.Cos(Angle.Y)) - curStep.Y * Convert.ToSingle(Math.Sin(Angle.Y)),
                 curStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + curStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
 
-            gi.ShowInfo("NextStep: " + curStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString());
+            gi.ShowInfo("curStep: " + curStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString() + "\r\n" + 
+                Path.ToArray().ToString());
 
             if(Math.Abs(curStep.X) <= toleranceX && Math.Abs(curStep.Y) <= toleranceY)
             {
@@ -415,82 +496,15 @@ namespace ICGame
                 }
             }
 
-            if (curStep.X > toleranceX)
+            if (Math.Abs(curStep.X) <= toleranceX)
             {
-                toleranceX = toleranceSmall;
-                if (curStep.Y > toleranceY)
-                {
-                    toleranceY = toleranceSmall;
-                    if(WheelState == WheelState.Straight)
-                    {
-                        WheelState = WheelState.StraightLeft;
-                    }
-                    else if (WheelState == WheelState.Right)
-                    {
-                        WheelState = WheelState.RightStraight;
-                    }
-                    if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
-                    {
-                        if (CheckMoveList(Direction.Forward, Direction.Left, gameObjects, gameTime))
-                        {
-                            Move(Direction.Forward, gameTime);
-                            Turn(Direction.Left, gameTime);
-                        }
-                    }
-                }
-                else if (curStep.Y < toleranceY)
-                {
-                    toleranceY = toleranceSmall;
-                    if(WheelState == WheelState.Straight)
-                    {
-                        WheelState = WheelState.StraightRight;
-                    }
-                    else if (WheelState == WheelState.Left)
-                    {
-                        WheelState = WheelState.LeftStraight;
-                    }
-                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
-                    {
-                        if (CheckMoveList(Direction.Backward, Direction.Left, gameObjects, gameTime))
-                        {
-                            Move(Direction.Backward, gameTime);
-                            Turn(Direction.Left, gameTime);
-                        }
-                    }
-                }
-                else
-                {
-                    toleranceY = toleranceBig;
-                    if (WheelState == WheelState.Straight)
-                    {
-                        WheelState = WheelState.StraightRight;
-                    }
-                    else if (WheelState == WheelState.Left)
-                    {
-                        WheelState = WheelState.LeftStraight;
-                    }
-                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
-                    {
-                        if (CheckMoveList(Direction.Backward, Direction.Right, gameObjects, gameTime))
-                        {
-                            Move(Direction.Backward, gameTime);
-                            Turn(Direction.Right, gameTime);
-                        }
-                    }
-                }
-            }
-            else if (Math.Abs(curStep.X) <= toleranceX)
-            {
-                toleranceX = toleranceBig;
                 if (Math.Abs(curStep.Y) <= toleranceY)
                 {
-                    toleranceY = toleranceBig;
                     Move(Direction.None, gameTime);
                     Turn(Direction.None, gameTime);
                 }
                 else if (curStep.Y > toleranceY)
                 {
-                    toleranceY = toleranceSmall;
                     if (WheelState == WheelState.Left)
                     {
                         WheelState = WheelState.LeftStraight;
@@ -508,10 +522,8 @@ namespace ICGame
                         }
                     }
                 }
-                else if (curStep.Y < toleranceY)
+                else
                 {
-                    toleranceY = toleranceSmall;
-
                     if (WheelState == WheelState.Left)
                     {
                         WheelState = WheelState.LeftStraight;
@@ -531,13 +543,36 @@ namespace ICGame
 
                 }
             }
-            else
+            else if (curStep.X > toleranceX)
             {
-                toleranceX = toleranceSmall;
-                if (curStep.Y < toleranceY)
+                if(Math.Abs(curStep.Y) <= toleranceY)
                 {
-                    toleranceY = toleranceSmall;
-                    if (WheelState == WheelState.Straight)
+                    Path.Insert(0, new Point(Convert.ToInt32(NextStep.X), Convert.ToInt32(NextStep.Y)));
+
+                    NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
+                }
+                else if (curStep.Y > toleranceY)
+                {
+                    if(WheelState == WheelState.Straight)
+                    {
+                        WheelState = WheelState.StraightLeft;
+                    }
+                    else if (WheelState == WheelState.Right)
+                    {
+                        WheelState = WheelState.RightStraight;
+                    }
+                    if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
+                    {
+                        if (CheckMoveList(Direction.Forward, Direction.Left, gameObjects, gameTime))
+                        {
+                            Move(Direction.Forward, gameTime);
+                            Turn(Direction.Left, gameTime);
+                        }
+                    }
+                }
+                else 
+                {
+                    if(WheelState == WheelState.Straight)
                     {
                         WheelState = WheelState.StraightRight;
                     }
@@ -554,9 +589,17 @@ namespace ICGame
                         }
                     }
                 }
+            }
+            else
+            {
+                if (Math.Abs(curStep.Y) <= toleranceY)
+                {
+                    Path.Insert(0, new Point(Convert.ToInt32(NextStep.X), Convert.ToInt32(NextStep.Y)));
+
+                    NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
+                }
                 else if (curStep.Y > toleranceY)
                 {
-                    toleranceY = toleranceSmall;
                     if (WheelState == WheelState.Straight)
                     {
                         WheelState = WheelState.StraightRight;
@@ -576,16 +619,15 @@ namespace ICGame
                 }
                 else
                 {
-                    toleranceY = toleranceBig;
                     if (WheelState == WheelState.Straight)
                     {
-                        WheelState = WheelState.StraightLeft;
+                        WheelState = WheelState.StraightRight;
                     }
-                    else if (WheelState == WheelState.Right)
+                    else if (WheelState == WheelState.Left)
                     {
-                        WheelState = WheelState.RightStraight;
+                        WheelState = WheelState.LeftStraight;
                     }
-                    if (WheelState == WheelState.StraightLeft || WheelState == WheelState.Left)
+                    if (WheelState == WheelState.StraightRight || WheelState == WheelState.Right)
                     {
                         if (CheckMoveList(Direction.Backward, Direction.Left, gameObjects, gameTime))
                         {
