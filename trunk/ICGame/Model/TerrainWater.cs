@@ -11,16 +11,16 @@ namespace ICGame
     public class TerrainWater
     {
         private float waterHeight = 5.0f;
-        public Board Board { get; private set; }
+        public Board Board { get; set; }
         VertexBuffer waterVertexBuffer;
-        private TerrainWaterDrawer terrainWaterDrawer;
         private RenderTarget2D refractionRenderTarget;
         private Texture2D refractionMap;
         private RenderTarget2D reflectionRenderTarget;
         private Texture2D reflectionMap;
-        public Camera Camera { get; private set; }
-        public Matrix ProjectionMatrix { get; private set; }
+        public Camera Camera { get; set; }
+        public Matrix ProjectionMatrix { get; set; }
         public Matrix ReflectionViewMatrix { get; set; }
+        public Vector3 ReflCameraPosition { get; set; }
 
         public VertexBuffer WaterVertexBuffer
         {
@@ -58,23 +58,20 @@ namespace ICGame
 
         public TerrainWater(GraphicsDevice device, Camera camera, Matrix projectionMatrix, Board board)
         {
-            this.Board = board;
-            this.Camera = camera;
-
+            Board = board;
+            Camera = camera;
+            ProjectionMatrix = projectionMatrix;
             SetUpWaterVertices(device);
 
             refractionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,
                                                 device.PresentationParameters.BackBufferHeight);
 
             reflectionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth, device.PresentationParameters.BackBufferHeight);
-
-
-            terrainWaterDrawer = new TerrainWaterDrawer(this);
         }
 
         public TerrainWaterDrawer GetDrawer()
         {
-            return terrainWaterDrawer;
+            return new TerrainWaterDrawer(this);
         }
 
         private void SetUpWaterVertices(GraphicsDevice device)
