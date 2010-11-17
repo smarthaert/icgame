@@ -5,7 +5,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Text;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 

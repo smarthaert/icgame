@@ -17,16 +17,20 @@ namespace ICGame
         private static int[,] map;
         private static bool initialized;
         private int[,] curProcessed;
+        private double curAvgDifficulty;
         private static List<int[,]> maps;
+        private static List<double> avgDifficulties;
         private static List<int> radiuses;
         private int lastRadius = -1;
         private List<Point> path;
         private DateTime pathTime;
+        private string msg;
 
         public PathFinder(int[,] map, List<GameObject> gameObjects)
         {
             PathFinder.map = PutObjects(ref map, gameObjects);
             maps = new List<int[,]>();
+            avgDifficulties = new List<double>();
             radiuses = new List<int>();
             initialized = true;
         }
@@ -42,29 +46,34 @@ namespace ICGame
 
         public void FindPath(Point start, Point goal, int objectRadius, IControllable controllable)
         {
+            msg = "";
+            DateTime dateTime = DateTime.Now;
             if(!radiuses.Contains(objectRadius))
             {
-                curProcessed = ProcessMap(map, objectRadius);
+
+                curProcessed = ProcessMap(map, objectRadius, out curAvgDifficulty);
                 lastRadius = objectRadius;
                 lock (maps)
                 {
                     radiuses.Add(lastRadius);
+                    avgDifficulties.Add(curAvgDifficulty);
                     maps.Add(curProcessed);
                 }
             }
             else
             {
                 curProcessed = maps[radiuses.IndexOf(objectRadius)];
+                curAvgDifficulty = avgDifficulties[radiuses.IndexOf(objectRadius)];
             }
+            msg += (DateTime.Now - dateTime).ToString() + "\r\n";
             Thread th = new Thread(new ParameterizedThreadStart(AStar));
             pathTime = DateTime.Now;
             th.Start(new AStarArg(start,goal,controllable));
             //AStar(start, goal, out path);
         }
 
-        private static int[,] ProcessMap(int[,] map, int objectRadius)
+        private static int[,] ProcessMap(int[,] map, int objectRadius, out double avgDifficulty)
         {
-            objectRadius = objectRadius;
             int[,] resultMap = new int[map.GetLength(0),map.GetLength(1)];
 
             for (int i = 0; i < map.GetLength(0); i++)
@@ -102,6 +111,16 @@ namespace ICGame
                 }
             }
 
+            //avgDifficulty = 0;
+            int ad = 0;
+            for (int i = 0; i < resultMap.GetLength(0); ++i )
+            {
+                for (int j = 0; j < resultMap.GetLength(1); j++)
+                {
+                    ad += resultMap[i, j];
+                }
+            }
+            avgDifficulty = (double)ad/(double)(resultMap.GetLength(0)*resultMap.GetLength(1));
             return resultMap;
         }
 
@@ -248,7 +267,7 @@ namespace ICGame
             {
                 int sqDist = xDist < yDist ? xDist : yDist;
 
-                return Math.Sqrt(2)*sqDist + (double)(xDist - sqDist) + (double)(yDist - sqDist);
+                return (Math.Sqrt(2)*sqDist + (double)(xDist - sqDist) + (double)(yDist - sqDist))*curAvgDifficulty;
             }
 
             double ratio;
@@ -385,6 +404,10 @@ namespace ICGame
         private void AStar(Object obj)
         {
             AStarArg aStarArg = (AStarArg) obj;
+            if(aStarArg.Goal.X < 0 || aStarArg.Goal.X >= curProcessed.GetLength(0) || aStarArg.Goal.Y < 0 || aStarArg.Goal.Y >= curProcessed.GetLength(1))
+            {
+                return;
+            }
             if (curProcessed[aStarArg.Goal.X, aStarArg.Goal.Y] == M)
             {
                 aStarArg.Controllable.Path = new List<Point>();
@@ -392,10 +415,15 @@ namespace ICGame
             }
             else
             {
+                DateTime dateTime = DateTime.Now;
                 AStar(aStarArg.Start, aStarArg.Goal, out path);
+                msg += (DateTime.Now - dateTime).ToString() + "\r\n";
+                dateTime = DateTime.Now;
                 if (pathTime > aStarArg.Controllable.PathTime)
                 {
                     this.OpitmizePath(ref path);
+                    msg += (DateTime.Now - dateTime).ToString() + "\r\n";
+                    dateTime = DateTime.Now;
                     aStarArg.Controllable.Path = path;
                     aStarArg.Controllable.NextStep = new Vector2(((GameObject) aStarArg.Controllable).Position.X,
                                                                  ((GameObject) aStarArg.Controllable).Position.Z);
@@ -406,8 +434,8 @@ namespace ICGame
                 {
                     msg += path[i].ToString() + " " + curProcessed[path[i].Y, path[i].X].ToString() + " " +
                            map[path[i].Y, path[i].X].ToString() + "  |  ";
-                }
-                MessageBox.Show(msg);*/
+                }*/
+                //MessageBox.Show(msg);
             }
         }
 

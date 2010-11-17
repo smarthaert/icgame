@@ -69,6 +69,7 @@ namespace ICGame
          {
              //device.SetRenderTarget(0, cloudsRenderTarget);
              //CONV
+             device.RasterizerState = RasterizerState.CullCounterClockwise;
              device.SetRenderTarget(cloudsRenderTarget);
              device.Clear(ClearOptions.Target/* | ClearOptions.DepthBuffer*/, Color.Black, 1.0f, 0);
                                                 //CONV

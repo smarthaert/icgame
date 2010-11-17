@@ -7,7 +7,6 @@ struct VertexToPixel
     float2 TextureCoords: TEXCOORD1;
     float calcRS        : TEXCOORD2;
     
-    
 };
 
 struct PixelToFrame
@@ -33,6 +32,8 @@ bool xShowNormals;
 bool xHasTexture;
 float xOvercast;
 float xTime;
+float4 xClipPlane0;
+bool xClipPlanes;
 
 float calcRS;
 //------- Texture Samplers --------
@@ -57,13 +58,27 @@ Texture xTexture3;
 
 sampler TextureSampler3 = sampler_state { texture = <xTexture3> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
 
+//--------Water Reflections-----------------
+
+float4x4 xReflectionView;
+Texture xReflectionMap;
+
+sampler ReflectionSampler = sampler_state { texture = <xReflectionMap> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
+Texture xRefractionMap;
+
+sampler RefractionSampler = sampler_state { texture = <xRefractionMap> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
+
 //------- Technique: Pretransformed --------
 
 VertexToPixel PretransformedVS( float4 inPos : POSITION, float4 inColor: COLOR)
 {	
 	VertexToPixel Output = (VertexToPixel)0;
+	float4x4 preViewProjection = mul (xView, xProjection);
+	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
+    
+	Output.Position = mul(inPos, preWorldViewProjection);
 	
-	Output.Position = inPos;
+	//Output.Position = inPos;
 	Output.Color = inColor;
     
 	return Output;    
@@ -530,6 +545,7 @@ struct MTVertexToPixel
     float2 TextureCoords    : TEXCOORD1;
     float4 LightDirection    : TEXCOORD2;
     float4 TextureWeights    : TEXCOORD3;
+    float4 clipPlanes		: TEXCOORD4;
 };
 
 struct MTPixelToFrame
@@ -540,9 +556,17 @@ struct MTPixelToFrame
 MTVertexToPixel MultiTexturedVS( float4 inPos : POSITION, float3 inNormal: NORMAL, float2 inTexCoords: TEXCOORD0, float4 inTexWeights: TEXCOORD1)
 {    
     MTVertexToPixel Output = (MTVertexToPixel)0;
+	
     float4x4 preViewProjection = mul (xView, xProjection);
     float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
     
+	if (xClipPlanes)
+	{
+		Output.clipPlanes.x = dot(inPos, xClipPlane0); 
+		Output.clipPlanes.y = 0; 
+		Output.clipPlanes.z = 0; 
+		Output.clipPlanes.w = 0; 
+	}
     Output.Position = mul(inPos, preWorldViewProjection);
     Output.Normal = mul(normalize(inNormal), xWorld);
     Output.TextureCoords = inTexCoords;
@@ -557,6 +581,9 @@ MTPixelToFrame MultiTexturedPS(MTVertexToPixel PSIn)
 {
     MTPixelToFrame Output = (MTPixelToFrame)0;        
     
+	if (xClipPlanes)
+		clip(PSIn.clipPlanes); 
+
     float lightingFactor = 1;
     if (xEnableLighting)
         lightingFactor = saturate(saturate(dot(PSIn.Normal, PSIn.LightDirection)) + xAmbient);
@@ -696,3 +723,51 @@ technique NotRlyBlueHologram
 	}
 }
 
+//------- Technique: Water --------
+struct WVertexToPixel
+{
+    float4 Position                 : POSITION;
+    float4 ReflectionMapSamplingPos    : TEXCOORD1;
+};
+
+struct WPixelToFrame
+{
+    float4 Color : COLOR0;
+};
+
+WVertexToPixel WaterVS(float4 inPos : POSITION, float2 inTex: TEXCOORD)
+{    
+    WVertexToPixel Output = (WVertexToPixel)0;
+
+    float4x4 preViewProjection = mul (xView, xProjection);
+    float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
+    float4x4 preReflectionViewProjection = mul (xReflectionView, xProjection);
+    float4x4 preWorldReflectionViewProjection = mul (xWorld, preReflectionViewProjection);
+
+    Output.Position = mul(inPos, preWorldViewProjection);
+    Output.ReflectionMapSamplingPos = mul(inPos, preWorldReflectionViewProjection);
+
+    return Output;
+}
+
+WPixelToFrame WaterPS(WVertexToPixel PSIn)
+{
+    WPixelToFrame Output = (WPixelToFrame)0;        
+    
+    float2 ProjectedTexCoords;
+    ProjectedTexCoords.x = PSIn.ReflectionMapSamplingPos.x/PSIn.ReflectionMapSamplingPos.w/2.0f + 0.5f;
+    ProjectedTexCoords.y = -PSIn.ReflectionMapSamplingPos.y/PSIn.ReflectionMapSamplingPos.w/2.0f + 0.5f;    
+
+    Output.Color = tex2D(ReflectionSampler, ProjectedTexCoords);    
+    
+    return Output;
+}
+
+technique Water
+{
+    pass Pass0
+    {
+        VertexShader = compile vs_1_1 WaterVS();
+        PixelShader = compile ps_2_0 WaterPS();
+    }
+}

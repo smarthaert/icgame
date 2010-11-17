@@ -156,7 +156,6 @@ namespace ICGame
 
         private void AnimateTurn(GameTime gameTime)
         {
-            //TODO: Uogolnic na dowolna ilosc kol
             float rot = 0;
             const float turningSpeed = 0.003f;
             const float maxAngle = 0.5f*MathHelper.PiOver4;
@@ -425,7 +424,7 @@ namespace ICGame
             }
 
             AnimationTransforms[Model.Bones[fr+"Wheel" + Convert.ToString(wheelIndex)].Index] =
-                Matrix.CreateRotationY(0.01f*gameTime.ElapsedGameTime.Milliseconds*Speed*sign)*
+                Matrix.CreateRotationY(0.6f*gameTime.ElapsedGameTime.Milliseconds*Speed*sign)*
                 AnimationTransforms[Model.Bones[fr+"Wheel" + Convert.ToString(wheelIndex)].Index];
         }
 
@@ -446,7 +445,7 @@ namespace ICGame
             
             AnimateTurn(gameTime);
             AnimateDriving(gameTime);
-            //AnimateDoor(gameTime);
+            AnimateDoor(gameTime);
             //AnimateTurret(gameTime);
             base.Animate(gameTime, gameObjects);
         }
@@ -456,7 +455,7 @@ namespace ICGame
             return new VehicleDrawer(this);
         }
 
-        const float toleranceBig = 4f;
+        const float toleranceBig = 2f;
         const float toleranceSmall = 2f;
 
         private float toleranceX = toleranceSmall;
@@ -492,6 +491,8 @@ namespace ICGame
                 }
                 else
                 {
+                    Move(Direction.None, gameTime);
+                    Turn(Direction.None, gameTime);
                     return;
                 }
             }
@@ -638,7 +639,7 @@ namespace ICGame
                 }
             }
         }
-        public void Move(Direction direction, GameTime gameTime)
+        public override void Move(Direction direction, GameTime gameTime)
         {
             moving = direction;
             base.Move(direction,gameTime);

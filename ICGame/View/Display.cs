@@ -61,10 +61,12 @@ namespace ICGame
             graphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here // O RLY!? :D
-
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             Camera.CalculateCamera();
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,Projection,Camera.CameraPosition);
-            //CampaignController.MissionController 
+            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, effect);
+            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,Projection,Camera.CameraPosition,null);
+            //CampaignController.MissionController );
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
                 if(gameObject is IAnimated) 

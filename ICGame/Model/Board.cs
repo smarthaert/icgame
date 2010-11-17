@@ -49,6 +49,11 @@ namespace ICGame
             get; set;
         }
 
+        public TerrainWater TerrainWater
+        {
+            get; set;
+        }
+
         public Game MainGame
         {
             get; set;
@@ -253,6 +258,11 @@ namespace ICGame
             //CONV
             SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone();
             SkyDome = new SkyDome(device,effect);
+        }
+
+        public void PrepareTerrainWater(Camera camera, Matrix projectionMatrix)
+        {
+            TerrainWater = new TerrainWater(MainGame.GraphicsDevice, camera, projectionMatrix, this);
         }
 
         public void PrepareBuffers()
