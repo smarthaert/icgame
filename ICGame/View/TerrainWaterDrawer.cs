@@ -11,8 +11,6 @@ namespace ICGame
 {
     public class TerrainWaterDrawer
     {
-        private static Vector3 reflCameraPosition;
-
         private TerrainWater terrainWater;
 
         public TerrainWaterDrawer(TerrainWater terrainWater)
@@ -43,24 +41,24 @@ namespace ICGame
             terrainWater.RefractionMap = terrainWater.RefractionRenderTarget;
             /*using (FileStream fileStream = File.OpenWrite("refractionmap.jpg"))
             {
-                refractionMap.SaveAsJpeg(fileStream, refractionMap.Width, refractionMap.Height);
+                terrainWater.RefractionMap.SaveAsJpeg(fileStream, terrainWater.RefractionMap.Width, refractionMap.Height);
                 fileStream.Close();
             } */
         }
 
         public void UpdateReflectionViewMatrix(Camera camera)
         {
-            reflCameraPosition = camera.CameraPosition;
-            reflCameraPosition.Y = -camera.CameraPosition.Y + terrainWater.WaterHeight * 2;
-
+            terrainWater.ReflCameraPosition = new Vector3(camera.CameraPosition.X, -camera.CameraPosition.Y + terrainWater.WaterHeight * 2, 
+                                                            camera.CameraPosition.Z);
+            
             Vector3 reflTargetPos = camera.CameraLookAt;
             reflTargetPos.Y = -camera.CameraLookAt.Y + terrainWater.WaterHeight * 2;
 
             Vector3 cameraRight = Vector3.Transform(new Vector3(1, 0, 0), camera.CameraRotation);
 
-            Vector3 invUpVector = Vector3.Cross(cameraRight, reflTargetPos - reflCameraPosition);
+            Vector3 invUpVector = Vector3.Cross(cameraRight, reflTargetPos - terrainWater.ReflCameraPosition);
 
-            terrainWater.ReflectionViewMatrix = Matrix.CreateLookAt(reflCameraPosition, reflTargetPos, invUpVector);
+            terrainWater.ReflectionViewMatrix = Matrix.CreateLookAt(terrainWater.ReflCameraPosition, reflTargetPos, invUpVector);
         }
 
         public void DrawReflectionMap(GraphicsDevice device, Effect effect)
@@ -69,11 +67,11 @@ namespace ICGame
 
             Vector4 reflectionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), true);
 
-            device.RasterizerState = RasterizerState.CullClockwise;
             device.SetRenderTarget(terrainWater.ReflectionRenderTarget);
+            device.RasterizerState = RasterizerState.CullClockwise;
             device.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
-            terrainWater.Board.GetDrawer().Draw(device, effect, terrainWater.ReflectionViewMatrix, 
-                                                terrainWater.ProjectionMatrix, reflCameraPosition, reflectionPlane);
+            terrainWater.Board.GetDrawer().Draw(device, effect, terrainWater.ReflectionViewMatrix,
+                                                terrainWater.ProjectionMatrix, terrainWater.ReflCameraPosition, reflectionPlane);
 
             device.SetRenderTarget(null);
             terrainWater.ReflectionMap = terrainWater.ReflectionRenderTarget;
@@ -87,6 +85,7 @@ namespace ICGame
 
         public void DrawWater(GraphicsDevice device, Effect effect)
         {
+            device.RasterizerState = RasterizerState.CullClockwise;
             effect.CurrentTechnique = effect.Techniques["Water"];
             Matrix worldMatrix = Matrix.Identity;
             effect.Parameters["xWorld"].SetValue(worldMatrix);
