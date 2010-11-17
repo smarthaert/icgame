@@ -87,7 +87,7 @@ namespace ICGame
         #endregion
 
         public Mission Mission       //jak jest lepszy pomysł na przekazanie Board'a to jestem otwarty na propozycje
-        {
+        {                            //_LOL_ :D
             get;
             set;
         }

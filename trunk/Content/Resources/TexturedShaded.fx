@@ -252,7 +252,7 @@ PixelToFrame BlueHologramPS(VertexToPixel PSIn)
 	Output.Color.rgb *= PSIn.Color;
 	Output.Color.rgb *= PSIn.LightingFactor;
 	
-	Output.Color.a=xTransparency-0.1f;
+	Output.Color.a=xTransparency;
 
 	return Output;
 }
@@ -311,7 +311,7 @@ PixelToFrame NotRlyBlueHologramPS(VertexToPixel PSIn)
 	Output.Color.rgb = PSIn.Color;
 	Output.Color.rgb *= PSIn.LightingFactor;
 	
-	Output.Color.a=xTransparency-0.1f;
+	Output.Color.a=xTransparency;
 
 	return Output;
 }

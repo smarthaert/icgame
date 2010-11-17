@@ -28,6 +28,7 @@ namespace ICGame
         public GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         SpriteBatch spriteBatch; 
         public Effect effect;   //nie patrzeæ
+        public Effect particleEffect; //tu tez
         public Effect ModelEffect { get; set; } //tu te¿
 
         public Game()
@@ -36,12 +37,14 @@ namespace ICGame
             
             Content.RootDirectory = "Content";
 
-            Campaign = new Campaign();
+          //  Campaign = new Campaign(EffectController);
 
             UserInterface = new UserInterface();
 
             MissionController = new MissionController(this);
-            CampaignController = new CampaignController(this, MissionController);
+            EffectController = new EffectController(this);
+            CampaignController = new CampaignController(this, MissionController, EffectController);
+            
 
             Camera = new Camera(new Vector3(244, 0, 154),MissionController);
 
@@ -106,6 +109,8 @@ namespace ICGame
             get; set;
         }
 
+        public EffectController EffectController { get; set; }
+
 
 
         /// <summary>
@@ -129,6 +134,7 @@ namespace ICGame
 
             UserInterfaceController.InitializeUserInterface(this);
 
+            
             //Alpha blending
           //  GraphicsDevice.RenderState.AlphaBlendEnable = true;
           //  GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
@@ -146,6 +152,7 @@ namespace ICGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("Resources/effects");
+            particleEffect = Content.Load<Effect>("Resources/ParticleEffect");
             ModelEffect = Content.Load<Effect>("Resources/TexturedShaded");
         }
 
@@ -169,7 +176,7 @@ namespace ICGame
          
             UserInterfaceController.UpdateUserInterfaceState(gameTime);
             MissionController.UpdateMission(gameTime);
-            
+            EffectController.Update(gameTime);
             switch (CampaignController.CampaignState)
             {
                 case GameState.Initialize:

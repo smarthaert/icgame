@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using ICGame.Tools;
 namespace ICGame
 {
     public class StaticObject : GameObject, IPhysical, IDestructible
@@ -14,19 +14,16 @@ namespace ICGame
            /* if(parent!=null)
                 PhysicalTransforms =parent.PhysicalTransforms;
             else*/ PhysicalTransforms = Matrix.Identity;
+            BoundingBox bb;
+            BoundingBoxTools.CalculateBoundingBox(model, out bb);
+            BoundingBox = bb;
+
         }
         #region IPhysical Members
 
         public BoundingBox BoundingBox
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         #endregion
