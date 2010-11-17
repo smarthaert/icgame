@@ -116,10 +116,11 @@ namespace ICGame
         protected override void Initialize()
         {
             base.Initialize();
-            CampaignController.StartCampaign();
-            CampaignController.CampaignState = GameState.MainMenu;
 
             Display = new Display(GraphicsDeviceManager, UserInterface, Camera, CampaignController, effect);
+
+            CampaignController.StartCampaign();
+            CampaignController.CampaignState = GameState.MainMenu;
             
             
 

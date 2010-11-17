@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -12,29 +12,32 @@ namespace ICGame
         {
             Board = board;
         }
-    
+
         public Board Board
         {
-            get; set;
+            get;
+            set;
         }
 
         public void DrawSkyDome(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition)
         {
             //graphicsDevice.RenderState.DepthBufferWriteEnable = false;
             //CONV
-            graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            //graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
+            graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Matrix[] modelTransforms = new Matrix[Board.SkyDomeModel.Bones.Count];
             Board.SkyDomeModel.CopyAbsoluteBoneTransformsTo(modelTransforms);
             Vector3 modifiedCameraPosition = cameraPosition;
             modifiedCameraPosition.Y = -45.0f;
-            
-          //  Matrix wMatrix = Matrix.CreateTranslation(0, -0.3f, 0) * Matrix.CreateScale(100) * Matrix.CreateTranslation();
+
+            //  Matrix wMatrix = Matrix.CreateTranslation(0, -0.3f, 0) * Matrix.CreateScale(100) * Matrix.CreateTranslation();
+
             foreach (ModelMesh mesh in Board.SkyDomeModel.Meshes)
             {
                 foreach (Effect currentEffect in mesh.Effects)
                 {
-                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index]*Matrix.CreateScale(400) * Matrix.CreateTranslation(modifiedCameraPosition)  ;
+                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * Matrix.CreateScale(400) * Matrix.CreateTranslation(modifiedCameraPosition);
                     currentEffect.CurrentTechnique = currentEffect.Techniques["SkyDome"];
                     currentEffect.Parameters["xWorld"].SetValue(worldMatrix);
                     currentEffect.Parameters["xView"].SetValue(view);
@@ -46,55 +49,60 @@ namespace ICGame
             }
             //graphicsDevice.RenderState.DepthBufferWriteEnable = true;
             //CONV
-            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            //graphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
-        public void Draw(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void Draw(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane)
         {
-           DrawSkyDome(graphicsDevice,effect,view,projection,cameraPosition);
+            //if(clipPlane == null)
+            //{
+            //    Board.TerrainWater.GetDrawer().DrawReflectionMap(graphicsDevice,effect);
+            //}
+            DrawSkyDome(graphicsDevice, effect, view, projection, cameraPosition);
+
             effect.CurrentTechnique = effect.Techniques["MultiTextured"];
+
+            if(clipPlane == null)
+            {
+                effect.Parameters["xClipPlanes"].SetValue(false);
+            }
+            else
+            {
+                effect.Parameters["xClipPlanes"].SetValue(true);
+                effect.Parameters["xClipPlane0"].SetValue((Vector4)clipPlane);
+            }
+
             effect.Parameters["xTexture0"].SetValue(Board.Textures["sand"]);
             effect.Parameters["xTexture1"].SetValue(Board.Textures["grass"]);
             effect.Parameters["xTexture2"].SetValue(Board.Textures["rock"]);
             effect.Parameters["xTexture3"].SetValue(Board.Textures["snow"]);
- 
+
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
             effect.Parameters["xView"].SetValue(view);
             effect.Parameters["xProjection"].SetValue(projection);
             effect.Parameters["xEnableLighting"].SetValue(true);
             effect.Parameters["xAmbient"].SetValue(0.4f);
             effect.Parameters["xLightDirection"].SetValue(new Vector3(-0.5f, -1, -0.5f));
-
-            //effect.Begin();
-            //CONV
-
-            graphicsDevice.RasterizerState = RasterizerState.CullNone;
+            
+            graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
-                //pass.Begin();
                 pass.Apply();
 
-                //graphicsDevice.VertexDeclaration = new VertexDeclaration(graphicsDevice,VertexMultitextured.VertexElements);
-                //CONV
-
-                //graphicsDevice.Vertices[0].SetSource(Board.TerrainVertexBuffer, 0, VertexMultitextured.SizeInBytes);
-                //CONV
                 graphicsDevice.SetVertexBuffer(Board.TerrainVertexBuffer);
                 graphicsDevice.Indices = Board.TerrainIndexBuffer;
 
-
-                //int noVertices = Board.TerrainVertexBuffer.SizeInBytes / VertexMultitextured.SizeInBytes;
-                //int noTriangles = Board.TerrainIndexBuffer.SizeInBytes / sizeof(int) / 3;
-                //CONV
                 int noVertices = Board.TerrainVertexBuffer.VertexCount;
-                int noTriangles = Board.TerrainIndexBuffer.IndexCount/3;
+                int noTriangles = Board.TerrainIndexBuffer.IndexCount / 3;
                 graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, noVertices, 0, noTriangles);
-                //graphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList,Board.VertexPositionColor1,0,Board.VertexPositionColor1.GetLength(0),Board.Indices,0,Board.Indices.Length/3);
-
-                //pass.End();
+                
             }
-            
-            //effect.End();
+            graphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            //if(clipPlane == null)
+            //{
+            //    Board.TerrainWater.GetDrawer().DrawWater(graphicsDevice, effect);
+            //}
         }
     }
 }

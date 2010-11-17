@@ -46,6 +46,7 @@ namespace ICGame
                 );
             Mission.Board.PrepareSkyDome(MainGame.Content.Load<Model>("Resources/dome"), MainGame.effect, MainGame.GraphicsDevice);
             Mission.Board.LoadHeightData(heightMap);
+            Mission.Board.PrepareTerrainWater(MainGame.Display.Camera, MainGame.Display.Projection);
             Mission.LoadObjects(gameObjectFactory);
         }
         /// <summary>
@@ -65,6 +66,11 @@ namespace ICGame
         public BoardDrawer GetBoardDrawer()
         {
             return Mission.Board.GetDrawer();
+        }
+
+        public TerrainWaterDrawer GetTerrainWaterDrawer()
+        {
+            return Mission.Board.TerrainWater.GetDrawer();
         }
 
         /// <summary>

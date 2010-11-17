@@ -87,6 +87,22 @@ namespace ICGame
             }
         }
 
+        public Matrix CameraRotation
+        {
+            get
+            {
+                return Matrix.CreateFromQuaternion(rotation);
+            }
+        }
+
+        public Vector3 CameraLookAt
+        {
+            get
+            {
+                return lookAtPosition;
+            }
+        }
+
         public Vector3 CalculateCamera()
         {
             

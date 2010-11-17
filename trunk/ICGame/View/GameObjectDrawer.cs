@@ -100,7 +100,6 @@ namespace ICGame
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
-            
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)
             {
@@ -147,7 +146,9 @@ namespace ICGame
                     effect.Parameters["xProjection"].SetValue(projection);
                    // effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                 }
+                gd.RasterizerState = RasterizerState.CullCounterClockwise;
                 model.Draw();
+                gd.RasterizerState = RasterizerState.CullClockwise;
                 //if (model.Name == "Window0" || model.Name == "DoorLeft" || model.Name == "DoorRight" || model.Name == "AlertBarBlue")
                 //{
                 //    gd.RenderState.DepthBufferWriteEnable = true;

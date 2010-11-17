@@ -56,6 +56,11 @@ namespace ICGame
             return MissionController.GetBoardDrawer();
         }
 
+        public TerrainWaterDrawer GetTerrainWaterDrawer()
+        {
+            return MissionController.GetTerrainWaterDrawer();
+        }
+
         private Campaign Campaign
         {
             get; set;
