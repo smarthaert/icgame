@@ -10,7 +10,7 @@ namespace ICGame
     public class MissionController
     {
         private Game MainGame;
-
+        
         public MissionController(Game game)
         {
             MainGame = game;
@@ -34,7 +34,7 @@ namespace ICGame
             
         }
 
-        public void LoadMissionData(GameObjectFactory gameObjectFactory)
+        public void LoadMissionData(GameObjectFactory gameObjectFactory, EffectController effectController)
         {
             Microsoft.Xna.Framework.Content.ContentManager contentManager = MainGame.Content;
             Texture2D heightMap = contentManager.Load<Texture2D>("Resources/heightmap");
@@ -48,7 +48,7 @@ namespace ICGame
             Mission.Board.PrepareSkyDome(MainGame.Content.Load<Model>("Resources/dome"), MainGame.effect, MainGame.GraphicsDevice);
             Mission.Board.LoadHeightData(heightMap);
             Mission.Board.PrepareTerrainWater(MainGame.Display.Camera, MainGame.Display.Projection);
-            Mission.LoadObjects(gameObjectFactory);
+            Mission.LoadObjects(gameObjectFactory, effectController);
         }
         /// <summary>
         /// Do wywalenia w przyszłości

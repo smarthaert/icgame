@@ -27,12 +27,14 @@ namespace ICGame
 
             Campaign.GameObjectFactory.LoadModels(MainGame);
             Campaign.BuyUnit(GameObjectID.FireTruck);
+            Campaign.BuyUnit(GameObjectID.Chassy);
             Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
+            Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
             //Campaign.BuyUnit(GameObjectID.AnimFigure);
             //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
             //Campaign.BuyUnit(GameObjectID.FireTruck);
             //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
-            MissionController.LoadMissionData(Campaign.GameObjectFactory);
+            MissionController.LoadMissionData(Campaign.GameObjectFactory, EffectController);
         }
 
         public List<GameObject> GetObjectsToDraw()

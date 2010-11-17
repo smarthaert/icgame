@@ -41,8 +41,9 @@ namespace ICGame
 
             UserInterface = new UserInterface();
 
-            MissionController = new MissionController(this);
+            
             EffectController = new EffectController(this);
+            MissionController = new MissionController(this);
             CampaignController = new CampaignController(this, MissionController, EffectController);
             
 

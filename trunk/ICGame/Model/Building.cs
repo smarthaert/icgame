@@ -54,6 +54,31 @@ namespace ICGame
             PhysicalTransforms = Matrix.Identity;
         }
 
+        public Vector3 GetRandomPoint(Random random)
+        {
+            float x = (float)random.NextDouble() * Height / 2;
+            float y = (float)random.NextDouble() * Width/2;
+            float z = (float)random.NextDouble() * Length / 2;
+            x = random.NextDouble() > 0.5f ? x : -x;
+            z = random.NextDouble() > 0.5f ? z : -z;
+
+            float rand = (float)random.NextDouble();
+
+            x = rand > 0.5f ?
+                (rand > 0.75f ?
+                    Position.X + Height / 2 :
+                    Position.X - Height / 2) :
+                Position.X + x;
+            z = rand > 0.5f ?
+                Position.Z + z : 
+                (rand > 0.25f ?
+                    Position.Z + Length / 2:
+                    Position.Z - Length / 2);
+
+
+            return new Vector3(x, Position.Y + y, z);
+        }
+
         #region IPhysical Members
 
         public BoundingBox BoundingBox

@@ -42,8 +42,18 @@ namespace ICGame
         public void AddEffectToAnObject(GameObject gameObject, string name) //TODO: ENUM!!!!!!!! (albo XML)
         {
             IObjectEffect gameEffect;
-            //if (name == "water")
+            if (name == "water")
                 gameEffect = new WaterEffect(gameObject,MainGame);
+            else if(name=="fire")
+            {
+                gameEffect = new FireEffect(gameObject, MainGame);
+                AddEffectToAnObject(gameObject,"smoke");
+               
+            }
+            else
+            {
+                 gameEffect = new FireSmokeEffect(gameObject, MainGame);
+            }
             gameEffect.IsActive = true;
             
             gameObject.EffectList.Add(gameEffect);
