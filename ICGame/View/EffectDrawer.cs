@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
@@ -17,6 +18,6 @@ namespace ICGame
         
 
         public abstract void Draw(Microsoft.Xna.Framework.Matrix projection, Camera camera,
-                          Microsoft.Xna.Framework.Graphics.GraphicsDevice gd);
+                          Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, GameTime gameTime);
     }
 }

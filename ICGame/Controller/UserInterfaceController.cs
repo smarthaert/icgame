@@ -223,6 +223,17 @@ namespace ICGame
             {
                 Camera.MoveDown();
             }
+
+            if (curState.IsKeyDown(Keys.E))
+            {
+                CampaignController.EffectController.SetEffects(true);
+            }
+
+            if (curState.IsKeyDown(Keys.R))
+            {
+                CampaignController.EffectController.SetEffects(false);
+            }
+
             if (curState.IsKeyDown(Keys.Tab)&& prevState.IsKeyUp(Keys.Tab))
             {
                 ((Unit)CampaignController.GetActiveObject()).Selected =  ((Unit)CampaignController.GetActiveObject()).Selected ? false : true;
@@ -267,19 +278,19 @@ namespace ICGame
             //TEMP  //...jak wszysztko :D
             if(curState.IsKeyDown(Keys.F1))
             {
-                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = MathHelper.PiOver2;
+                ((Vehicle)CampaignController.MissionController.GetSeletedObject()).turretDestination = MathHelper.PiOver2;
             }
             if(curState.IsKeyDown(Keys.F2))
             {
-                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = MathHelper.Pi;
+                ((Vehicle)CampaignController.MissionController.GetSeletedObject()).turretDestination = MathHelper.Pi;
             }
             if(curState.IsKeyDown(Keys.F3))
             {
-                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = 3 * MathHelper.PiOver2;
+                ((Vehicle)CampaignController.MissionController.GetSeletedObject()).turretDestination = 3 * MathHelper.PiOver2;
             }
             if(curState.IsKeyDown(Keys.F4))
             {
-                ((Vehicle)CampaignController.GetActiveObject()).turretDestination = 2 * MathHelper.Pi;
+                ((Vehicle)CampaignController.MissionController.GetSeletedObject()).turretDestination = 2 * MathHelper.Pi;
             }
             if (curState.IsKeyDown(Keys.F5) && prevState.IsKeyUp(Keys.F5))
             {

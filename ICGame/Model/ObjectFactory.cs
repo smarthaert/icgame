@@ -8,6 +8,12 @@ namespace ICGame
 {
     public class GameObjectFactory
     {
+        private EffectController EffectController;
+        public GameObjectFactory(EffectController effectController)
+        {
+            EffectController = effectController;
+        }
+        
         private enum ObjectClass
         {
             Vehicle, StaticObject, Unit, Building, GameObject, Infantry
@@ -99,6 +105,8 @@ namespace ICGame
                     {
                         newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 2, 2, 2, false);
                     }
+                    if (loadedModel.name == "firetruck_2")
+                        EffectController.AddEffectToAnObject(newObject,"water"); //tak, bezsens...
                     (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
                     break;
                 case ObjectClass.StaticObject:

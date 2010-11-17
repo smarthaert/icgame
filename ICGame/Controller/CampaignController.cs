@@ -10,21 +10,23 @@ namespace ICGame
     public class CampaignController
     {
         private Game MainGame;
-        public CampaignController(Game game, MissionController missionController)
+        
+        public CampaignController(Game game, MissionController missionController, EffectController effectController)
         {
             MainGame = game;
             MissionController = missionController;
+            EffectController = effectController;
 
         }
         public void StartCampaign()
         {
-            Campaign = new Campaign();
+            Campaign = new Campaign(EffectController);
             
             MissionController.StartMission();
             Campaign.Mission = MissionController.Mission;
 
             Campaign.GameObjectFactory.LoadModels(MainGame);
-            Campaign.BuyUnit(GameObjectID.Chassy);
+            Campaign.BuyUnit(GameObjectID.FireTruck);
             Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
             //Campaign.BuyUnit(GameObjectID.AnimFigure);
             //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
@@ -70,6 +72,8 @@ namespace ICGame
         { 
             get; set;
         }
+
+        public EffectController EffectController { get; set; }
 
         public GameObject GetActiveObject()
         {

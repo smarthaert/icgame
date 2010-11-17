@@ -77,7 +77,15 @@ namespace ICGame
                 gameObject.GetDrawer().Draw(Projection, Camera.CameraMatrix, Camera.CameraPosition, graphicsDevice, null);
                 
             }
-            UserInterface.Drawer.Draw();
+
+            foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
+            {
+                foreach (IObjectEffect objectEffect in gameObject.GetEffectsToDraw())
+                {
+                    objectEffect.GetDrawer().Draw(Projection, Camera, graphicsDevice, gameTime);
+                }
+            }
+
             //TODO: Rysowanie malego modelu powinno obslugiwac zaznaczenie wielu jednostek i ogolnie powinno wyleciec do jakiegos kontrolera jednostek (niestniejacego)
             GameObject selectedObject = CampaignController.MissionController.GetSeletedObject();
             if (selectedObject != null)
@@ -85,10 +93,7 @@ namespace ICGame
                 selectedObject.GetDrawer().DrawSmallModel(Projection, Camera, graphicsDevice,gameTime);
             }
 
-            
-            
-
-
+            UserInterface.Drawer.Draw();
         }
     }
 }

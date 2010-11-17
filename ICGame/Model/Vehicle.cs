@@ -95,6 +95,11 @@ namespace ICGame
             }
         }
 
+        public float TurretAngle
+        {
+            get { return turretAngle; }
+        }
+
         #endregion
 
         public Vehicle(Model model, float speed, float turnRadius, int rearWheelsCount, int frontWheelsCount, int doorCount, bool hasTurret)
@@ -122,12 +127,7 @@ namespace ICGame
             gi = new GameInfo();
 
 
-            //UBER TEMP
-            EffectList.Add(new WaterEffect(this));
-            EffectList[0].IsActive = true;
 
-            
-            //\TEMP
 
         }
 
@@ -156,6 +156,11 @@ namespace ICGame
             AnimationTransforms[Model.Bones["WaterCannonBase"].Index] = Matrix.CreateRotationZ(turretAngle);
             AnimationTransforms[Model.Bones["WaterPipe0"].Index] = Matrix.CreateRotationZ(turretAngle);
             AnimationTransforms[Model.Bones["WaterPipe1"].Index] = Matrix.CreateRotationZ(turretAngle);
+            AnimationTransforms[Model.Bones["WaterSource0"].Index] = Matrix.CreateTranslation(0, -2.4f, 0.3f) * Matrix.CreateRotationZ(turretAngle) ;
+            AnimationTransforms[Model.Bones["WaterSource1"].Index] =  Matrix.CreateTranslation(0, 2.4f, 0.3f)*Matrix.CreateRotationZ(turretAngle);
+       
+            
+            
         }
 
         private void AnimateTurn(GameTime gameTime)
@@ -650,6 +655,26 @@ namespace ICGame
         {
             moving = direction;
             base.Move(direction,gameTime);
+        }
+
+        //Probably temp... Ale potrzebne na zewnatrz!!!
+        //BUG EPIC HACK
+        public Vector3 GetWaterSourcePosition()
+        {
+            /*Matrix[] matrices = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(matrices);*/
+            Matrix test = Model.Bones["WaterSource0"].Transform;
+         //   test *= Matrix.CreateTranslation(0, -2.4f, 1);
+            Vector3 Result = (test*Model.Bones[0].Transform*ModelMatrix).Translation;
+            return Result;
+        }
+        //Temp jak diabli
+        public Vector3 GetSecondWaterSourcePosition()
+        {
+            Matrix test = Model.Bones["WaterSource1"].Transform;
+            
+            Vector3 Result = (test * Model.Bones[0].Transform * ModelMatrix).Translation;
+            return Result;
         }
     }
 }

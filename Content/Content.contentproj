@@ -40,11 +40,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>FBXProcessor</Processor>
     </Compile>
-    <Compile Include="Model\firetruck.fbx">
-      <Name>firetruck</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>FBXProcessor</Processor>
-    </Compile>
     <Compile Include="Model\home0.fbx">
       <Name>home0</Name>
       <Importer>FbxImporter</Importer>
@@ -125,13 +120,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\chassy_1.fbx">
-      <Name>chassy_1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>FBXProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Model\firetruck_2.fbx">
       <Name>firetruck_2</Name>
       <Importer>FbxImporter</Importer>
@@ -139,17 +127,46 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Resources\TexturedShaded.fx">
-      <Name>TexturedShaded</Name>
+    <Compile Include="Model\chassy_1.fbx">
+      <Name>chassy_1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>FBXProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Texture2D\Particle\fire.png">
+      <Name>fire</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Texture2D\Particle\smoke.png">
+      <Name>smoke</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Resources\ParticleEffect.fx">
+      <Name>ParticleEffect</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Texture2D\Board\waterbump.dds">
-      <Name>waterbump</Name>
+    <Compile Include="Texture2D\Particle\water.png">
+      <Name>water</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Resources\TexturedShaded.fx">
+      <Name>TexturedShaded</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
