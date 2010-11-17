@@ -68,7 +68,7 @@ namespace ICGame
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             Camera.CalculateCamera();
-            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, effect, CampaignController.GetObjectsToDraw());
+            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, effect, CampaignController.GetObjectsToDraw(), gameTime);
             CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,Projection,Camera.CameraPosition,null);
 
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())

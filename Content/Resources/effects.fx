@@ -58,6 +58,11 @@ Texture xTexture3;
 
 sampler TextureSampler3 = sampler_state { texture = <xTexture3> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
 
+float xWaveLength;
+float xWaveHeight;
+float3 xWindDirection;
+float xWindForce;
+
 //--------Water Reflections-----------------
 
 float4x4 xReflectionView;
@@ -67,6 +72,10 @@ sampler ReflectionSampler = sampler_state { texture = <xReflectionMap> ; magfilt
 Texture xRefractionMap;
 
 sampler RefractionSampler = sampler_state { texture = <xRefractionMap> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
+
+Texture xWaterBumpMap;
+
+sampler WaterBumpMapSampler = sampler_state { texture = <xWaterBumpMap> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
 
 //------- Technique: Pretransformed --------
 
@@ -458,10 +467,14 @@ technique MultiTextured
 
 
 //------- Technique: Water --------
+
 struct WVertexToPixel
 {
     float4 Position                 : POSITION;
     float4 ReflectionMapSamplingPos    : TEXCOORD1;
+    float2 BumpMapSamplingPos        : TEXCOORD2;
+    float4 RefractionMapSamplingPos : TEXCOORD3;
+    float4 Position3D                : TEXCOORD4;
 };
 
 struct WPixelToFrame
@@ -481,18 +494,56 @@ WVertexToPixel WaterVS(float4 inPos : POSITION, float2 inTex: TEXCOORD)
     Output.Position = mul(inPos, preWorldViewProjection);
     Output.ReflectionMapSamplingPos = mul(inPos, preWorldReflectionViewProjection);
 
+	float3 windDir = normalize(xWindDirection);    
+	float3 perpDir = cross(xWindDirection, float3(0,1,0));
+
+	float ydot = dot(inTex, xWindDirection.xz);
+	float xdot = dot(inTex, perpDir.xz);
+	float2 moveVector = float2(xdot, ydot);
+
+	moveVector += float2(0, xTime*xWindForce);
+
+	Output.BumpMapSamplingPos = moveVector/xWaveLength;
+	Output.RefractionMapSamplingPos = mul(inPos, preWorldViewProjection);
+	Output.Position3D = mul(inPos, xWorld);
+
     return Output;
 }
 
 WPixelToFrame WaterPS(WVertexToPixel PSIn)
 {
-    WPixelToFrame Output = (WPixelToFrame)0;        
-    
+    WPixelToFrame Output = (WPixelToFrame)0;      
+	       
     float2 ProjectedTexCoords;
     ProjectedTexCoords.x = PSIn.ReflectionMapSamplingPos.x/PSIn.ReflectionMapSamplingPos.w/2.0f + 0.5f;
-    ProjectedTexCoords.y = -PSIn.ReflectionMapSamplingPos.y/PSIn.ReflectionMapSamplingPos.w/2.0f + 0.5f;    
+    ProjectedTexCoords.y = -PSIn.ReflectionMapSamplingPos.y/PSIn.ReflectionMapSamplingPos.w/2.0f + 0.5f;
 
-    Output.Color = tex2D(ReflectionSampler, ProjectedTexCoords);    
+	float4 bumpColor = tex2D(WaterBumpMapSampler, PSIn.BumpMapSamplingPos);
+	float2 perturbation = xWaveHeight*(bumpColor.rg - 0.5f)*2.0f;
+	float2 perturbatedTexCoords = ProjectedTexCoords + perturbation;    
+
+	float4 reflectiveColor = tex2D(ReflectionSampler, perturbatedTexCoords);
+
+	float2 ProjectedRefrTexCoords;
+	ProjectedRefrTexCoords.x = PSIn.RefractionMapSamplingPos.x/PSIn.RefractionMapSamplingPos.w/2.0f + 0.5f;
+	ProjectedRefrTexCoords.y = -PSIn.RefractionMapSamplingPos.y/PSIn.RefractionMapSamplingPos.w/2.0f + 0.5f;    
+	float2 perturbatedRefrTexCoords = ProjectedRefrTexCoords + perturbation;    
+	float4 refractiveColor = tex2D(RefractionSampler, perturbatedRefrTexCoords);
+
+	float3 eyeVector = normalize(xCameraPosition - PSIn.Position3D);
+
+	float3 normalVector = float3(0,1,0);
+
+	float fresnelTerm = saturate(dot(eyeVector, normalVector));
+
+	  
+     float4 combinedColor = lerp(reflectiveColor, refractiveColor, fresnelTerm);
+     
+     float4 dullColor = float4(0.3f, 0.3f, 0.5f, 1.0f);
+     
+     Output.Color = lerp(combinedColor, dullColor, 0.2f);
+
+    //Output.Color = tex2D(ReflectionSampler, ProjectedTexCoords);    
     
     return Output;
 }

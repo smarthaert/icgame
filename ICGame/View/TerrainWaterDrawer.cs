@@ -28,20 +28,25 @@ namespace ICGame
             return planeCoeffs;
         }
 
-        public void DrawRefractionMap(GraphicsDevice device, Effect effect)
+        public void DrawRefractionMap(GraphicsDevice device, Effect effect, List<GameObject> gameObjects)
         {
-            Vector4 refractionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), false);
+            Vector4 refractionPlane = CreatePlane(terrainWater.WaterHeight + 6.5f, new Vector3(0, -1, 0), false);
+            Vector4 vRefractionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), false);
 
             device.SetRenderTarget(terrainWater.RefractionRenderTarget);
-            device.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
+            device.Clear(ClearOptions.Target, Color.White, 1.0f, 0);
             terrainWater.Board.GetDrawer().Draw(device, effect, terrainWater.Camera.CameraMatrix, terrainWater.ProjectionMatrix, 
                                                 terrainWater.Camera.CameraPosition, refractionPlane);
 
+            foreach (GameObject o in gameObjects)
+            {
+                o.GetDrawer().Draw(terrainWater.ProjectionMatrix, terrainWater.Camera.CameraMatrix, terrainWater.Camera.CameraPosition, device, vRefractionPlane);
+            }
             device.SetRenderTarget(null);
             terrainWater.RefractionMap = terrainWater.RefractionRenderTarget;
             /*using (FileStream fileStream = File.OpenWrite("refractionmap.jpg"))
             {
-                terrainWater.RefractionMap.SaveAsJpeg(fileStream, terrainWater.RefractionMap.Width, refractionMap.Height);
+                terrainWater.RefractionMap.SaveAsJpeg(fileStream, terrainWater.RefractionMap.Width, terrainWater.RefractionMap.Height);
                 fileStream.Close();
             } */
         }
@@ -99,7 +104,14 @@ namespace ICGame
             effect.Parameters["xReflectionView"].SetValue(terrainWater.ReflectionViewMatrix);
             effect.Parameters["xProjection"].SetValue(terrainWater.ProjectionMatrix);
             effect.Parameters["xReflectionMap"].SetValue(terrainWater.ReflectionMap);
-            effect.Parameters["xRefractionMap"].SetValue(terrainWater.RefractionMap);
+            effect.Parameters["xRefractionMap"].SetValue(terrainWater.RefractionMap); 
+            effect.Parameters["xWaterBumpMap"].SetValue(terrainWater.Waves);
+            effect.Parameters["xWaveLength"].SetValue(terrainWater.WaveLength);
+            effect.Parameters["xWaveHeight"].SetValue(terrainWater.WaveHeight);
+            effect.Parameters["xCameraPosition"].SetValue(terrainWater.Camera.CameraPosition);
+            effect.Parameters["xTime"].SetValue(terrainWater.Time);
+            effect.Parameters["xWindForce"].SetValue(terrainWater.WindForce);
+            effect.Parameters["xWindDirection"].SetValue(terrainWater.WindDirection);
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -111,9 +123,10 @@ namespace ICGame
             }
         }
 
-        public void Draw(GraphicsDevice device, Effect effect, List<GameObject> gameObjects)
+        public void Draw(GraphicsDevice device, Effect effect, List<GameObject> gameObjects, GameTime gameTime)
         {
-            DrawRefractionMap(device, effect);
+            terrainWater.Time = (float)(gameTime.TotalGameTime.TotalMilliseconds) / 2000000.0f;
+            DrawRefractionMap(device, effect,gameObjects);
             DrawReflectionMap(device, effect, gameObjects);
             DrawWater(device, effect);
         }
