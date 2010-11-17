@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ICGame.Tools;
+
 namespace ICGame
 {
     public class StaticObject : GameObject, IPhysical, IDestructible
@@ -14,10 +14,6 @@ namespace ICGame
            /* if(parent!=null)
                 PhysicalTransforms =parent.PhysicalTransforms;
             else*/ PhysicalTransforms = Matrix.Identity;
-            BoundingBox bb;
-            BoundingBoxTools.CalculateBoundingBox(model, out bb);
-            BoundingBox = bb;
-
         }
         #region IPhysical Members
 
@@ -79,41 +75,11 @@ namespace ICGame
             get; set;
         }
 
-        public float Width
-        {
-            get
-            {
-                return 0;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public float Width { get; set; }
 
-        public float Height
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public float Height { get; set; }
 
-        public float Length
-        {
-            get
-            {
-                return 0;
-            }
-            set
-            {
-                
-            }
-        }
+        public float Length { get; set; }
 
 		public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
         {
@@ -121,5 +87,7 @@ namespace ICGame
         }
 
         #endregion
+
+
     }
 }

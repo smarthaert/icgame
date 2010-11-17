@@ -107,7 +107,13 @@ namespace ICGame
                     }
                     if (loadedModel.name == "firetruck_2")
                         EffectController.AddEffectToAnObject(newObject,"water"); //tak, bezsens...
+
+       
                     (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
+                    //Hotffix
+                    if(gameObjectID == GameObjectID.Chassy)
+                        newObject.Position = new Vector3(200, 0, 160);
+
                     break;
                 case ObjectClass.StaticObject:
                     newObject = new StaticObject(loadedModel.model);

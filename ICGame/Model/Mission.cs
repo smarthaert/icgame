@@ -30,12 +30,12 @@ namespace ICGame
             Board.SkyDome.GeneratePerlinNoise(time);
         }
 
-        public void LoadObjects(GameObjectFactory gameObjectFactory)
+        public void LoadObjects(GameObjectFactory gameObjectFactory,EffectController effectController)
         {
             GameObject obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
             obj.Position=new Vector3(244.0f,Board.GetHeight(244.0f,164.0f),164.0f);
             ObjectContainer.GameObjects.Add(obj);
-
+            effectController.AddEffectToAnObject(obj, "fire"); //tyz bezsens
             obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
             obj.Position = new Vector3(274.0f, Board.GetHeight(274.0f, 134.0f), 134.0f);
             ObjectContainer.GameObjects.Add(obj);
