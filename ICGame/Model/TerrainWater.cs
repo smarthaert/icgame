@@ -10,46 +10,27 @@ namespace ICGame
 {
     public class TerrainWater
     {
-        private float waterHeight = 5.0f;
+        public const float waterHeight = 5.0f;
         public Board Board { get; set; }
         VertexBuffer waterVertexBuffer;
-        private RenderTarget2D refractionRenderTarget;
-        private Texture2D refractionMap;
-        private RenderTarget2D reflectionRenderTarget;
-        private Texture2D reflectionMap;
         public Camera Camera { get; set; }
         public Matrix ProjectionMatrix { get; set; }
         public Matrix ReflectionViewMatrix { get; set; }
         public Vector3 ReflCameraPosition { get; set; }
-
+        public Texture2D Waves { get; set; }
+        private GraphicsDevice dev;
         public VertexBuffer WaterVertexBuffer
         {
             get { return waterVertexBuffer; }
         }
 
-        public Texture2D ReflectionMap
-        {
-            get { return reflectionMap; }
-            set { reflectionMap = value; }
-        }
+        public Texture2D ReflectionMap { get; set; }
 
-        public RenderTarget2D ReflectionRenderTarget
-        {
-            get { return reflectionRenderTarget; }
-            set { reflectionRenderTarget = value; }
-        }
+        public RenderTarget2D ReflectionRenderTarget { get; set; }
 
-        public Texture2D RefractionMap
-        {
-            get { return refractionMap; }
-            set { refractionMap = value; }
-        }
+        public Texture2D RefractionMap { get; set; }
 
-        public RenderTarget2D RefractionRenderTarget
-        {
-            get { return refractionRenderTarget; }
-            set { refractionRenderTarget = value; }
-        }
+        public RenderTarget2D RefractionRenderTarget { get; set; }
 
         public float WaterHeight
         {
@@ -58,15 +39,22 @@ namespace ICGame
 
         public TerrainWater(GraphicsDevice device, Camera camera, Matrix projectionMatrix, Board board)
         {
+            dev = device;
             Board = board;
             Camera = camera;
             ProjectionMatrix = projectionMatrix;
             SetUpWaterVertices(device);
 
-            refractionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,
-                                                device.PresentationParameters.BackBufferHeight);
+            RefractionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,
+                                                device.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
 
-            reflectionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth, device.PresentationParameters.BackBufferHeight);
+            ReflectionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth, 
+                                                device.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+        }
+
+        public void LoadTextures(Texture2D waves)
+        {
+            Waves = waves;
         }
 
         public TerrainWaterDrawer GetDrawer()

@@ -14,7 +14,6 @@ namespace ICGame
 
         private Effect effect;
 
-
         public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, CampaignController campaignController, Effect effect)
         {
             graphics = graphicsDeviceManager;
@@ -26,7 +25,6 @@ namespace ICGame
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 600.0f);
             
             this.effect = effect;
-
         }
 
         public ContentManager Content
@@ -58,21 +56,25 @@ namespace ICGame
 
         public void Draw(GameTime gameTime)
         {
+            //TODO: Refakcoring - update stanu obiektów raczej nie powinien być tutaj
+            foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
+            {
+                if (gameObject is IAnimated)
+                    ((IAnimated)gameObject).Animate(gameTime, CampaignController.GetObjectsToDraw());
+            }
             graphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here // O RLY!? :D
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             Camera.CalculateCamera();
-            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, effect);
+            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, effect, CampaignController.GetObjectsToDraw());
             CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,Projection,Camera.CameraPosition,null);
-            //CampaignController.MissionController );
+
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
-                if(gameObject is IAnimated) 
-                ((IAnimated)gameObject).Animate(gameTime, CampaignController.GetObjectsToDraw());
                 //TODO: CampaignController.GetObjectsToCheck(IPhysical physical) -> lista obiektów które mogą kolidować z animowanym
-                gameObject.GetDrawer().Draw(Projection,Camera,graphicsDevice);
+                gameObject.GetDrawer().Draw(Projection, Camera.CameraMatrix, Camera.CameraPosition, graphicsDevice, null);
                 
             }
             UserInterface.Drawer.Draw();

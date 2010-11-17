@@ -51,7 +51,7 @@ namespace ICGame
                     {
                         //meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
                         //CONV
-                        meshPart.Effect = game.effect.Clone();
+                        meshPart.Effect = game.ModelEffect.Clone();
                     }
                 }
                 loadedModels[pair.Key].model = tempModel;
@@ -91,7 +91,14 @@ namespace ICGame
             switch (loadedModel.objectClass) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
-                    newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 4, 2, 1);
+                    if(gameObjectID == GameObjectID.FireTruck)
+                    {
+                        newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 4, 2, 1, true);
+                    }
+                    else if(gameObjectID == GameObjectID.Chassy)
+                    {
+                        newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 2, 2, 2, false);
+                    }
                     (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
                     break;
                 case ObjectClass.StaticObject:

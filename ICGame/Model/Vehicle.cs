@@ -22,6 +22,7 @@ namespace ICGame
         private readonly int rearWheelsCount;
         private readonly int frontWheelsCount;
         private readonly int doorCount;
+        private readonly bool hasTurret;
         private DoorState leftDoorState;
         private DoorState rightDoorState;
         private WheelState wheelState;
@@ -96,12 +97,13 @@ namespace ICGame
 
         #endregion
 
-        public Vehicle(Model model, float speed, float turnRadius, int rearWheelsCount, int frontWheelsCount, int doorCount)
+        public Vehicle(Model model, float speed, float turnRadius, int rearWheelsCount, int frontWheelsCount, int doorCount, bool hasTurret)
             : base(model, speed, turnRadius)
         {
             this.rearWheelsCount = rearWheelsCount;
             this.frontWheelsCount = frontWheelsCount;
             this.doorCount = doorCount;
+            this.hasTurret = hasTurret;
 
             leftDoorAngle = 0;
             rightDoorAngle = 0;
@@ -152,6 +154,8 @@ namespace ICGame
                 turretAngle += rot;
             }
             AnimationTransforms[Model.Bones["WaterCannonBase"].Index] = Matrix.CreateRotationZ(turretAngle);
+            AnimationTransforms[Model.Bones["WaterPipe0"].Index] = Matrix.CreateRotationZ(turretAngle);
+            AnimationTransforms[Model.Bones["WaterPipe1"].Index] = Matrix.CreateRotationZ(turretAngle);
         }
 
         private void AnimateTurn(GameTime gameTime)
@@ -313,7 +317,7 @@ namespace ICGame
                     for (int i = 0; i < doorCount; i++)
                     {
                         AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
-                            Matrix.CreateRotationY(MathHelper.PiOver2);
+                            Matrix.CreateRotationZ(MathHelper.PiOver2);
                     }
                 }
                 else
@@ -321,7 +325,7 @@ namespace ICGame
                     for (int i = 0; i < doorCount; i++)
                     {
                         AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
-                            Matrix.CreateRotationY(rot)*
+                            Matrix.CreateRotationZ(rot)*
                             AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index];
                     }
                 }
@@ -345,7 +349,7 @@ namespace ICGame
                 for (int i = 0; i < doorCount; i++)
                 {
                     AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index] =
-                        Matrix.CreateRotationY(rot)*
+                        Matrix.CreateRotationZ(rot)*
                         AnimationTransforms[Model.Bones["DoorLeft" + Convert.ToString(i)].Index];
                 }
             }
@@ -362,13 +366,13 @@ namespace ICGame
                     for (int i = 0; i < doorCount; i++)
                     {
                         AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
-                            Matrix.CreateRotationY(MathHelper.PiOver2);
+                            Matrix.CreateRotationZ(MathHelper.PiOver2);
                     }
                 }
                 for (int i = 0; i < doorCount; i++)
                 {
                     AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
-                        Matrix.CreateRotationY(rot)*
+                        Matrix.CreateRotationZ(rot)*
                         AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index];
                 }
             }
@@ -391,7 +395,7 @@ namespace ICGame
                 for (int i = 0; i < doorCount; i++)
                 {
                     AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index] =
-                        Matrix.CreateRotationY(rot)*
+                        Matrix.CreateRotationZ(rot)*
                         AnimationTransforms[Model.Bones["DoorRight" + Convert.ToString(i)].Index];
                 }
             }
@@ -446,7 +450,10 @@ namespace ICGame
             AnimateTurn(gameTime);
             AnimateDriving(gameTime);
             AnimateDoor(gameTime);
-            //AnimateTurret(gameTime);
+            if (hasTurret)
+            {
+                AnimateTurret(gameTime);
+            }
             base.Animate(gameTime, gameObjects);
         }
 

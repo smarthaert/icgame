@@ -96,7 +96,7 @@ namespace ICGame
             }
         }
 
-        public virtual void Draw(Matrix projection, Camera camera, GraphicsDevice gd)
+        public virtual void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, GraphicsDevice gd, Vector4? clipPlane)
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -119,11 +119,21 @@ namespace ICGame
                         effect.CurrentTechnique = effect.Techniques["NotRlyTexturedShaded"];
                     }
 
+                    if(clipPlane == null)
+                    {
+                        effect.Parameters["xClipPlanes"].SetValue(false);
+                    }
+                    else
+                    {
+                        effect.Parameters["xClipPlanes"].SetValue(true);
+                        effect.Parameters["xClipPlane0"].SetValue((Vector4)clipPlane);
+                    }
+
                     effect.Parameters["xEnableLighting"].SetValue(true);
                     Vector3 lightDirection = new Vector3(0.5f, 0, -1.0f);
                     lightDirection.Normalize();
                     effect.Parameters["xLightDirection"].SetValue(lightDirection);
-                    effect.Parameters["xCameraPosition"].SetValue(camera.CameraPosition);
+                    effect.Parameters["xCameraPosition"].SetValue(cameraPosition);
 
                     //Parametry materialu
                       effect.Parameters["xAmbient"].SetValue(GameObject.Ambient[i]);
@@ -142,10 +152,11 @@ namespace ICGame
 
                     //Macierze
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix);
-                    effect.Parameters["xView"].SetValue(camera.CameraMatrix);
+                    effect.Parameters["xView"].SetValue(viewMatrix);
                     effect.Parameters["xProjection"].SetValue(projection);
                    // effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                 }
+
                 gd.RasterizerState = RasterizerState.CullCounterClockwise;
                 model.Draw();
                 gd.RasterizerState = RasterizerState.CullClockwise;

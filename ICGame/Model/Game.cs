@@ -28,6 +28,7 @@ namespace ICGame
         public GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         SpriteBatch spriteBatch; 
         public Effect effect;   //nie patrzeæ
+        public Effect ModelEffect { get; set; } //tu te¿
 
         public Game()
         {
@@ -145,6 +146,7 @@ namespace ICGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = Content.Load<Effect>("Resources/effects");
+            ModelEffect = Content.Load<Effect>("Resources/TexturedShaded");
         }
 
         /// <summary>

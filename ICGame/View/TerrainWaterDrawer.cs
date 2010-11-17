@@ -18,7 +18,7 @@ namespace ICGame
             this.terrainWater = terrainWater;
         }
 
-        private Vector4 CreatePlane(float height, Vector3 planeNormalDirection, bool clipSide)
+        public Vector4 CreatePlane(float height, Vector3 planeNormalDirection, bool clipSide)
         {
             planeNormalDirection.Normalize();
             Vector4 planeCoeffs = new Vector4(planeNormalDirection, height);
@@ -61,20 +61,26 @@ namespace ICGame
             terrainWater.ReflectionViewMatrix = Matrix.CreateLookAt(terrainWater.ReflCameraPosition, reflTargetPos, invUpVector);
         }
 
-        public void DrawReflectionMap(GraphicsDevice device, Effect effect)
+        public void DrawReflectionMap(GraphicsDevice device, Effect effect, List<GameObject> gameObjects)
         {
             UpdateReflectionViewMatrix(terrainWater.Camera);
 
             Vector4 reflectionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), true);
 
             device.SetRenderTarget(terrainWater.ReflectionRenderTarget);
-            device.RasterizerState = RasterizerState.CullClockwise;
+            device.RasterizerState = RasterizerState.CullCounterClockwise;
+            device.DepthStencilState = DepthStencilState.Default;
             device.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
             terrainWater.Board.GetDrawer().Draw(device, effect, terrainWater.ReflectionViewMatrix,
                                                 terrainWater.ProjectionMatrix, terrainWater.ReflCameraPosition, reflectionPlane);
-
+            foreach (GameObject o in gameObjects)
+            {
+                o.GetDrawer().Draw(terrainWater.ProjectionMatrix, terrainWater.ReflectionViewMatrix, terrainWater.ReflCameraPosition, device, reflectionPlane);
+            }
+            //device.DepthStencilState = DepthStencilState.Default;
             device.SetRenderTarget(null);
             terrainWater.ReflectionMap = terrainWater.ReflectionRenderTarget;
+            device.DepthStencilState = DepthStencilState.Default;
             /*using (FileStream fileStream = File.OpenWrite("reflectionmap.jpg"))
             {
                 terrainWater.ReflectionMap.SaveAsJpeg(fileStream, terrainWater.ReflectionMap.Width, terrainWater.ReflectionMap.Height);
@@ -105,10 +111,10 @@ namespace ICGame
             }
         }
 
-        public void Draw(GraphicsDevice device, Effect effect)
+        public void Draw(GraphicsDevice device, Effect effect, List<GameObject> gameObjects)
         {
             DrawRefractionMap(device, effect);
-            DrawReflectionMap(device, effect);
+            DrawReflectionMap(device, effect, gameObjects);
             DrawWater(device, effect);
         }
     }

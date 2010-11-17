@@ -24,7 +24,7 @@ namespace ICGame
             Campaign.Mission = MissionController.Mission;
 
             Campaign.GameObjectFactory.LoadModels(MainGame);
-            Campaign.BuyUnit(GameObjectID.FireTruck);
+            Campaign.BuyUnit(GameObjectID.Chassy);
             Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
             //Campaign.BuyUnit(GameObjectID.AnimFigure);
             //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
