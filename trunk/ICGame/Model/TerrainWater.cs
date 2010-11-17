@@ -18,7 +18,17 @@ namespace ICGame
         public Matrix ReflectionViewMatrix { get; set; }
         public Vector3 ReflCameraPosition { get; set; }
         public Texture2D Waves { get; set; }
-        private GraphicsDevice dev;
+
+        public Vector3 WindDirection { get; set; }
+
+        public float WindForce { get; set; }
+
+        public float Time { get; set; }
+
+        public float WaveLength { get; set; }
+
+        public float WaveHeight { get; set; }
+
         public VertexBuffer WaterVertexBuffer
         {
             get { return waterVertexBuffer; }
@@ -39,11 +49,16 @@ namespace ICGame
 
         public TerrainWater(GraphicsDevice device, Camera camera, Matrix projectionMatrix, Board board)
         {
-            dev = device;
             Board = board;
             Camera = camera;
             ProjectionMatrix = projectionMatrix;
             SetUpWaterVertices(device);
+            WindDirection = new Vector3(-1, 0, -0.2f);
+            WindDirection.Normalize();
+            WindForce = 20.0f;
+            Time = 0;
+            WaveLength = 0.1f;
+            WaveHeight = 0.3f;
 
             RefractionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,
                                                 device.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);

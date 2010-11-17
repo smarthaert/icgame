@@ -44,10 +44,10 @@ namespace ICGame
                 contentManager.Load<Texture2D>("Texture2D/Board/sand"),
                 contentManager.Load<Texture2D>("Texture2D/Board/snow")
                 );
-            //Mission.Board.TerrainWater.LoadTextures(contentManager.Load<Texture2D>("Texutre2D/Board/waterbump"));
             Mission.Board.PrepareSkyDome(MainGame.Content.Load<Model>("Resources/dome"), MainGame.effect, MainGame.GraphicsDevice);
             Mission.Board.LoadHeightData(heightMap);
             Mission.Board.PrepareTerrainWater(MainGame.Display.Camera, MainGame.Display.Projection);
+            Mission.Board.TerrainWater.LoadTextures(contentManager.Load<Texture2D>("Texture2D/Board/waterbump"));
             Mission.LoadObjects(gameObjectFactory, effectController);
         }
         /// <summary>
