@@ -88,6 +88,25 @@ namespace ICGame
             return selected!=null;
         }
 
+        /// <summary>
+        /// Zwracamy kliknięty obiekt 
+        /// </summary>
+        /// <param name="x">mouse x</param>
+        /// <param name="y">mouse y</param>
+        /// <param name="camera"></param>
+        /// <param name="projection"></param>
+        /// <param name="gd"></param>
+        /// <returns>Referencje na obiekt albo null jesli nic nie kliknięto</returns>
+        public GameObject CheckClickedObject(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd )
+        {
+            foreach (GameObject gameObject in GameObjects)
+            {
+                if ((gameObject as IPhysical).CheckClicked(x, y, camera, projection, gd) != null)
+                    return gameObject;
+            }
+            return null;
+        }
+
         public void InitializePathFinder()
         {
             pathFinder = new PathFinder(Board.GetDifficultyMap(), GameObjects);

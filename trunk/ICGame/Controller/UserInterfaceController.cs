@@ -142,7 +142,23 @@ namespace ICGame
                 if (mouseCurState.RightButton == ButtonState.Released && mousePrevState.RightButton == ButtonState.Pressed  && mouseCurState != mousePrevState && (gameTime.TotalGameTime.TotalMilliseconds-lastDraging)>500)
                 {
                     Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
-                    CampaignController.MissionController.Mission.ObjectContainer.MoveToLocation(pos3D.X, pos3D.Z);
+                    //Zakapsulkowac To!
+                    GameObject pointedObject = CampaignController.MissionController.Mission.ObjectContainer.CheckClickedObject(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection, mainGame.GraphicsDevice);
+                    if (pointedObject != null)
+                    {
+                        if (CampaignController.MissionController.GetSeletedObject()!=null && (pointedObject is Building))
+                        {
+                        //    CampaignController.MissionController.Mission.ObjectContainer.MoveToLocation(pointedObject.Position.X, pointedObject.Position.Z);
+                            (CampaignController.MissionController.GetSeletedObject() as Vehicle).PointTurretToGameObject
+                                (pointedObject);
+                            (CampaignController.MissionController.GetSeletedObject() as Vehicle).ActivateSpecialAction();
+
+                        }
+                    }
+                    else
+                    {
+                        CampaignController.MissionController.Mission.ObjectContainer.MoveToLocation(pos3D.X, pos3D.Z);
+                    }
                 }
             }
 

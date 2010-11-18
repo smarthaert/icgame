@@ -48,13 +48,15 @@ namespace ICGame
             {
                 gameEffect = new FireEffect(gameObject, MainGame);
                 AddEffectToAnObject(gameObject,"smoke");
+                gameEffect.IsActive = true;
                
             }
             else
             {
                  gameEffect = new FireSmokeEffect(gameObject, MainGame);
+                 gameEffect.IsActive = true;
             }
-            gameEffect.IsActive = true;
+        
             
             gameObject.EffectList.Add(gameEffect);
             
