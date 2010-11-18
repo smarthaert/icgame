@@ -89,9 +89,6 @@ namespace ICGame
         public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
         {
             bool selected = Mission.ObjectContainer.CheckSelection(x, y, camera, projection, gd);
-
-
-
             return selected;
         }
     }

@@ -129,17 +129,7 @@ namespace ICGame
 
         #region IInteractive Members
 
-        public bool Selected
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public bool Selected { get; set; }
 
         #endregion
 
@@ -189,7 +179,19 @@ namespace ICGame
 
         public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
         {
-            return null;
+            Vector3 near = new Vector3((float)x, (float)y, 0f);
+            Vector3 far = new Vector3((float)x, (float)y, 1f);
+
+            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, ModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, ModelMatrix);
+
+            Vector3 direction = farpt - nearpt;
+
+            direction.Normalize();
+
+            Ray ray = new Ray(nearpt, direction);
+
+            return BoundingBox.Intersects(ray);
         }
 
         #endregion

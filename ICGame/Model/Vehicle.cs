@@ -676,5 +676,32 @@ namespace ICGame
             Vector3 Result = (test * Model.Bones[0].Transform * ModelMatrix).Translation;
             return Result;
         }
+
+        //Temp
+        public void ActivateSpecialAction()
+        {
+            foreach (IObjectEffect objectEffect in EffectList)
+            {
+                if (objectEffect is WaterEffect)
+                {
+                    objectEffect.IsActive = true;
+                }
+            }
+        }
+
+        public void PointTurretToGameObject(GameObject gameObject)
+        {
+            var longitudinalDifference = gameObject.Position.X - Position.X;
+            var latitudinalDifference = gameObject.Position.Z - Position.Z;
+            double result = 0;
+            var azimuth = (Math.PI * .5d) - Math.Atan(latitudinalDifference / longitudinalDifference);
+            if (longitudinalDifference > 0) result = azimuth;
+            else if (longitudinalDifference < 0) result = azimuth + Math.PI;
+            else if (latitudinalDifference < 0)
+                result = Math.PI;
+            else
+                result = 0d;
+            turretDestination = (float)(result);
+        }
     }
 }
