@@ -250,14 +250,14 @@ namespace ICGame
         }
         //\TEMP
 
-        public void PrepareSkyDome( Model skyDome, Effect effect, GraphicsDevice device)
+        public void PrepareSkyDome( Model skyDome, GraphicsDevice device)
         {
           //  CloudMap = cloudMap;
             SkyDomeModel = skyDome;
             //SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
             //CONV
-            SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone();
-            SkyDome = new SkyDome(device,effect);
+            SkyDomeModel.Meshes[0].MeshParts[0].Effect = TechniqueProvider.GetEffect("effects").Clone();
+            SkyDome = new SkyDome(device);
         }
 
         public void PrepareTerrainWater(Camera camera, Matrix projectionMatrix)

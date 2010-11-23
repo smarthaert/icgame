@@ -12,9 +12,7 @@ namespace ICGame
         private GraphicsDeviceManager graphics;
         private GraphicsDevice graphicsDevice;
 
-        private Effect effect;
-
-        public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, CampaignController campaignController, Effect effect)
+        public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, CampaignController campaignController)
         {
             graphics = graphicsDeviceManager;
             graphicsDevice = graphics.GraphicsDevice;
@@ -23,8 +21,6 @@ namespace ICGame
             Camera = camera;
             CampaignController = campaignController;
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 600.0f);
-            
-            this.effect = effect;
         }
 
         public ContentManager Content
@@ -68,8 +64,8 @@ namespace ICGame
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             Camera.CalculateCamera();
-            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, effect, CampaignController.GetObjectsToDraw(), gameTime);
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,effect,Camera.CameraMatrix,Projection,Camera.CameraPosition,null);
+            CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), gameTime);
+            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,Camera.CameraMatrix,Projection,Camera.CameraPosition,null);
 
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {

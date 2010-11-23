@@ -57,7 +57,7 @@ namespace ICGame
                     {
                         //meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
                         //CONV
-                        meshPart.Effect = game.ModelEffect.Clone();
+                        meshPart.Effect = TechniqueProvider.GetEffect("TexturedShaded").Clone();
                     }
                 }
                 loadedModels[pair.Key].model = tempModel;

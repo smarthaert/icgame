@@ -39,7 +39,7 @@ namespace ICGame.ParticleSystem
                 device.BlendState = emmiter.BlendState;
                 device.DepthStencilState = DepthStencilState.DepthRead;
                 
-                effect.Parameters["View"].SetValue(camera.CameraMatrix);
+                effect.Parameters["ViewProjection"].SetValue(camera.CameraMatrix * projection);
                 effect.Parameters["Projection"].SetValue(projection);
 
                 effect.Parameters["ViewportScale"].SetValue(new Vector2(0.5f / device.Viewport.AspectRatio, -0.5f));

@@ -113,9 +113,9 @@ namespace ICGame.ParticleSystem
             indexBuffer.SetData(indices);
         }
 
-        public void LoadParticleEffect(Effect effect, Texture2D texture)
+        public void LoadParticleEffect(Texture2D texture)
         {
-            particleEffect = effect.Clone();
+            particleEffect = TechniqueProvider.GetEffect("ParticleEffect").Clone();
 
             EffectParameterCollection parameters = particleEffect.Parameters;
 

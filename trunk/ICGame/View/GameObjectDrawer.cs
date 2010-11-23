@@ -107,7 +107,9 @@ namespace ICGame
                                                                                         gameTime));
                     temporaryCamera.Reset();
                     effect.Parameters["xView"].SetValue(temporaryCamera.CameraMatrix);
-                    effect.Parameters["xProjection"].SetValue(projection);
+                    effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * 
+                                                                        GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width, gameTime) * 
+                                                                        temporaryCamera.CameraMatrix * projection);
                     // effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                     
                     
@@ -174,7 +176,7 @@ namespace ICGame
                     //Macierze
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix);
                     effect.Parameters["xView"].SetValue(viewMatrix);
-                    effect.Parameters["xProjection"].SetValue(projection);
+                    effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix* viewMatrix * projection);
                    // effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                  
                 }
