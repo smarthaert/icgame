@@ -26,10 +26,7 @@ namespace ICGame
     public class Game : Microsoft.Xna.Framework.Game
     {
         public GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
-        SpriteBatch spriteBatch; 
-        public Effect effect;   //nie patrzeæ
-        public Effect particleEffect; //tu tez
-        public Effect ModelEffect { get; set; } //tu te¿
+        SpriteBatch spriteBatch;
 
         public Game()
         {
@@ -46,12 +43,9 @@ namespace ICGame
             MissionController = new MissionController(this);
             CampaignController = new CampaignController(this, MissionController, EffectController);
             
-
             Camera = new Camera(new Vector3(244, 0, 154),MissionController);
 
             UserInterfaceController = new UserInterfaceController(Camera, CampaignController,UserInterface);
-
-        
         
         }
 
@@ -124,7 +118,7 @@ namespace ICGame
         {
             base.Initialize();
 
-            Display = new Display(GraphicsDeviceManager, UserInterface, Camera, CampaignController, effect);
+            Display = new Display(GraphicsDeviceManager, UserInterface, Camera, CampaignController);
 
             CampaignController.StartCampaign();
             CampaignController.CampaignState = GameState.MainMenu;
@@ -152,9 +146,7 @@ namespace ICGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            effect = Content.Load<Effect>("Resources/effects");
-            particleEffect = Content.Load<Effect>("Resources/ParticleEffect");
-            ModelEffect = Content.Load<Effect>("Resources/TexturedShaded");
+            TechniqueProvider.StartTechniqueProvider(Content);
         }
 
         /// <summary>

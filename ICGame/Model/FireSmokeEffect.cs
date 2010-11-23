@@ -51,7 +51,7 @@ namespace ICGame
             particleEmmiter.Reset();
 
             particleEmmiter.LoadContent(game.GraphicsDevice);
-            particleEmmiter.LoadParticleEffect(game.particleEffect, game.Content.Load<Texture2D>("Texture2D/Particle/smoke"));
+            particleEmmiter.LoadParticleEffect(game.Content.Load<Texture2D>("Texture2D/Particle/smoke"));
 
 
         }
@@ -71,7 +71,7 @@ namespace ICGame
 
         public EffectDrawer GetDrawer()
         {
-            return new FireSmokeEffectDrawer(this, GameObject, game.particleEffect);
+            return new FireSmokeEffectDrawer(this, GameObject, TechniqueProvider.GetEffect("ParticleEffect"));
         }
 
         public void Update(GameTime gameTime)

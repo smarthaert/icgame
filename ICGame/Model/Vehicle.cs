@@ -121,8 +121,8 @@ namespace ICGame
             NextStep = new Vector2(Position.X,Position.Z);
 
             //TEMP
-            leftDoorState = DoorState.Opening;
-            rightDoorState = DoorState.Opening;
+            //leftDoorState = DoorState.Opening;
+            //rightDoorState = DoorState.Opening;
             //wheelState = WheelState.StraightLeft;
             gi = new GameInfo();
 
@@ -317,7 +317,7 @@ namespace ICGame
                 {
                     leftDoorState = DoorState.Open;
                     //TEMP
-                    leftDoorState = DoorState.Closing;
+                    //leftDoorState = DoorState.Closing;
                     //\TEMP
                     for (int i = 0; i < doorCount; i++)
                     {
@@ -343,7 +343,7 @@ namespace ICGame
                 {
                     leftDoorState = DoorState.Closed;
                     //TEMP
-                    leftDoorState = DoorState.Opening;
+                    //leftDoorState = DoorState.Opening;
                     //\TEMP
                     for (int i = 0; i < doorCount; ++i)
                     {
@@ -366,7 +366,7 @@ namespace ICGame
                 {
                     rightDoorState = DoorState.Open;
                     //TEMP
-                    rightDoorState = DoorState.Closing;
+                    //rightDoorState = DoorState.Closing;
                     //\TEMP
                     for (int i = 0; i < doorCount; i++)
                     {
@@ -389,7 +389,7 @@ namespace ICGame
                 {
                     rightDoorState = DoorState.Closed;
                     //TEMP
-                    rightDoorState = DoorState.Opening;
+                    //rightDoorState = DoorState.Opening;
                     //\TEMP
                     for (int i = 0; i < doorCount; i++)
                     {
@@ -701,7 +701,7 @@ namespace ICGame
                 result = Math.PI;
             else
                 result = 0d;
-            turretDestination = (float)(result);
+            turretDestination = (float)(result - Angle.Y);
         }
     }
 }

@@ -28,14 +28,15 @@ namespace ICGame
             return planeCoeffs;
         }
 
-        public void DrawRefractionMap(GraphicsDevice device, Effect effect, List<GameObject> gameObjects)
+        public void DrawRefractionMap(GraphicsDevice device, List<GameObject> gameObjects)
         {
+            Effect effect = TechniqueProvider.GetEffect("effects");
             Vector4 refractionPlane = CreatePlane(terrainWater.WaterHeight + 6.5f, new Vector3(0, -1, 0), false);
             Vector4 vRefractionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), false);
 
             device.SetRenderTarget(terrainWater.RefractionRenderTarget);
             device.Clear(ClearOptions.Target, Color.White, 1.0f, 0);
-            terrainWater.Board.GetDrawer().Draw(device, effect, terrainWater.Camera.CameraMatrix, terrainWater.ProjectionMatrix, 
+            terrainWater.Board.GetDrawer().Draw(device, terrainWater.Camera.CameraMatrix, terrainWater.ProjectionMatrix, 
                                                 terrainWater.Camera.CameraPosition, refractionPlane);
 
             foreach (GameObject o in gameObjects)
@@ -66,8 +67,9 @@ namespace ICGame
             terrainWater.ReflectionViewMatrix = Matrix.CreateLookAt(terrainWater.ReflCameraPosition, reflTargetPos, invUpVector);
         }
 
-        public void DrawReflectionMap(GraphicsDevice device, Effect effect, List<GameObject> gameObjects)
+        public void DrawReflectionMap(GraphicsDevice device, List<GameObject> gameObjects)
         {
+            Effect effect = TechniqueProvider.GetEffect("effects");
             UpdateReflectionViewMatrix(terrainWater.Camera);
 
             Vector4 reflectionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), true);
@@ -76,7 +78,7 @@ namespace ICGame
             device.RasterizerState = RasterizerState.CullCounterClockwise;
             device.DepthStencilState = DepthStencilState.Default;
             device.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
-            terrainWater.Board.GetDrawer().Draw(device, effect, terrainWater.ReflectionViewMatrix,
+            terrainWater.Board.GetDrawer().Draw(device, terrainWater.ReflectionViewMatrix,
                                                 terrainWater.ProjectionMatrix, terrainWater.ReflCameraPosition, reflectionPlane);
             foreach (GameObject o in gameObjects)
             {
@@ -94,15 +96,16 @@ namespace ICGame
         }
 
 
-        public void DrawWater(GraphicsDevice device, Effect effect)
+        public void DrawWater(GraphicsDevice device)
         {
             device.RasterizerState = RasterizerState.CullClockwise;
+            Effect effect = TechniqueProvider.GetEffect("Water");
             effect.CurrentTechnique = effect.Techniques["Water"];
             Matrix worldMatrix = Matrix.Identity;
             effect.Parameters["xWorld"].SetValue(worldMatrix);
-            effect.Parameters["xView"].SetValue(terrainWater.Camera.CameraMatrix);
-            effect.Parameters["xReflectionView"].SetValue(terrainWater.ReflectionViewMatrix);
-            effect.Parameters["xProjection"].SetValue(terrainWater.ProjectionMatrix);
+            effect.Parameters["xWorldViewProjection"].SetValue(worldMatrix * terrainWater.Camera.CameraMatrix * terrainWater.ProjectionMatrix);
+            effect.Parameters["xWorldReflectionViewProjection"].SetValue(worldMatrix * terrainWater.ReflectionViewMatrix * terrainWater.ProjectionMatrix);
+            //effect.Parameters["xProjection"].SetValue(terrainWater.ProjectionMatrix);
             effect.Parameters["xReflectionMap"].SetValue(terrainWater.ReflectionMap);
             effect.Parameters["xRefractionMap"].SetValue(terrainWater.RefractionMap); 
             effect.Parameters["xWaterBumpMap"].SetValue(terrainWater.Waves);
@@ -123,12 +126,12 @@ namespace ICGame
             }
         }
 
-        public void Draw(GraphicsDevice device, Effect effect, List<GameObject> gameObjects, GameTime gameTime)
+        public void Draw(GraphicsDevice device, List<GameObject> gameObjects, GameTime gameTime)
         {
             terrainWater.Time = (float)(gameTime.TotalGameTime.TotalMilliseconds) / 2000000.0f;
-            DrawRefractionMap(device, effect,gameObjects);
-            DrawReflectionMap(device, effect, gameObjects);
-            DrawWater(device, effect);
+            DrawRefractionMap(device, gameObjects);
+            DrawReflectionMap(device, gameObjects);
+            DrawWater(device);
         }
     }
 }

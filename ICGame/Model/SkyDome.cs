@@ -23,10 +23,10 @@ namespace ICGame
             get; set;
         }
 
-        public SkyDome(GraphicsDevice device, Effect effect)
+        public SkyDome(GraphicsDevice device)
         {
             this.device = device;
-            this.effect = effect;
+            effect = TechniqueProvider.GetEffect("SkyDome");
 
             //cloudsRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,  device.PresentationParameters.BackBufferHeight, 1, device.DisplayMode.Format);
             //CONV

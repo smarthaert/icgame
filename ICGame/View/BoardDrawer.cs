@@ -19,7 +19,7 @@ namespace ICGame
             set;
         }
 
-        public void DrawSkyDome(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void DrawSkyDome(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition)
         {
             //graphicsDevice.RenderState.DepthBufferWriteEnable = false;
             //CONV
@@ -52,13 +52,15 @@ namespace ICGame
             //graphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
-        public void Draw(GraphicsDevice graphicsDevice, Effect effect, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane)
+        public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane)
         {
             //if(clipPlane == null)
             //{
             //    Board.TerrainWater.GetDrawer().DrawReflectionMap(graphicsDevice,effect);
             //}
-            DrawSkyDome(graphicsDevice, effect, view, projection, cameraPosition);
+
+            Effect effect = TechniqueProvider.GetEffect("MultiTextured");
+            DrawSkyDome(graphicsDevice, view, projection, cameraPosition);
 
             effect.CurrentTechnique = effect.Techniques["MultiTextured"];
 
@@ -78,11 +80,12 @@ namespace ICGame
             effect.Parameters["xTexture3"].SetValue(Board.Textures["snow"]);
 
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
-            effect.Parameters["xView"].SetValue(view);
-            effect.Parameters["xProjection"].SetValue(projection);
+            effect.Parameters["xWorldViewProjection"].SetValue(view * projection);
             effect.Parameters["xEnableLighting"].SetValue(true);
             effect.Parameters["xAmbient"].SetValue(0.4f);
-            effect.Parameters["xLightDirection"].SetValue(new Vector3(-0.5f, -1, -0.5f));
+            Vector3 v3 = new Vector3(0.5f, 1, 0.5f);
+            v3.Normalize();
+            effect.Parameters["xLightDirection"].SetValue(v3);
             
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
