@@ -31,10 +31,10 @@ namespace ICGame
             particleEmmiter.Duration = TimeSpan.FromSeconds(2);
 
             particleEmmiter.MinHorizontalVelocity = 1;
-            particleEmmiter.MaxHorizontalVelocity = 7;
+            particleEmmiter.MaxHorizontalVelocity = 4;
 
             particleEmmiter.MinVerticalVelocity = 0;
-            particleEmmiter.MaxVerticalVelocity = 10;
+            particleEmmiter.MaxVerticalVelocity = 5;
 
             particleEmmiter.Gravity = new Vector3(0.3f, -10, 0.3f);
 
@@ -50,8 +50,8 @@ namespace ICGame
             particleEmmiter.MaxColor = new Color(255,255,200,0.9f);
             particleEmmiter.BlendState = BlendState.AlphaBlend;
 
-            particleEmmiter.MinEndSize = 5;
-            particleEmmiter.MaxEndSize = 15;
+            particleEmmiter.MinEndSize = 3;
+            particleEmmiter.MaxEndSize = 7;
             
             particleEmmiter.Reset();
             
@@ -76,7 +76,7 @@ namespace ICGame
 
         public EffectDrawer GetDrawer()
         {
-            return new WaterEffectDrawer(this, GameObject, TechniqueProvider.GetEffect("ParticleEffect"));
+            return new WaterEffectDrawer(this, GameObject);
         }
 
         public void Update(GameTime gameTime)

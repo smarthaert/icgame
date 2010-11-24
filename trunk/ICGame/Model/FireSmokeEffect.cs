@@ -28,10 +28,10 @@ namespace ICGame
             particleEmmiter.Duration = TimeSpan.FromSeconds(10);
 
             particleEmmiter.MinHorizontalVelocity = 0;
-            particleEmmiter.MaxHorizontalVelocity = 10;
+            particleEmmiter.MaxHorizontalVelocity = 5;
 
-            particleEmmiter.MinVerticalVelocity = 6;
-            particleEmmiter.MaxVerticalVelocity = 13;
+            particleEmmiter.MinVerticalVelocity = 3;
+            particleEmmiter.MaxVerticalVelocity = 7;
 
             // Create a wind effect by tilting the gravity vector sideways.
             particleEmmiter.Gravity = new Vector3(7, -2, 0);
@@ -41,11 +41,11 @@ namespace ICGame
             particleEmmiter.MinRotateSpeed = -1;
             particleEmmiter.MaxRotateSpeed = 1;
 
-            particleEmmiter.MinStartSize = 4;
-            particleEmmiter.MaxStartSize = 7;
+            particleEmmiter.MinStartSize = 2;
+            particleEmmiter.MaxStartSize = 4;
 
-            particleEmmiter.MinEndSize = 35;
-            particleEmmiter.MaxEndSize = 60;
+            particleEmmiter.MinEndSize = 17;
+            particleEmmiter.MaxEndSize = 30;
 
 
             particleEmmiter.Reset();
@@ -71,7 +71,7 @@ namespace ICGame
 
         public EffectDrawer GetDrawer()
         {
-            return new FireSmokeEffectDrawer(this, GameObject, TechniqueProvider.GetEffect("ParticleEffect"));
+            return new FireSmokeEffectDrawer(this, GameObject);
         }
 
         public void Update(GameTime gameTime)

@@ -47,6 +47,7 @@ namespace ICGame
                 }
             }
             BoundingBox = new BoundingBox(min, max);
+            OOBoundingBox = new OOBoundingBox(BoundingBox, scale);
 
             Length = scale * (BoundingBox.Max.Z - BoundingBox.Min.Z);
             Width = scale * (BoundingBox.Max.Y - BoundingBox.Min.Y);
@@ -85,6 +86,11 @@ namespace ICGame
         {
             get;
             set;
+        }
+
+        public OOBoundingBox OOBoundingBox
+        {
+            get; set;
         }
 
         #endregion

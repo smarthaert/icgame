@@ -124,7 +124,7 @@ namespace ICGame
             //leftDoorState = DoorState.Opening;
             //rightDoorState = DoorState.Opening;
             //wheelState = WheelState.StraightLeft;
-            gi = new GameInfo();
+            //gi = new GameInfo();
 
 
 
@@ -491,8 +491,8 @@ namespace ICGame
             curStep = new Vector2(curStep.X * Convert.ToSingle(Math.Cos(Angle.Y)) - curStep.Y * Convert.ToSingle(Math.Sin(Angle.Y)),
                 curStep.Y * Convert.ToSingle(Math.Cos(Angle.Y)) + curStep.X * Convert.ToSingle(Math.Sin(Angle.Y)));
 
-            gi.ShowInfo("curStep: " + curStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString() + "\r\n" + 
-                Path.ToArray().ToString());
+            //gi.ShowInfo("curStep: " + curStep.ToString() + "\r\nAngle: " + Angle.Y.ToString() + "\r\n WheelState" + WheelState.ToString() + "\r\n" + 
+            //    Path.ToArray().ToString());
 
             if(Math.Abs(curStep.X) <= toleranceX && Math.Abs(curStep.Y) <= toleranceY)
             {

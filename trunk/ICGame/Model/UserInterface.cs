@@ -23,6 +23,7 @@ namespace ICGame
         private int fullscreenSizeX = 1024;
         private int fullscreenSizeY = 768;
         const int THRESHOLD = 5; //Do wykrywania brzegow
+        public SpriteFont spriteFont;
 
         private UserInterfaceDraw userInterfaceDraw;
 
@@ -96,6 +97,7 @@ namespace ICGame
             fullscreenSizeY = mainGame.GraphicsDevice.DisplayMode.Height;
             fullscreenSizeX = mainGame.GraphicsDevice.DisplayMode.Width;
 
+            spriteFont = mainGame.Content.Load<SpriteFont>("Resources/font");
         }
         /// <summary>
         /// Zmienia stan ekranu (fullscren/windowed) i informuje obiekty UI o tej zmianie

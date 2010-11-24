@@ -50,7 +50,7 @@ namespace ICGame
             set;
         }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, string fps)
         {
             //TODO: Refakcoring - update stanu obiektów raczej nie powinien być tutaj
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
@@ -89,7 +89,7 @@ namespace ICGame
                 selectedObject.GetDrawer().DrawSmallModel(Projection, Camera, graphicsDevice,gameTime);
             }
 
-            UserInterface.Drawer.Draw();
+            UserInterface.Drawer.Draw(fps);
         }
     }
 }

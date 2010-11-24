@@ -33,11 +33,11 @@ namespace ICGame
         public void LoadObjects(GameObjectFactory gameObjectFactory,EffectController effectController)
         {
             GameObject obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
-            obj.Position=new Vector3(244.0f,Board.GetHeight(244.0f,164.0f),164.0f);
+            obj.Position=new Vector3(122.0f,Board.GetHeight(122.0f,82.0f),82.0f);
             ObjectContainer.GameObjects.Add(obj);
             effectController.AddEffectToAnObject(obj, "fire"); //tyz bezsens
             obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
-            obj.Position = new Vector3(274.0f, Board.GetHeight(274.0f, 134.0f), 134.0f);
+            obj.Position = new Vector3(137.0f, Board.GetHeight(137.0f, 67.0f), 67.0f);
             ObjectContainer.GameObjects.Add(obj);
 
             ObjectContainer.InitializePathFinder();

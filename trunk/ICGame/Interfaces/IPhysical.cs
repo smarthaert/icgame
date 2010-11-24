@@ -12,6 +12,11 @@ namespace ICGame
             get;
         }
 
+        OOBoundingBox OOBoundingBox
+        {
+            get; set;
+        }
+
         float Width
         {
             get;

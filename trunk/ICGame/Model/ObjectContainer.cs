@@ -57,7 +57,7 @@ namespace ICGame
             GameObjects=new List<GameObject>();
             SelectedObject = -1;
             //TEMP
-            gi = new GameInfo();
+            //gi = new GameInfo();
             //\TEMP
         }
         public List<GameObject> GameObjects
@@ -190,7 +190,7 @@ namespace ICGame
             }
             //TEMP
             logText += "Selected:\t" + SelectedObject.ToString() + "\r\n";
-            gi.ShowInfo(logText);
+            //gi.ShowInfo(logText);
             //\TEMP
 
             UpdateEffects(gameTime);
