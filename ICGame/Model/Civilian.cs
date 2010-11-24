@@ -27,6 +27,11 @@ namespace ICGame
             }
         }
 
+        public OOBoundingBox OOBoundingBox
+        {
+            get; set;
+        }
+
         #endregion
 
         #region IDestructible Members

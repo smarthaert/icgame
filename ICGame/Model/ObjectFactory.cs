@@ -99,11 +99,11 @@ namespace ICGame
                 case ObjectClass.Vehicle:
                     if(gameObjectID == GameObjectID.FireTruck)
                     {
-                        newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 4, 2, 1, true);
+                        newObject = new Vehicle(loadedModel.model, 0.005f, 7.5f, 4, 2, 1, true);
                     }
                     else if(gameObjectID == GameObjectID.Chassy)
                     {
-                        newObject = new Vehicle(loadedModel.model, 0.01f, 15.0f, 2, 2, 2, false);
+                        newObject = new Vehicle(loadedModel.model, 0.005f, 7.5f, 2, 2, 2, false);
                     }
                     if (loadedModel.name == "firetruck_2")
                         EffectController.AddEffectToAnObject(newObject,"water"); //tak, bezsens...
@@ -112,7 +112,7 @@ namespace ICGame
                     (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
                     //Hotffix
                     if(gameObjectID == GameObjectID.Chassy)
-                        newObject.Position = new Vector3(200, 0, 160);
+                        newObject.Position = new Vector3(100, 0, 80);
 
                     break;
                 case ObjectClass.StaticObject:

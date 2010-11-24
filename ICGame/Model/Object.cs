@@ -14,7 +14,7 @@ namespace ICGame
     
     public abstract class GameObject : IDrawable
     {
-        protected const float scale = 0.01f;
+        protected const float scale = 0.005f;
 
         private Vector3 position;
         private Model _model;
@@ -40,7 +40,7 @@ namespace ICGame
             EffectList = new List<IObjectEffect>();
           
 
-            position = new Vector3(210, 0, 160);
+            position = new Vector3(105, 0, 80);
             
         }
         public virtual GameObjectDrawer GetDrawer()
@@ -78,7 +78,7 @@ namespace ICGame
         public Matrix GetSmallModelMatrix(Vector3 newPosition, int screenWidth, GameTime gameTime)
         {
             Matrix result = Matrix.Identity;
-            result *= Matrix.CreateScale(scale / (screenWidth / 8), scale / (screenWidth / 8), scale / (screenWidth / 8)) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
+            result *= Matrix.CreateScale(scale / (screenWidth / 16), scale / (screenWidth / 16), scale / (screenWidth / 16)) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
 
             rot += gameTime.ElapsedGameTime.Milliseconds*0.0001f;
             result *=Matrix.CreateRotationY(rot);

@@ -10,14 +10,14 @@ namespace ICGame
 {
     public class FireEffectDrawer : EffectDrawer
     {
-        private Effect effect;
+        //private Effect effect;
 
-        public FireEffectDrawer(IObjectEffect objectEffect, GameObject gameObject, Effect effect)
+        public FireEffectDrawer(IObjectEffect objectEffect, GameObject gameObject)
             : base(objectEffect, gameObject)
         {
             this.gameObject = gameObject;
             this.objectEffect = objectEffect;
-            this.effect = effect;
+            //this.effect = effect;
         }
 
         public override void Draw(Matrix projection, Camera camera,

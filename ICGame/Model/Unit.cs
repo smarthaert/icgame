@@ -63,7 +63,7 @@ namespace ICGame
             //BoundingBox = new BoundingBox(GetMinVertex(),GetMaxVertex());
 
             BoundingBoxTools.CalculateBoundingBox(Model, out boundingBox);
-
+            OOBoundingBox = new OOBoundingBox(boundingBox, scale);
             Length = scale*(boundingBox.Max.Z - boundingBox.Min.Z);
             Width = scale*(boundingBox.Max.Y - boundingBox.Min.Y);
             Height = scale*(boundingBox.Max.X - boundingBox.Min.X);
@@ -82,6 +82,11 @@ namespace ICGame
             {
                 boundingBox = value;
             }
+        }
+
+        public OOBoundingBox OOBoundingBox
+        {
+            get; set;
         }
 
         #endregion
@@ -365,6 +370,15 @@ namespace ICGame
             return !thisBB.Intersects(checkBB);
         }
 
+        /*public bool CheckMove(IPhysical physical)
+        {
+            GameObject go = physical as GameObject;
+            physical.OOBoundingBox.Position = go.Position;
+            physical.OOBoundingBox.Rotation = go.Angle;
+
+            return OOBoundingBox.Intersects(physical.OOBoundingBox);
+        }*/
+
         public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
         {
             float spd = 0;
@@ -413,16 +427,20 @@ namespace ICGame
                         Length,
                         Width);
             BoundingBox thisBB = BoundingBoxTools.TransformBoundingBox(BoundingBox, ModelMatrix);
-            
+            //OOBoundingBox.Position = Position;
+            //OOBoundingBox.Rotation = Angle;
             foreach (GameObject gameObject in gameObjects)
             {
                 if(gameObject is IPhysical && gameObject != this)
                 {
                     IPhysical physical = gameObject as IPhysical;
                     if(!CheckMove(physical, thisBB, gameTime))
+                    //if(!CheckMove(physical))
                     {
                         Position = oldpos;
                         Angle = oldangle;
+                        //OOBoundingBox.Position = Position;
+                        //OOBoundingBox.Rotation = Angle;
                         Path.Insert(0,new Point(Convert.ToInt32(NextStep.X),Convert.ToInt32(NextStep.Y)));
 
                         NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
@@ -432,6 +450,8 @@ namespace ICGame
             }
             Position = oldpos;
             Angle = oldangle;
+            //OOBoundingBox.Position = Position;
+            //OOBoundingBox.Rotation = Angle;
             return true;
         }
 

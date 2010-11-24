@@ -10,14 +10,11 @@ namespace ICGame
 {
     public class WaterEffectDrawer : EffectDrawer
     {
-        private Effect effect;
-
-        public WaterEffectDrawer(IObjectEffect objectEffect, GameObject gameObject, Effect effect)
+        public WaterEffectDrawer(IObjectEffect objectEffect, GameObject gameObject)
           : base(objectEffect,gameObject)
         {
             this.gameObject = gameObject;
             this.objectEffect = objectEffect;
-            this.effect = effect;
         }
 
         public override void Draw(Matrix projection, Camera camera,

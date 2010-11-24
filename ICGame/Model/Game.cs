@@ -27,6 +27,9 @@ namespace ICGame
     {
         public GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         SpriteBatch spriteBatch;
+        private int frameCounter;
+        private int frameTime, fps;
+        private GameInfo gi = new GameInfo();
 
         public Game()
         {
@@ -165,7 +168,7 @@ namespace ICGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
+            
          
             UserInterfaceController.UpdateUserInterfaceState(gameTime);
             MissionController.UpdateMission(gameTime);
@@ -196,8 +199,16 @@ namespace ICGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-           
-           Display.Draw(gameTime);
+            frameCounter++;
+            frameTime += gameTime.ElapsedGameTime.Milliseconds;
+            if (frameTime >= 1000)
+            {
+                fps = frameCounter;
+                frameTime -= 1000;
+                frameCounter = 0;
+            }
+
+            Display.Draw(gameTime, "FPS: " + fps.ToString());
            base.Draw(gameTime);
         }
     }

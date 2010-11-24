@@ -23,7 +23,7 @@ namespace ICGame
             IsActive = false;
             this.game = game;
 
-            particleEmmiter.MaxParticles = 18000;
+            particleEmmiter.MaxParticles = 10000;
 
             particleEmmiter.Duration = TimeSpan.FromSeconds(3);
 
@@ -41,11 +41,11 @@ namespace ICGame
             particleEmmiter.MinColor = new Color(255, 255, 255, 10);
             particleEmmiter.MaxColor = new Color(255, 255, 255, 40);
 
-            particleEmmiter.MinStartSize = 10;
-            particleEmmiter.MaxStartSize = 15;
+            particleEmmiter.MinStartSize = 5;
+            particleEmmiter.MaxStartSize = 8;
 
-            particleEmmiter.MinEndSize = 30;
-            particleEmmiter.MaxEndSize = 60;
+            particleEmmiter.MinEndSize = 15;
+            particleEmmiter.MaxEndSize = 30;
 
             // Use additive blending.
             particleEmmiter.BlendState = BlendState.Additive;
@@ -74,7 +74,7 @@ namespace ICGame
 
         public EffectDrawer GetDrawer()
         {
-            return new FireEffectDrawer(this, GameObject, TechniqueProvider.GetEffect("ParticleEffect"));
+            return new FireEffectDrawer(this, GameObject);
         }
 
         public void Update(GameTime gameTime)
