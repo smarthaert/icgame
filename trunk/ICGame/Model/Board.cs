@@ -86,6 +86,8 @@ namespace ICGame
             get { return indices; }
         }
 
+        public Vector3 LightDirection { get; set; }
+
         public void CreateTerrain()
         {
             VertexMultitextured[] terrainVertices = new VertexMultitextured[terrainWidth * terrainHeight];
@@ -117,9 +119,39 @@ namespace ICGame
                                                             new Color(0, 0, (byte)(heightMap[i, j]*10+20),255),));*/
                 }
             }
-            vertexPositionColor = terrainVertices;
             SetUpIndices();
+            CalculateNormals(ref terrainVertices);
+            vertexPositionColor = terrainVertices;
             PrepareBuffers();
+
+            //LightDirection = new Vector3(0.5f, -0.7f, -1.0f);
+            LightDirection = new Vector3(1.0f, -1.0f, -1.0f);
+            LightDirection.Normalize();
+        }
+
+        private void CalculateNormals(ref VertexMultitextured[] terrainVertices)
+        {
+            for (int i = 0; i < terrainVertices.Length; i++)
+                terrainVertices[i].Normal = new Vector3(0, 0, 0);
+
+            for (int i = 0; i < indices.Length / 3; i++)
+            {
+                int index1 = indices[i * 3];
+                int index2 = indices[i * 3 + 1];
+                int index3 = indices[i * 3 + 2];
+
+                Vector3 side1 = terrainVertices[index1].Position - terrainVertices[index3].Position;
+                Vector3 side2 = terrainVertices[index1].Position - terrainVertices[index2].Position;
+                Vector3 normal = Vector3.Cross(side1, side2);
+
+                terrainVertices[index1].Normal += normal;
+                terrainVertices[index2].Normal += normal;
+                terrainVertices[index3].Normal += normal;
+            }
+
+            for (int i = 0; i < terrainVertices.Length; i++)
+                terrainVertices[i].Normal.Normalize();
+
         }
 
         private void SetUpIndices()

@@ -63,6 +63,7 @@ namespace ICGame
             // TODO: Add your drawing code here // O RLY!? :D
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+            graphicsDevice.BlendState = BlendState.AlphaBlend;
             Camera.CalculateCamera();
             CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), gameTime);
             CampaignController.GetBackgroundDrawer().Draw(graphicsDevice,Camera.CameraMatrix,Projection,Camera.CameraPosition,null);
@@ -74,6 +75,8 @@ namespace ICGame
                 
             }
 
+            graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            graphicsDevice.RasterizerState = RasterizerState.CullNone;
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
                 foreach (IObjectEffect objectEffect in gameObject.GetEffectsToDraw())
@@ -81,6 +84,8 @@ namespace ICGame
                     objectEffect.GetDrawer().Draw(Projection, Camera, graphicsDevice, gameTime);
                 }
             }
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+
 
             //TODO: Rysowanie malego modelu powinno obslugiwac zaznaczenie wielu jednostek i ogolnie powinno wyleciec do jakiegos kontrolera jednostek (niestniejacego)
             GameObject selectedObject = CampaignController.MissionController.GetSeletedObject();
@@ -89,7 +94,9 @@ namespace ICGame
                 selectedObject.GetDrawer().DrawSmallModel(Projection, Camera, graphicsDevice,gameTime);
             }
 
+#if !DEBUG
             UserInterface.Drawer.Draw(fps);
+#endif
         }
     }
 }

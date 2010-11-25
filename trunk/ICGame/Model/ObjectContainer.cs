@@ -130,7 +130,7 @@ namespace ICGame
         public void UpdateGameObjects(GameTime gameTime)
         {
             //TEMP
-            string logText = "";
+            //string logText = "";
             //\TEMP
             for (int i=0;i<GameObjects.Count;i++)
             {
@@ -144,7 +144,7 @@ namespace ICGame
                     float cosw = Convert.ToSingle(Math.Cos(GameObjects[i].Angle.Y) * go.Width / 2);
 
                     //TEMP
-                    logText += sinl.ToString() + "\r\n" + cosl.ToString() + "\r\n" + sinw.ToString() + "\r\n" + cosw.ToString() + "\r\n";
+                    //logText += sinl.ToString() + "\r\n" + cosl.ToString() + "\r\n" + sinw.ToString() + "\r\n" + cosw.ToString() + "\r\n";
                     //\TEMP
 
                     GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,
@@ -178,18 +178,18 @@ namespace ICGame
                         GameObjects[i].Position.Z);
                 }
                 //TEMP
-                logText += Convert.ToString(i) + ":\r\n";
-                logText += "Position:\t" + GameObjects[i].Position.ToString() + "\r\n";
-                logText += "Rotation:\t" + GameObjects[i].Angle.ToString() + "\r\n";
+                //logText += Convert.ToString(i) + ":\r\n";
+                //logText += "Position:\t" + GameObjects[i].Position.ToString() + "\r\n";
+                //logText += "Rotation:\t" + GameObjects[i].Angle.ToString() + "\r\n";
                 if (GameObjects[i] is IPhysical)
                 {
                     IPhysical ip = GameObjects[i] as IPhysical;
-                    logText += "BoundingBox:\t" + ip.BoundingBox.ToString() + "\r\n";
+                    //logText += "BoundingBox:\t" + ip.BoundingBox.ToString() + "\r\n";
                 }
                 //\TEMP
             }
             //TEMP
-            logText += "Selected:\t" + SelectedObject.ToString() + "\r\n";
+            //logText += "Selected:\t" + SelectedObject.ToString() + "\r\n";
             //gi.ShowInfo(logText);
             //\TEMP
 

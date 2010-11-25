@@ -7,6 +7,9 @@ struct MTVertexToPixel
     float4 LightDirection    : TEXCOORD2;
     float4 TextureWeights    : TEXCOORD3;
     float4 clipPlanes		: TEXCOORD4;
+    float calcRS        : TEXCOORD5;
+	
+    //float LightingFactor: TEXCOORD6;
 };
 
 struct MTPixelToFrame
@@ -17,7 +20,9 @@ struct MTPixelToFrame
 //------- XNA-to-HLSL variables --------
 float4x4 xWorldViewProjection;
 float4x4 xWorld;
+float4x4 xView;
 float3 xLightDirection;
+float3 xCameraPosition;
 bool xEnableLighting;
 float xAmbient;
 float4 xClipPlane0;
@@ -60,10 +65,11 @@ MTVertexToPixel MultiTexturedVS( float4 inPos : POSITION, float3 inNormal: NORMA
 		Output.clipPlanes.z = 0; 
 		Output.clipPlanes.w = 0; 
 	}
+
     Output.Position = mul(inPos, xWorldViewProjection);
     Output.Normal = mul(normalize(inNormal), xWorld);
     Output.TextureCoords = inTexCoords;
-    Output.LightDirection.xyz = -xLightDirection;
+    Output.LightDirection.xyz = xLightDirection;
     Output.LightDirection.w = 1;    
     Output.TextureWeights = inTexWeights;
     
@@ -85,8 +91,8 @@ MTPixelToFrame MultiTexturedPS(MTVertexToPixel PSIn)
     Output.Color += tex2D(TextureSampler1, PSIn.TextureCoords)*PSIn.TextureWeights.y;
     Output.Color += tex2D(TextureSampler2, PSIn.TextureCoords)*PSIn.TextureWeights.z;
     Output.Color += tex2D(TextureSampler3, PSIn.TextureCoords)*PSIn.TextureWeights.w;    
-        
-    //Output.Color.xyz *= lightingFactor;
+      
+	Output.Color.xyz *= lightingFactor;
     
     return Output;
 }

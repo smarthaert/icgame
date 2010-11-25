@@ -60,11 +60,7 @@ namespace ICGame
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)
             {
-
-                //if (model.Name == "Window0" || model.Name == "DoorLeft" || model.Name == "DoorRight" || model.Name == "AlertBarBlue")
-                //{
-                //    gd.RenderState.DepthBufferWriteEnable = false;
-                //}
+                int j = i;  //do przywracania poprzednich technik
                 foreach (Effect effect in model.Effects)
                 {
                     if (GameObject.Textures[i] != null)      //inaczej się kurwa nie dało
@@ -110,20 +106,30 @@ namespace ICGame
                     effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * 
                                                                         GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width, gameTime) * 
                                                                         temporaryCamera.CameraMatrix * projection);
-                    // effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
                     
-                    
-
                 }
                 model.Draw();
+                foreach (Effect effect in model.Effects)
+                {
+                    if(GameObject.Textures[j++] != null)      //inaczej się kurwa nie dało
+                    {
+                        effect.CurrentTechnique = effect.Techniques["TexturedShaded"];
+                    }
+                    else
+                    {
+                        effect.CurrentTechnique = effect.Techniques["NotRlyTexturedShaded"];
+                    }
+                }
             }
         }
 
         public virtual void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, GraphicsDevice gd, Vector4? clipPlane)
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
+            Matrix modelMatrix = GameObject.ModelMatrix;
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
             int i = 0;
+            gd.RasterizerState = RasterizerState.CullCounterClockwise;
             foreach (var model in GameObject.Model.Meshes)
             {
                 
@@ -133,15 +139,6 @@ namespace ICGame
                 //}
                 foreach (Effect effect in model.Effects)
                 {
-                    if(GameObject.Textures[i] != null)      //inaczej się kurwa nie dało
-                    {
-                        effect.CurrentTechnique = effect.Techniques["TexturedShaded"];
-                    }
-                    else
-                    {
-                        effect.CurrentTechnique = effect.Techniques["NotRlyTexturedShaded"];
-                    }
-
                     if(clipPlane == null)
                     {
                         effect.Parameters["xClipPlanes"].SetValue(false);
@@ -153,43 +150,20 @@ namespace ICGame
                     }
 
                     effect.Parameters["xEnableLighting"].SetValue(true);
-                    Vector3 lightDirection = new Vector3(0.5f, 0, -1.0f);
-                    lightDirection.Normalize();
-                    effect.Parameters["xLightDirection"].SetValue(lightDirection);
+                    effect.Parameters["xLightDirection"].SetValue(GameObject.Mission.Board.LightDirection);
                     effect.Parameters["xCameraPosition"].SetValue(cameraPosition);
 
-                    //Parametry materialu
-                      effect.Parameters["xAmbient"].SetValue(GameObject.Ambient[i]);
-                      effect.Parameters["xDiffuseColor"].SetValue(GameObject.DiffuseColor[i]);
-                      effect.Parameters["xDiffuseFactor"].SetValue(GameObject.DiffuseFactor[i]);
-                      
-                      effect.Parameters["xTransparency"].SetValue(GameObject.Transparency[i]);
-                      effect.Parameters["xSpecularColor"].SetValue(GameObject.Specular[i]);
-                      effect.Parameters["xSpecularFactor"].SetValue(GameObject.SpecularFactor[i]);
-
-                   // Vector3 b = effect.Parameters["xDiffuseColor"].GetValueVector3();
-                    effect.Parameters["xHasTexture"].SetValue(GameObject.Textures[i]!=null?true:false);
-                    effect.Parameters["xTexture"].SetValue(GameObject.Textures[i++]);
-                    
-
-
                     //Macierze
-                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix);
+                    effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * modelMatrix);
                     effect.Parameters["xView"].SetValue(viewMatrix);
-                    effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * GameObject.ModelMatrix* viewMatrix * projection);
-                   // effect.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+                    effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * modelMatrix* viewMatrix * projection);
                  
                 }
 
-                gd.RasterizerState = RasterizerState.CullCounterClockwise;
                 model.Draw();
-                gd.RasterizerState = RasterizerState.CullClockwise;
-                //if (model.Name == "Window0" || model.Name == "DoorLeft" || model.Name == "DoorRight" || model.Name == "AlertBarBlue")
-                //{
-                //    gd.RenderState.DepthBufferWriteEnable = true;
-                //}
 
             }
+            gd.RasterizerState = RasterizerState.CullClockwise;
         }
     }
 }

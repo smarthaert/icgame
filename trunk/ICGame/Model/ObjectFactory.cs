@@ -129,8 +129,45 @@ namespace ICGame
             if (newObject != null)
             {
                 newObject.Textures = loadedModel.textures;
+
+                int i = 0;
+                foreach (var model in newObject.Model.Meshes)
+                {
+                    foreach (Effect effect in model.Effects)
+                    {
+                        if (newObject.Textures[i++] != null)      //inaczej się kurwa nie dało
+                        {
+                            effect.CurrentTechnique = effect.Techniques["TexturedShaded"];
+                        }
+                        else
+                        {
+                            effect.CurrentTechnique = effect.Techniques["NotRlyTexturedShaded"];
+                        }
+                    }
+                }
+
                 MaterialReader materialReader = new MaterialReader(newObject, loadedModel.name);
                 materialReader.PopulateObject();
+
+                i = 0;
+                foreach (var model in newObject.Model.Meshes)
+                {
+                    foreach (Effect effect in model.Effects)
+                    {
+                        //Parametry materialu
+                        effect.Parameters["xAmbient"].SetValue(newObject.Ambient[i]);
+                        effect.Parameters["xDiffuseColor"].SetValue(newObject.DiffuseColor[i]);
+                        effect.Parameters["xDiffuseFactor"].SetValue(newObject.DiffuseFactor[i]);
+
+                        effect.Parameters["xTransparency"].SetValue(newObject.Transparency[i]);
+                        effect.Parameters["xSpecularColor"].SetValue(newObject.Specular[i]);
+                        effect.Parameters["xSpecularFactor"].SetValue(newObject.SpecularFactor[i]);
+
+                        effect.Parameters["xHasTexture"].SetValue(newObject.Textures[i] != null ? true : false);
+                        effect.Parameters["xTexture"].SetValue(newObject.Textures[i++]);
+                    }
+                }
+
                 return newObject;
             }
             else

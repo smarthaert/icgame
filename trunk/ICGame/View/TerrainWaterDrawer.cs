@@ -97,14 +97,12 @@ namespace ICGame
 
         public void DrawWater(GraphicsDevice device)
         {
-            device.RasterizerState = RasterizerState.CullClockwise;
             Effect effect = TechniqueProvider.GetEffect("Water");
             effect.CurrentTechnique = effect.Techniques["Water"];
             Matrix worldMatrix = Matrix.Identity;
             effect.Parameters["xWorld"].SetValue(worldMatrix);
             effect.Parameters["xWorldViewProjection"].SetValue(worldMatrix * terrainWater.Camera.CameraMatrix * terrainWater.ProjectionMatrix);
             effect.Parameters["xWorldReflectionViewProjection"].SetValue(worldMatrix * terrainWater.ReflectionViewMatrix * terrainWater.ProjectionMatrix);
-            //effect.Parameters["xProjection"].SetValue(terrainWater.ProjectionMatrix);
             effect.Parameters["xReflectionMap"].SetValue(terrainWater.ReflectionMap);
             effect.Parameters["xRefractionMap"].SetValue(terrainWater.RefractionMap); 
             effect.Parameters["xWaterBumpMap"].SetValue(terrainWater.Waves);
@@ -114,6 +112,7 @@ namespace ICGame
             effect.Parameters["xTime"].SetValue(terrainWater.Time);
             effect.Parameters["xWindForce"].SetValue(terrainWater.WindForce);
             effect.Parameters["xWindDirection"].SetValue(terrainWater.WindDirection);
+            effect.Parameters["xLightDirection"].SetValue(terrainWater.Board.LightDirection);
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
