@@ -58,6 +58,7 @@ namespace ICGame
         public void SendToMission(Unit unit)
         {
             unit.Mission = Mission;
+            unit.SelectionRing.Mission = Mission;
             Mission.ObjectContainer.GameObjects.Add(unit);
         }
     }

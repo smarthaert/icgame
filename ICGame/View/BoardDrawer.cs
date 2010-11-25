@@ -25,7 +25,6 @@ namespace ICGame
             //CONV
             //graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
-            graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Matrix[] modelTransforms = new Matrix[Board.SkyDomeModel.Bones.Count];
             Board.SkyDomeModel.CopyAbsoluteBoneTransformsTo(modelTransforms);
             Vector3 modifiedCameraPosition = cameraPosition;
@@ -54,13 +53,10 @@ namespace ICGame
 
         public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane)
         {
-            //if(clipPlane == null)
-            //{
-            //    Board.TerrainWater.GetDrawer().DrawReflectionMap(graphicsDevice,effect);
-            //}
-
             Effect effect = TechniqueProvider.GetEffect("MultiTextured");
+            graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             DrawSkyDome(graphicsDevice, view, projection, cameraPosition);
+            graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             effect.CurrentTechnique = effect.Techniques["MultiTextured"];
 
@@ -80,14 +76,13 @@ namespace ICGame
             effect.Parameters["xTexture3"].SetValue(Board.Textures["snow"]);
 
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
+            effect.Parameters["xView"].SetValue(view);
             effect.Parameters["xWorldViewProjection"].SetValue(view * projection);
             effect.Parameters["xEnableLighting"].SetValue(true);
             effect.Parameters["xAmbient"].SetValue(0.4f);
-            Vector3 v3 = new Vector3(0.5f, 1, 0.5f);
-            v3.Normalize();
-            effect.Parameters["xLightDirection"].SetValue(v3);
+            effect.Parameters["xLightDirection"].SetValue(Board.LightDirection);
+            effect.Parameters["xCameraPosition"].SetValue(cameraPosition);
             
-            graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -100,12 +95,6 @@ namespace ICGame
                 graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, noVertices, 0, noTriangles);
                 
             }
-            graphicsDevice.RasterizerState = RasterizerState.CullNone;
-
-            //if(clipPlane == null)
-            //{
-            //    Board.TerrainWater.GetDrawer().DrawWater(graphicsDevice, effect);
-            //}
         }
     }
 }

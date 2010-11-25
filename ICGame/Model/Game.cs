@@ -34,7 +34,10 @@ namespace ICGame
         public Game()
         {
             GraphicsDeviceManager = new GraphicsDeviceManager(this);
-            
+            //GraphicsDeviceManager = new PerfHUDDeviceManager(this);
+            GraphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
+            GraphicsDeviceManager.ApplyChanges();
+            //GraphicsDeviceManager.IsFullScreen = true;
             Content.RootDirectory = "Content";
 
           //  Campaign = new Campaign(EffectController);
@@ -50,7 +53,25 @@ namespace ICGame
 
             UserInterfaceController = new UserInterfaceController(Camera, CampaignController,UserInterface);
         
+# if DEBUG
+            GraphicsDeviceManager.PreparingDeviceSettings += new System.EventHandler<PreparingDeviceSettingsEventArgs>(OnPreparingDeviceSettings);
+#endif
         }
+
+#if DEBUG
+        void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            foreach (GraphicsAdapter adapter in GraphicsAdapter.Adapters)
+            {
+                if (adapter.Description.Contains("PerfHUD"))
+                {
+                    e.GraphicsDeviceInformation.Adapter = adapter;
+                    GraphicsAdapter.UseReferenceDevice = true;  //  this is the modified line from usage in previous xna version
+                    break;
+                }
+            }
+        }
+#endif
 
         #region Subclasses
 

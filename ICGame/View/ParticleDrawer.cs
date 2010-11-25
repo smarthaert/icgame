@@ -21,7 +21,6 @@ namespace ICGame.ParticleSystem
         public void Draw(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime)
         {
             GraphicsDevice device = gd;
-            device.RasterizerState = RasterizerState.CullNone;
 
             if (emmiter.vertexBuffer.IsContentLost)
             {
@@ -37,7 +36,6 @@ namespace ICGame.ParticleSystem
             if (emmiter.firstActiveParticle != emmiter.firstFreeParticle)
             {
                 device.BlendState = emmiter.BlendState;
-                device.DepthStencilState = DepthStencilState.DepthRead;
                 
                 effect.Parameters["ViewProjection"].SetValue(camera.CameraMatrix * projection);
                 effect.Parameters["Projection"].SetValue(projection);
@@ -76,7 +74,6 @@ namespace ICGame.ParticleSystem
                     }
                 }
 
-                device.DepthStencilState = DepthStencilState.Default;
             }
 
             emmiter.drawCounter++;

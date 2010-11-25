@@ -179,7 +179,7 @@ PixelToFrame TexturedShadedPS(VertexToPixel PSIn)
 	Output.Color.rgb*=PSIn.Color;
 		
 	Output.Color +=float4(PSIn.calcRS*xSpecularColor,0);
-	Output.Color.rgb *= saturate(PSIn.LightingFactor);
+	Output.Color.rgb *= 0.7f * saturate(PSIn.LightingFactor);
 
 	Output.Color.a=xTransparency;
 
