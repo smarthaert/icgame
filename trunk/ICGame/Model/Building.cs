@@ -53,8 +53,19 @@ namespace ICGame
             Width = scale * (BoundingBox.Max.Y - BoundingBox.Min.Y);
             Height = scale * (BoundingBox.Max.X - BoundingBox.Min.X);
             PhysicalTransforms = Matrix.Identity;
+            PositionChanged += OnPositionChanged;
+            AngleChanged += OnAngleChanged;
         }
 
+        void OnPositionChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Position = e.Vector;
+        }
+
+        void OnAngleChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Rotation = e.Vector;
+        }
         public Vector3 GetRandomPoint(Random random)
         {
             float x = (float)random.NextDouble() * Height / 2;
@@ -87,6 +98,7 @@ namespace ICGame
             get;
             set;
         }
+
 
         public OOBoundingBox OOBoundingBox
         {

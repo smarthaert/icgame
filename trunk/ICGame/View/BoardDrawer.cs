@@ -21,17 +21,11 @@ namespace ICGame
 
         public void DrawSkyDome(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition)
         {
-            //graphicsDevice.RenderState.DepthBufferWriteEnable = false;
-            //CONV
-            //graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
-
             Matrix[] modelTransforms = new Matrix[Board.SkyDomeModel.Bones.Count];
             Board.SkyDomeModel.CopyAbsoluteBoneTransformsTo(modelTransforms);
             Vector3 modifiedCameraPosition = cameraPosition;
             modifiedCameraPosition.Y = -45.0f;
-
-            //  Matrix wMatrix = Matrix.CreateTranslation(0, -0.3f, 0) * Matrix.CreateScale(100) * Matrix.CreateTranslation();
-
+            
             foreach (ModelMesh mesh in Board.SkyDomeModel.Meshes)
             {
                 foreach (Effect currentEffect in mesh.Effects)
@@ -46,11 +40,17 @@ namespace ICGame
                 }
                 mesh.Draw();
             }
-            //graphicsDevice.RenderState.DepthBufferWriteEnable = true;
-            //CONV
-            //graphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
+        /// <summary>
+        /// Rysuje plansze.
+        /// </summary>
+        /// <param name="graphicsDevice">GraphicsDevice</param>
+        /// <param name="view">Macierz widoku/kamery</param>
+        /// <param name="projection">Macierz przyciecia</param>
+        /// <param name="cameraPosition">Pozycja kamery</param>
+        /// <param name="clipPlane">Plan, wzdluz ktorego nastepuje przyciecie. Jezeli clipPlane == null, przyciecie nie nastepuje.
+        ///                         Jezeli clipPlane != null nastepuje rowniez zmniejszenie w kazdym wymiarze liczby wierzcholkow o Board.ReduceFactor</param>
         public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane)
         {
             Effect effect = TechniqueProvider.GetEffect("MultiTextured");
@@ -86,12 +86,24 @@ namespace ICGame
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
+                int noVertices;
+                int noTriangles;
 
                 graphicsDevice.SetVertexBuffer(Board.TerrainVertexBuffer);
-                graphicsDevice.Indices = Board.TerrainIndexBuffer;
+                if (clipPlane == null)
+                {
+                    graphicsDevice.Indices = Board.TerrainIndexBuffer;
 
-                int noVertices = Board.TerrainVertexBuffer.VertexCount;
-                int noTriangles = Board.TerrainIndexBuffer.IndexCount / 3;
+                    noVertices = Board.TerrainVertexBuffer.VertexCount;
+                    noTriangles = Board.TerrainIndexBuffer.IndexCount / 3;
+                }
+                else
+                {
+                    graphicsDevice.Indices = Board.ReducedTerrainIndexBuffer;
+
+                    noVertices = Board.TerrainVertexBuffer.VertexCount/(Board.ReduceFactor * Board.ReduceFactor);
+                    noTriangles = Board.ReducedTerrainIndexBuffer.IndexCount/3;
+                }
                 graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, noVertices, 0, noTriangles);
                 
             }

@@ -12,8 +12,7 @@ namespace ICGame
 {
     public class Unit : GameObject, IAnimated, IPhysical, IInteractive, IDestructible, IControllable
     {
-        
-		public StaticObject SelectionRing
+        public StaticObject SelectionRing
         {
             get; set;
         }
@@ -73,6 +72,19 @@ namespace ICGame
             Width = scale*(boundingBox.Max.Y - boundingBox.Min.Y);
             Height = scale*(boundingBox.Max.X - boundingBox.Min.X);
             PhysicalTransforms = Matrix.Identity;
+
+            PositionChanged += OnPositionChanged;
+            AngleChanged += OnAngleChanged;
+        }
+
+        void OnPositionChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Position = e.Vector;
+        }
+
+        void OnAngleChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Rotation = e.Vector;
         }
 
         #region IPhysical Members
@@ -360,7 +372,13 @@ namespace ICGame
 
         #region IInteractive Members
 
-
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="physical"></param>
+        /// <param name="thisBB"></param>
+        /// <param name="gameTime"></param>
+        /// <returns></returns>
         public bool CheckMove(IPhysical physical, BoundingBox thisBB, GameTime gameTime)
         {
             GameObject go = physical as GameObject;
@@ -369,14 +387,16 @@ namespace ICGame
             return !thisBB.Intersects(checkBB);
         }
 
-        /*public bool CheckMove(IPhysical physical)
+        public bool CheckMove(IPhysical physical)
         {
-            GameObject go = physical as GameObject;
-            physical.OOBoundingBox.Position = go.Position;
-            physical.OOBoundingBox.Rotation = go.Angle;
+            //TEMP
+            //TODO: Porzadne zwiazanie w setterze
+            //GameObject go = physical as GameObject;
+            //physical.OOBoundingBox.Position = go.Position;
+            //physical.OOBoundingBox.Rotation = go.Angle;
 
             return OOBoundingBox.Intersects(physical.OOBoundingBox);
-        }*/
+        }
 
         public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
         {
@@ -393,6 +413,7 @@ namespace ICGame
             Vector3 oldangle = new Vector3(Angle.X, Angle.Y, Angle.Z);
             Position = new Vector3(Position.X + Convert.ToSingle(spd * Math.Sin(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds),
                 Position.Y, Position.Z + Convert.ToSingle(spd * Math.Cos(Angle.Y) * gameTime.ElapsedGameTime.Milliseconds));
+            Position = new Vector3(Position.X, Mission.Board.GetHeight(Position.X, Position.Z), Position.Z);
             if (directionLR == Direction.Left)
             {
                 Angle = new Vector3(Angle.X, Angle.Y + Speed * gameTime.ElapsedGameTime.Milliseconds / TurnRadius, Angle.Z);
@@ -425,7 +446,8 @@ namespace ICGame
                             ),
                         Length,
                         Width);
-            BoundingBox thisBB = BoundingBoxTools.TransformBoundingBox(BoundingBox, ModelMatrix);
+            //BoundingBox thisBB = BoundingBoxTools.TransformBoundingBox(BoundingBox, ModelMatrix);
+            //TEMP
             //OOBoundingBox.Position = Position;
             //OOBoundingBox.Rotation = Angle;
             foreach (GameObject gameObject in gameObjects)
@@ -433,11 +455,11 @@ namespace ICGame
                 if(gameObject is IPhysical && gameObject != this)
                 {
                     IPhysical physical = gameObject as IPhysical;
-                    if(!CheckMove(physical, thisBB, gameTime))
-                    //if(!CheckMove(physical))
+                    if(!CheckMove(physical))
                     {
                         Position = oldpos;
                         Angle = oldangle;
+                        //TEMP
                         //OOBoundingBox.Position = Position;
                         //OOBoundingBox.Rotation = Angle;
                         Path.Insert(0,new Point(Convert.ToInt32(NextStep.X),Convert.ToInt32(NextStep.Y)));
@@ -449,6 +471,7 @@ namespace ICGame
             }
             Position = oldpos;
             Angle = oldangle;
+            //TEMP
             //OOBoundingBox.Position = Position;
             //OOBoundingBox.Rotation = Angle;
             return true;

@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
+    /// <summary>
+    /// Object Oriented Bounding Box
+    /// </summary>
     public class OOBoundingBox
     {
         private Vector3 rotation;
@@ -52,13 +55,14 @@ namespace ICGame
 
         private bool SpanOverlap(float min0, float max0, float min1, float max1)
         {
-            return !(min0 > max1 || max0 < min1);
+            return (min0 > max1 || max0 < min1);
         }
 
         private void ComputeSpan(Vector3 Axis, out float min, out float max)
         {
             float p = Vector3.Dot(Axis,Position);
-            float r = Math.Abs(Vector3.Dot(Axis,NormalX)) * Size.X + Math.Abs(Vector3.Dot(Axis,NormalY)) * Size.Y + Math.Abs(Vector3.Dot(Axis,NormalZ)) * Size.Z;
+            float r = Math.Abs(Vector3.Dot(Axis,NormalX)) * Size.X/2 + Math.Abs(Vector3.Dot(Axis,NormalY)) * Size.Y/2 + 
+                Math.Abs(Vector3.Dot(Axis,NormalZ)) * Size.Z/2;
 
             min = p-r;
             max = p+r;
@@ -73,6 +77,11 @@ namespace ICGame
             return SpanOverlap(min0, max0, min1, max1);
         }
 
+        /// <summary>
+        /// Sprawdza, czy dwa OOBoundingBox'y koliduja.
+        /// </summary>
+        /// <param name="boundingBox">OOBoundingBox, kolizja z ktorym jest sprawdzana</param>
+        /// <returns></returns>
         public bool Intersects(OOBoundingBox boundingBox)
         {
             if (AxisOverlap(NormalX, boundingBox))

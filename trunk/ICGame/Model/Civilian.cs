@@ -11,7 +11,18 @@ namespace ICGame
         public Civilian(Model model)
             : base(model)
         {
-            
+            PositionChanged += OnPositionChanged;
+            AngleChanged += OnAngleChanged;
+        }
+
+        void OnPositionChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Position = e.Vector;
+        }
+
+        void OnAngleChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Rotation = e.Vector;
         }
         #region IPhysical Members
 

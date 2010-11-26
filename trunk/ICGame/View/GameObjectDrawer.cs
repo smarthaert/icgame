@@ -128,7 +128,6 @@ namespace ICGame
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             Matrix modelMatrix = GameObject.ModelMatrix;
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
-            int i = 0;
             gd.RasterizerState = RasterizerState.CullCounterClockwise;
             foreach (var model in GameObject.Model.Meshes)
             {

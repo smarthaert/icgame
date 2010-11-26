@@ -7,6 +7,9 @@ namespace ICGame
 {
     public interface IPhysical
     {
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         BoundingBox BoundingBox
         {
             get;

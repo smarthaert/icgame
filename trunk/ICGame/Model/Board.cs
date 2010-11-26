@@ -21,6 +21,11 @@ namespace ICGame
         private const int tileSize = 32;
         private VertexMultitextured[] vertexPositionColor;
         private int[] indices;
+        private int[] reducedIndices;
+        /// <summary>
+        /// Stopien o jaki zmniejszana jest liczba wierzchołkow w kazdym wymiarze podczes rysowania odbicia terenu/terenu znajdujacego sie pod woda
+        /// </summary>
+        public const int ReduceFactor = 4;
 
         public VertexBuffer TerrainVertexBuffer
         { 
@@ -31,7 +36,13 @@ namespace ICGame
         {
             get; set;
         }
-            
+
+        public IndexBuffer ReducedTerrainIndexBuffer
+        {
+            get;
+            set;
+        }
+
         public Dictionary<string, Texture2D> Textures
         {
             get
@@ -80,10 +91,6 @@ namespace ICGame
         public VertexMultitextured[] VertexPositionColor1
         {
             get { return vertexPositionColor; }
-        }
-        public int[] Indices
-        {
-            get { return indices; }
         }
 
         public Vector3 LightDirection { get; set; }
@@ -157,6 +164,7 @@ namespace ICGame
         private void SetUpIndices()
         {
             indices = new int[(terrainWidth - 1) * (terrainHeight - 1) * 6];
+            reducedIndices = new int[(terrainWidth/ReduceFactor-1) * (terrainHeight/ReduceFactor-1) * 6];
             int counter = 0;
             for (int y = 0; y < terrainHeight - 1; y++)
             {
@@ -174,6 +182,25 @@ namespace ICGame
                     indices[counter++] = topLeft;
                     indices[counter++] = topRight;
                     indices[counter++] = lowerRight;
+                }
+            }
+            counter = 0;
+            for (int y = 0; y < terrainHeight - ReduceFactor; y+=ReduceFactor)
+            {
+                for (int x = 0; x < terrainWidth - ReduceFactor; x+=ReduceFactor)
+                {
+                    int lowerLeft = x + y * terrainWidth;
+                    int lowerRight = (x + ReduceFactor) + y * terrainWidth;
+                    int topLeft = x + (y + ReduceFactor) * terrainWidth;
+                    int topRight = (x + ReduceFactor) + (y + ReduceFactor) * terrainWidth;
+
+                    reducedIndices[counter++] = topLeft;
+                    reducedIndices[counter++] = lowerRight;
+                    reducedIndices[counter++] = lowerLeft;
+
+                    reducedIndices[counter++] = topLeft;
+                    reducedIndices[counter++] = topRight;
+                    reducedIndices[counter++] = lowerRight;
                 }
             }
         }
@@ -307,6 +334,9 @@ namespace ICGame
 
             TerrainIndexBuffer = new IndexBuffer(MainGame.GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
             TerrainIndexBuffer.SetData(indices);
+
+            ReducedTerrainIndexBuffer = new IndexBuffer(MainGame.GraphicsDevice, typeof(int), reducedIndices.Length, BufferUsage.WriteOnly);
+            ReducedTerrainIndexBuffer.SetData(reducedIndices);
         }
 
         
