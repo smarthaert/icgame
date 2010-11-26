@@ -60,11 +60,11 @@ namespace ICGame
             WaveLength = 0.1f;
             WaveHeight = 0.3f;
 
-            RefractionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth,
-                                                device.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+            RefractionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth/2,
+                                                device.PresentationParameters.BackBufferHeight/2, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
 
-            ReflectionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth, 
-                                                device.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+            ReflectionRenderTarget = new RenderTarget2D(device, device.PresentationParameters.BackBufferWidth/2, 
+                                                device.PresentationParameters.BackBufferHeight/2, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
         }
 
         public void LoadTextures(Texture2D waves)

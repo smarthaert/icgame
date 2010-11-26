@@ -22,6 +22,8 @@ namespace ICGame
         private float rot;
         private ArrayList meshesNames=new ArrayList();
 
+        public delegate void EventHandler(object sender, VectorEventArgs e);
+
         #region IDrawable Members
 
         public GameObject(Model model)
@@ -113,6 +115,8 @@ namespace ICGame
 
         #endregion
 
+        public event EventHandler PositionChanged;
+
         public Vector3 Position
         {
             get
@@ -122,6 +126,7 @@ namespace ICGame
             set
             {
                 position = new Vector3(value.X,value.Y,value.Z);
+                PositionChanged.Invoke(this, new VectorEventArgs(value));
                 if(this is Vehicle)
                 {
                     (this as Vehicle).SelectionRing.Position = position;
@@ -136,10 +141,21 @@ namespace ICGame
                 return meshesNames;
             }
         }
+
+        private Vector3 angle;
+        public event EventHandler AngleChanged;
+
         public Vector3 Angle
         {
-            get;
-            set;
+            get
+            {
+                return angle;
+            }
+            set
+            {
+                AngleChanged.Invoke(this, new VectorEventArgs(value));
+                angle = value;
+            }
         }
 
         public List<IObjectEffect> EffectList

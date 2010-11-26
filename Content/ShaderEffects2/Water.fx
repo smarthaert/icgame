@@ -108,7 +108,7 @@ WPixelToFrame WaterPS(WVertexToPixel PSIn)
 
 	 float3 reflectionVector = -reflect(xLightDirection, normalVector);
      float specular = dot(normalize(reflectionVector), normalize(eyeVector));
-     specular = pow(specular, 256);        
+     specular = pow(abs(specular), 256);        
      Output.Color.rgb += specular;
 
     //Output.Color = tex2D(ReflectionSampler, ProjectedTexCoords);    

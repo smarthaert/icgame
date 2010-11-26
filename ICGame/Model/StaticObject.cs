@@ -14,13 +14,28 @@ namespace ICGame
            /* if(parent!=null)
                 PhysicalTransforms =parent.PhysicalTransforms;
             else*/ PhysicalTransforms = Matrix.Identity;
+            OOBoundingBox = new OOBoundingBox(new Vector3(0,0,0), new Vector3(0,0,0));
+            PositionChanged += OnPositionChanged;
+            AngleChanged += OnAngleChanged;
         }
+
+        void OnPositionChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Position = e.Vector;
+        }
+
+        void OnAngleChanged(object sender, VectorEventArgs e)
+        {
+            OOBoundingBox.Rotation = e.Vector;
+        }
+
         #region IPhysical Members
 
         public BoundingBox BoundingBox
         {
             get; set;
         }
+
 
         public OOBoundingBox OOBoundingBox
         {
