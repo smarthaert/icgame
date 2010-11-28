@@ -8,8 +8,8 @@ namespace ICGame
 {
     public class StaticObject : GameObject, IPhysical, IDestructible
     {
-        public StaticObject(Model model)
-            : base(model)
+        public StaticObject(Model model, ObjectStats.StaticObjectStats staticObjectStats)
+            : base(model, staticObjectStats)
         {
            /* if(parent!=null)
                 PhysicalTransforms =parent.PhysicalTransforms;

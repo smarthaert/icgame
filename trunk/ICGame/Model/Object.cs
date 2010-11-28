@@ -26,7 +26,7 @@ namespace ICGame
 
         #region IDrawable Members
 
-        public GameObject(Model model)
+        public GameObject(Model model, ObjectStats.GameObjectStats objectStats)
         {
             Model = model;
             Ambient = new List<float>();
@@ -40,7 +40,13 @@ namespace ICGame
             Opacity = new List<float>();
 
             EffectList = new List<IObjectEffect>();
-          
+
+            foreach (string effectName in objectStats.Effects)
+            {
+                IObjectEffect effect = EffectFactory.GetEffectByName(effectName);
+                effect.GameObject = this;
+                EffectList.Add(effect);
+            }
 
             position = new Vector3(105, 0, 80);
             

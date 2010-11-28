@@ -32,12 +32,12 @@ namespace ICGame
 
         public void LoadObjects(GameObjectFactory gameObjectFactory,EffectController effectController)
         {
-            GameObject obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
+            GameObject obj = gameObjectFactory.CreateGameObject("home0");
             obj.Position=new Vector3(122.0f,Board.GetHeight(122.0f,82.0f),82.0f);
             obj.Mission = this;
             ObjectContainer.GameObjects.Add(obj);
-            effectController.AddEffectToAnObject(obj, "fire"); //tyz bezsens
-            obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
+            //effectController.AddEffectToAnObject(obj, "fire"); //tyz bezsens
+            obj = gameObjectFactory.CreateGameObject("home0");
             obj.Position = new Vector3(137.0f, Board.GetHeight(137.0f, 67.0f), 67.0f);
             obj.Mission = this;
             ObjectContainer.GameObjects.Add(obj);

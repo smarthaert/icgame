@@ -8,11 +8,13 @@ namespace ICGame
 {
     public class EffectController
     {
-        private Game MainGame;
+        private static Game MainGame;
+        private EffectFactory effectFactory;
 
         public EffectController(Game mainGame)
         {
             MainGame = mainGame;
+            effectFactory = new EffectFactory(mainGame);
         }
 
         public void Update(GameTime gameTime)
@@ -39,7 +41,12 @@ namespace ICGame
             }
         }
 
-        public void AddEffectToAnObject(GameObject gameObject, string name) //TODO: ENUM!!!!!!!! (albo XML)
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="name"></param>
+        private void AddEffectToAnObject(GameObject gameObject, string name) //TODO: ENUM!!!!!!!! (albo XML)
         {
             IObjectEffect gameEffect;
             if (name == "water")
@@ -56,10 +63,8 @@ namespace ICGame
                  gameEffect = new FireSmokeEffect(gameObject, MainGame);
                  gameEffect.IsActive = true;
             }
-        
             
             gameObject.EffectList.Add(gameEffect);
-            
         }
 
     }

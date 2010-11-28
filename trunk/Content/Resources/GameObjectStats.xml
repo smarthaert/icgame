@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GameObjects>
+  <GameObject Name="firetruck_2" Type="Vehicle">
+    <GameObjectAttribute AttributeName="Speed" AttributeType="float">0,005</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="TurnRadius" AttributeType="float">7,5</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="RearWheelsCount" AttributeType="int">4</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="FrontWheelsCount" AttributeType="int">2</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="DoorCount" AttributeType="int">1</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="HasTurret" AttributeType="bool">true</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="WaterSourceCount" AttributeType="int">2</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="Effect" AttributeType="string">water</GameObjectAttribute>
+  </GameObject>
+  <GameObject Name="chassy_1" Type="Vehicle">
+    <GameObjectAttribute AttributeName="Speed" AttributeType="float">0,005</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="TurnRadius" AttributeType="float">7,5</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="RearWheelsCount" AttributeType="int">2</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="FrontWheelsCount" AttributeType="int">2</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="DoorCount" AttributeType="int">2</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="HasTurret" AttributeType="bool">false</GameObjectAttribute>
+  </GameObject>
+  <GameObject Name="selection_ring" Type="StaticObject" />
+  <GameObject Name="animfigure" Type="Infantry">
+    <GameObjectAttribute AttributeName="Speed" AttributeType="float">0.1f</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="TurnRadius" AttributeType="float">0.1f</GameObjectAttribute>
+  </GameObject>
+  <GameObject Name="home0" Type="Building">
+    <GameObjectAttribute AttributeName="Effect" AttributeType="string">fire</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="Effect" AttributeType="string">firesmoke</GameObjectAttribute>
+  </GameObject>
+</GameObjects>

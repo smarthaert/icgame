@@ -14,6 +14,11 @@ namespace ICGame
             set;
         }
 
+        GameObject GameObject
+        {
+            get; set;
+        }
+
         EffectDrawer GetDrawer();
 
         void Update(GameTime gameTime);

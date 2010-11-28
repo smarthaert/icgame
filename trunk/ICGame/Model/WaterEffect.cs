@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using ICGame.ParticleSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,20 +12,27 @@ namespace ICGame
     public class WaterEffect : IObjectEffect
     {
         private bool isActive;
-        GameObject GameObject { get; set; }
+        public GameObject GameObject { get; set; }
 
         public ParticleEmitter particleEmmiter;
-        private Game game;
+
+        public WaterEffect(Game game)
+        {
+            CreateParticleEmitter(game);
+        }
+
         public WaterEffect(GameObject gameObject, Game game)
         {
             GameObject = gameObject;
+
+            CreateParticleEmitter(game);
+        }
+
+        private void CreateParticleEmitter(Game game)
+        {
             particleEmmiter = new ParticleEmitter();
-            
+
             IsActive = false;
-            this.game = game;
-
-
-            
 
             particleEmmiter.MaxParticles = 1200;
 
@@ -47,20 +55,17 @@ namespace ICGame
             particleEmmiter.MaxStartSize = 3;
 
             particleEmmiter.MinColor = new Color(0, 0, 50, 0.1f);
-            particleEmmiter.MaxColor = new Color(255,255,200,0.9f);
+            particleEmmiter.MaxColor = new Color(255, 255, 200, 0.9f);
             particleEmmiter.BlendState = BlendState.AlphaBlend;
 
             particleEmmiter.MinEndSize = 3;
             particleEmmiter.MaxEndSize = 7;
-            
+
             particleEmmiter.Reset();
-            
+
             particleEmmiter.LoadContent(game.GraphicsDevice);
             particleEmmiter.LoadParticleEffect(game.Content.Load<Texture2D>("Texture2D/Particle/water"));
-            
-
         }
-
 
         #region IObjectEffect Members
 
@@ -76,12 +81,19 @@ namespace ICGame
 
         public EffectDrawer GetDrawer()
         {
+            if (GameObject == null)
+            {
+                throw new NullReferenceException("No GameObject assigned");
+            }
             return new WaterEffectDrawer(this, GameObject);
         }
 
         public void Update(GameTime gameTime)
         {
-
+            if(GameObject == null)
+            {
+                throw new NullReferenceException("No GameObject assigned");
+            }
             for (int i = 0; i < 2; i++)
                 if (this.IsActive)
                 {

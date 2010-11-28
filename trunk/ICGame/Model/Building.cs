@@ -9,8 +9,8 @@ namespace ICGame
 {
     public class Building : GameObject, IAnimated, IPhysical, IDestructible, IInteractive 
     {
-        public Building(Model model)
-            : base(model)
+        public Building(Model model, ObjectStats.BuildingStats buildingStats)
+            : base(model, buildingStats)
         {
             //Position = new Vector3(10,0,16);
             PhysicalTransforms = Matrix.Identity;// +Matrix.CreateTranslation(Position);

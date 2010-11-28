@@ -11,17 +11,27 @@ namespace ICGame
     public class FireEffect : IObjectEffect
     {
         private bool isActive;
-        GameObject GameObject { get; set; }
+        public GameObject GameObject { get; set; }
 
         public ParticleEmitter particleEmmiter;
-        private Game game;
+
+        public FireEffect(Game game)
+        {
+            CreateParticleEmitter(game);
+        }
+
         public FireEffect(GameObject gameObject, Game game)
         {
             GameObject = gameObject;
+            CreateParticleEmitter(game);
+        }
+
+        private void CreateParticleEmitter(Game game)
+        {
+
             particleEmmiter = new ParticleEmitter();
 
             IsActive = false;
-            this.game = game;
 
             particleEmmiter.MaxParticles = 10000;
 
@@ -55,10 +65,7 @@ namespace ICGame
 
             particleEmmiter.LoadContent(game.GraphicsDevice);
             particleEmmiter.LoadParticleEffect(game.Content.Load<Texture2D>("Texture2D/Particle/fire"));
-
-
         }
-
 
         #region IObjectEffect Members
 
@@ -74,11 +81,19 @@ namespace ICGame
 
         public EffectDrawer GetDrawer()
         {
+            if (GameObject == null)
+            {
+                throw new NullReferenceException("No GameObject assigned");
+            }
             return new FireEffectDrawer(this, GameObject);
         }
 
         public void Update(GameTime gameTime)
         {
+            if (GameObject == null)
+            {
+                throw new NullReferenceException("No GameObject assigned");
+            }
             Random random = new Random(gameTime.TotalGameTime.Milliseconds);
             for (int i = 0; i < 2; i++)
                 if (this.IsActive)

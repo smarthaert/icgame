@@ -42,7 +42,7 @@ namespace ICGame
             //Mission.LoadObjects(GameObjectFactory);
         }
 
-        public void BuyUnit(GameObjectID gameObjectID)
+        public void BuyUnit(string gameObjectID)
         {
             GameObject gameObject = GameObjectFactory.CreateGameObject(gameObjectID);
             if(gameObject.GetType() == typeof(Vehicle))
