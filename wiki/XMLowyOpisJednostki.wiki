@@ -1,0 +1,13 @@
+#summary Struktura pliku XML z opisami jednostek.
+
+= Struktura pliku =
+
+Opis jednostek ujęty jest w tagi `<GameObjects></Gameobjects>`.
+
+= Opis jednostki =
+
+Poszczególne jednostki zawarte są w tagach `<GameObject>`, którego parametry to *Name*, który powinien być zgodny z nazwą pliku fbx z modelem, oraz *Type*, który powinien odpowiadać specjalizacji jednostki.
+
+Później następuje lista parametrów opcjonalnych, zawartych w tagach `<GameObjectAttribute>`, których parametry *AttributeName* oraz *AttributeType* odpowiadają nazwie i typowi parametrów, zaś wartość - wartości atrybutu.
+
+_*TODO:* Atrybuty wymagane dla poszczególnych typów jednostek._
