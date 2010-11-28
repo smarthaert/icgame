@@ -8,8 +8,8 @@ namespace ICGame
 {
     public class Civilian : GameObject, IAnimated, IPhysical, IDestructible, IInteractive
     {
-        public Civilian(Model model)
-            : base(model)
+        public Civilian(Model model, ObjectStats.CivilianStats civilianStats)
+            : base(model, civilianStats)
         {
             PositionChanged += OnPositionChanged;
             AngleChanged += OnAngleChanged;

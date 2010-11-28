@@ -39,13 +39,13 @@ namespace ICGame
             get; set;
         }
 
-        public Unit(Model model, float speed, float turnRadius):
-            base(model)
+        public Unit(Model model, ObjectStats.UnitStats unitStats):
+            base(model, unitStats)
         {
             moving = Direction.None;
             turning = Direction.None;
-            Speed = speed;
-            TurnRadius = turnRadius;
+            Speed = unitStats.Speed;
+            TurnRadius = unitStats.TurnRadius;
             Path = new List<Point>();
             lastGameTime = new GameTime();
             moving = Direction.None;
@@ -64,7 +64,6 @@ namespace ICGame
             {
                 AnimationTransforms[i] = Matrix.Identity;
             }
-            //BoundingBox = new BoundingBox(GetMinVertex(),GetMaxVertex());
 
             BoundingBoxTools.CalculateBoundingBox(Model, out boundingBox);
             OOBoundingBox = new OOBoundingBox(boundingBox, scale);
@@ -389,12 +388,6 @@ namespace ICGame
 
         public bool CheckMove(IPhysical physical)
         {
-            //TEMP
-            //TODO: Porzadne zwiazanie w setterze
-            //GameObject go = physical as GameObject;
-            //physical.OOBoundingBox.Position = go.Position;
-            //physical.OOBoundingBox.Rotation = go.Angle;
-
             return OOBoundingBox.Intersects(physical.OOBoundingBox);
         }
 
@@ -446,10 +439,7 @@ namespace ICGame
                             ),
                         Length,
                         Width);
-            //BoundingBox thisBB = BoundingBoxTools.TransformBoundingBox(BoundingBox, ModelMatrix);
-            //TEMP
-            //OOBoundingBox.Position = Position;
-            //OOBoundingBox.Rotation = Angle;
+
             foreach (GameObject gameObject in gameObjects)
             {
                 if(gameObject is IPhysical && gameObject != this)
@@ -459,21 +449,16 @@ namespace ICGame
                     {
                         Position = oldpos;
                         Angle = oldangle;
-                        //TEMP
-                        //OOBoundingBox.Position = Position;
-                        //OOBoundingBox.Rotation = Angle;
+
                         Path.Insert(0,new Point(Convert.ToInt32(NextStep.X),Convert.ToInt32(NextStep.Y)));
 
-                        NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
+                        NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0, directionFB);
                         return false;
                     }
                 }
             }
             Position = oldpos;
             Angle = oldangle;
-            //TEMP
-            //OOBoundingBox.Position = Position;
-            //OOBoundingBox.Rotation = Angle;
             return true;
         }
 
@@ -481,7 +466,7 @@ namespace ICGame
 
         #region IInteractive submethods
 
-        protected Vector2 CalculateBackingUp(double Angle, Vector2 Position, double distance)
+        protected Vector2 CalculateBackingUp(double Angle, Vector2 Position, double distance, Direction fbDirection)
         {
             //Angle = (Angle / 180.0) * Math.PI;
             if (Angle % (2 * Math.PI) == 0)
@@ -497,6 +482,10 @@ namespace ICGame
             double a = Math.Tan(Angle);
             //double b = Position.Z - a*Position.X;
             double sign = Math.Sign(Math.Cos(Angle)) != 0 ? Math.Sign(Math.Cos(Angle)) : 1;
+            if(fbDirection == Direction.Backward)
+            {
+                sign *= -1;
+            }
             double x2 = Position.X + sign * distance / Math.Sqrt(a * a + 1);      //creepy
             double y2 = a * (x2 - Position.X) + Position.Y;
 

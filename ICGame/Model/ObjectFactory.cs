@@ -14,9 +14,9 @@ namespace ICGame
             EffectController = effectController;
         }
         
-        private enum ObjectClass
+        public enum ObjectClass
         {
-            Vehicle, StaticObject, Unit, Building, GameObject, Infantry
+            Vehicle, StaticObject, Unit, Building, GameObject, Infantry, Civilian
         }
 
         private class LoadedModel
@@ -35,20 +35,22 @@ namespace ICGame
                                      {GameObjectID.AnimFigure, "animfigure"},
                                      {GameObjectID.Chassy, "chassy_1"}
                                  };
-        private Dictionary<GameObjectID, LoadedModel> loadedModels = new Dictionary<GameObjectID, LoadedModel>();
+        private Dictionary<string, LoadedModel> loadedModels = new Dictionary<string, LoadedModel>();
 
         public void LoadModels(Game game)
         {
-            foreach (KeyValuePair<GameObjectID, string> pair in objectAccessList)
+            GameObjectStatsReader.Initialize();
+
+            foreach (string name in GameObjectStatsReader.GetObjectsToLoad())
             {
-                loadedModels.Add(pair.Key,new LoadedModel ());
-                Model tempModel = loadedModels[pair.Key].model;
-                tempModel = game.Content.Load<Model>("Model/"+pair.Value);
+                loadedModels.Add(name,new LoadedModel ());
+                Model tempModel = loadedModels[name].model;
+                tempModel = game.Content.Load<Model>("Model/" + name);
                 foreach (ModelMesh mesh in tempModel.Meshes)
                 {
                     foreach (BasicEffect effect in mesh.Effects)
                     {
-                        loadedModels[pair.Key].textures.Add(effect.Texture);
+                        loadedModels[name].textures.Add(effect.Texture);
                     }
                 }
                 foreach (ModelMesh mesh in tempModel.Meshes)
@@ -60,69 +62,43 @@ namespace ICGame
                         meshPart.Effect = TechniqueProvider.GetEffect("TexturedShaded").Clone();
                     }
                 }
-                loadedModels[pair.Key].model = tempModel;
-                loadedModels[pair.Key].name = pair.Value;
-
-                //Temp, temp i po trzykroć temp! Należy dodac jakis plik przechowujacy informację o typie ładowanego obiektu 
-                switch (pair.Value)
-                {
-                    case "firetruck_2":
-                        loadedModels[pair.Key].objectClass = ObjectClass.Vehicle;
-                        break;
-                    case "selection_ring":
-                        loadedModels[pair.Key].objectClass = ObjectClass.StaticObject;
-                        break;
-                    case "home0":
-                        loadedModels[pair.Key].objectClass = ObjectClass.Building;
-                        break;
-                    case "animfigure":
-                        loadedModels[pair.Key].objectClass = ObjectClass.Infantry;
-                        break;
-                    case "chassy_1":
-                        loadedModels[pair.Key].objectClass = ObjectClass.Vehicle;
-                        break;
-                    default:
-                        loadedModels[pair.Key].objectClass = ObjectClass.GameObject;
-                        break;
-                }
+                loadedModels[name].model = tempModel;
+                loadedModels[name].name = name;
             }
         }
 
-        public GameObject CreateGameObject(GameObjectID gameObjectID)
+        public GameObject CreateGameObject(string name)
         {
             
-            LoadedModel loadedModel = loadedModels[gameObjectID];
+            LoadedModel loadedModel = loadedModels[name];
             GameObject newObject = null;
+            ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetObjectStats(name);
             
-            switch (loadedModel.objectClass) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
+            switch (objectStats.Type) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
-                    if(gameObjectID == GameObjectID.FireTruck)
-                    {
-                        newObject = new Vehicle(loadedModel.model, 0.005f, 7.5f, 4, 2, 1, true);
-                    }
-                    else if(gameObjectID == GameObjectID.Chassy)
-                    {
-                        newObject = new Vehicle(loadedModel.model, 0.005f, 7.5f, 2, 2, 2, false);
-                    }
-                    if (loadedModel.name == "firetruck_2")
-                        EffectController.AddEffectToAnObject(newObject,"water"); //tak, bezsens...
+                    newObject = new Vehicle(loadedModel.model, objectStats as ObjectStats.VehicleStats);
+                    //if (loadedModel.name == "firetruck_2")
+                    //    EffectController.AddEffectToAnObject(newObject,"water"); //tak, bezsens...
 
        
-                    (newObject as Vehicle).SelectionRing = (CreateGameObject(GameObjectID.SelectionRing) as StaticObject); //creepy
+                    (newObject as Vehicle).SelectionRing = (CreateGameObject("selection_ring") as StaticObject); //creepy
                     //Hotffix
-                    if(gameObjectID == GameObjectID.Chassy)
+                    if(name == "chassy_1")
                         newObject.Position = new Vector3(100, 0, 80);
 
                     break;
                 case ObjectClass.StaticObject:
-                    newObject = new StaticObject(loadedModel.model);
+                    newObject = new StaticObject(loadedModel.model, objectStats as ObjectStats.StaticObjectStats);
                     break;
                 case ObjectClass.Building:
-                    newObject = new Building(loadedModel.model);
+                    newObject = new Building(loadedModel.model, objectStats as ObjectStats.BuildingStats);
                     break;
                 case ObjectClass.Infantry:
-                    newObject = new Infantry(loadedModel.model,0.01f,1.0f);
+                    newObject = new Infantry(loadedModel.model, objectStats as ObjectStats.InfantryStats);
+                    break;
+                case ObjectClass.Civilian:
+                    newObject = new Civilian(loadedModel.model, objectStats as ObjectStats.CivilianStats);
                     break;
             }
 

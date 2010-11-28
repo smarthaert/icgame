@@ -23,6 +23,7 @@ namespace ICGame
         private readonly int frontWheelsCount;
         private readonly int doorCount;
         private readonly bool hasTurret;
+        private readonly int waterSourceCount;
         private DoorState leftDoorState;
         private DoorState rightDoorState;
         private WheelState wheelState;
@@ -102,13 +103,14 @@ namespace ICGame
 
         #endregion
 
-        public Vehicle(Model model, float speed, float turnRadius, int rearWheelsCount, int frontWheelsCount, int doorCount, bool hasTurret)
-            : base(model, speed, turnRadius)
+        public Vehicle(Model model, ObjectStats.VehicleStats vehicleStats)
+            : base(model, vehicleStats)
         {
-            this.rearWheelsCount = rearWheelsCount;
-            this.frontWheelsCount = frontWheelsCount;
-            this.doorCount = doorCount;
-            this.hasTurret = hasTurret;
+            rearWheelsCount = vehicleStats.RearWheelCount;
+            frontWheelsCount = vehicleStats.FrontWheelCount;
+            doorCount = vehicleStats.DoorCount;
+            hasTurret = vehicleStats.HasTurret;
+            waterSourceCount = vehicleStats.WaterSourceCount;
 
             leftDoorAngle = 0;
             rightDoorAngle = 0;
@@ -125,10 +127,6 @@ namespace ICGame
             //rightDoorState = DoorState.Opening;
             //wheelState = WheelState.StraightLeft;
             //gi = new GameInfo();
-
-
-
-
         }
 
         private void AnimateTurret(GameTime gameTime)
@@ -158,9 +156,6 @@ namespace ICGame
             AnimationTransforms[Model.Bones["WaterPipe1"].Index] = Matrix.CreateRotationZ(turretAngle);
             AnimationTransforms[Model.Bones["WaterSource0"].Index] = Matrix.CreateTranslation(0, -2.4f, 0.3f) * Matrix.CreateRotationZ(turretAngle) ;
             AnimationTransforms[Model.Bones["WaterSource1"].Index] =  Matrix.CreateTranslation(0, 2.4f, 0.3f)*Matrix.CreateRotationZ(turretAngle);
-       
-            
-            
         }
 
         private void AnimateTurn(GameTime gameTime)
@@ -562,7 +557,7 @@ namespace ICGame
                 {
                     Path.Insert(0, new Point(Convert.ToInt32(NextStep.X), Convert.ToInt32(NextStep.Y)));
 
-                    NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
+                    NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0, Direction.Forward);
                 }
                 else if (curStep.Y > toleranceY)
                 {
@@ -609,7 +604,7 @@ namespace ICGame
                 {
                     Path.Insert(0, new Point(Convert.ToInt32(NextStep.X), Convert.ToInt32(NextStep.Y)));
 
-                    NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0);
+                    NextStep = CalculateBackingUp(Angle.Y, new Vector2(Position.X, Position.Z), 25.0, Direction.Forward);
                 }
                 else if (curStep.Y > toleranceY)
                 {
