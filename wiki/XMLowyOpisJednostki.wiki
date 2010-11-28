@@ -8,6 +8,13 @@ Opis jednostek ujęty jest w tagi `<GameObjects></Gameobjects>`.
 
 Poszczególne jednostki zawarte są w tagach `<GameObject>`, którego parametry to *Name*, który powinien być zgodny z nazwą pliku fbx z modelem, oraz *Type*, który powinien odpowiadać specjalizacji jednostki.
 
-Później następuje lista parametrów opcjonalnych, zawartych w tagach `<GameObjectAttribute>`, których parametry *AttributeName* oraz *AttributeType* odpowiadają nazwie i typowi parametrów, zaś wartość - wartości atrybutu.
+Później następuje lista parametrów, zawartych w tagach `<GameObjectAttribute>`, których parametry *AttributeName* oraz *AttributeType* odpowiadają nazwie i typowi parametrów, zaś wartość - wartości atrybutu.
+
+= Import do ICGame =
+
+Aby odczytać nowy parametr wewnątrz gry należy:
+  * Dodać pole w klasie typu `ObjectStats` (w zależności od docelowej widoczności parametru)
+  * Dodać odczyt atrybutu w metodzie `GameObjectStatsReader.GetObjectStats(string)`.
+W tym momencie parametr jest gotowy do wykorzystania w konstruktorze odpowiedniej klasy z drzewka `GameObject`.
 
 _*TODO:* Atrybuty wymagane dla poszczególnych typów jednostek._
