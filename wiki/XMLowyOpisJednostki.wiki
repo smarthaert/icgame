@@ -18,3 +18,30 @@ Aby odczytać nowy parametr wewnątrz gry należy:
 W tym momencie parametr jest gotowy do wykorzystania w konstruktorze odpowiedniej klasy z drzewka `GameObject`.
 
 _*TODO:* Atrybuty wymagane dla poszczególnych typów jednostek._
+
+= Wymagane atrybuty =
+
+Każdy obiekt musi implementować atrybuty dla swojej klasy i wszystkich klas, po których dziedziczy.
+
+== GameObject ==
+
+== Unit _: GameObject_ ==
+
+  * `Speed [float]`
+  * `TurnRadius [float]`
+
+== Vehicle _: Unit_ ==
+
+  * `FrontWheelsCount [int]`
+  * `RearWheelsCount [int]`
+  * `DoorCount [int]` - *ilość par drzwi*
+  * `HasTurret [bool]`
+  * `WaterSourceCount [int]` - tylko jeśli `HasTurret == true`
+
+== Infantry _: Unit_ ==
+
+== Building _: GameObject_ ==
+
+== StaticObject _: GameObject_ ==
+
+== Civilian _: GameObject_ ==
