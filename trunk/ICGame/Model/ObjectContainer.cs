@@ -226,7 +226,7 @@ namespace ICGame
 
                 new PathFinder().FindPath(new Point(Convert.ToInt32(GameObjects[SelectedObject].Position.X),
                                                     Convert.ToInt32(GameObjects[SelectedObject].Position.Z)),
-                                          new Point(Convert.ToInt32(x),Convert.ToInt32(z)), radius, controllable);
+                                          new Point(Convert.ToInt32(x),Convert.ToInt32(z)), radius, controllable, GameObjects);
 
             }
         }

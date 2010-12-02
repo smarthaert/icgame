@@ -42,7 +42,7 @@ namespace ICGame
         /// <param name="projection">macierz rzutowania</param>
         /// <param name="camera">Obiekt klasy Camera</param>
         /// <param name="gd">Graphics device</param>
-        public virtual void DrawSmallModel(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime)
+        public virtual void DrawSmallModel(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime, float? alpha = null)
         {
             gd.BlendState = BlendState.AlphaBlend;
             gd.RasterizerState = RasterizerState.CullCounterClockwise;
@@ -91,7 +91,15 @@ namespace ICGame
                     effect.Parameters["xHasTexture"].SetValue(GameObject.Textures[i] != null ? true : false);
                     effect.Parameters["xTexture"].SetValue(GameObject.Textures[i++]);
 
-
+                    if (alpha == null)
+                    {
+                        effect.Parameters["xSetAlpha"].SetValue(false);
+                    }
+                    else
+                    {
+                        effect.Parameters["xSetAlpha"].SetValue(true);
+                        effect.Parameters["xAlpha"].SetValue((float)alpha);
+                    }
 
                     //Macierze
                     Vector3 unproject = gd.Viewport.Unproject(new Vector3(gd.Viewport.Width - 100, 80, 0.13f),
@@ -123,7 +131,7 @@ namespace ICGame
             }
         }
 
-        public virtual void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, GraphicsDevice gd, Vector4? clipPlane)
+        public virtual void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, GraphicsDevice gd, Vector4? clipPlane, float? alpha = null)
         {
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
             Matrix modelMatrix = GameObject.ModelMatrix;
@@ -131,11 +139,6 @@ namespace ICGame
             gd.RasterizerState = RasterizerState.CullCounterClockwise;
             foreach (var model in GameObject.Model.Meshes)
             {
-                
-                //if (model.Name == "Window0" || model.Name == "DoorLeft" || model.Name == "DoorRight" || model.Name == "AlertBarBlue")
-                //{
-                //    gd.RenderState.DepthBufferWriteEnable = false;
-                //}
                 foreach (Effect effect in model.Effects)
                 {
                     if(clipPlane == null)
@@ -156,7 +159,16 @@ namespace ICGame
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * modelMatrix);
                     effect.Parameters["xView"].SetValue(viewMatrix);
                     effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * modelMatrix* viewMatrix * projection);
-                 
+                    
+                    if(alpha == null)
+                    {
+                        effect.Parameters["xSetAlpha"].SetValue(false);
+                    }
+                    else
+                    {
+                        effect.Parameters["xSetAlpha"].SetValue(true);
+                        effect.Parameters["xAlpha"].SetValue((float)alpha);
+                    }
                 }
 
                 model.Draw();

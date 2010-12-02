@@ -46,7 +46,7 @@ namespace ICGame
                         terrainWater.Camera.CameraPosition, device, vRefractionPlane);
                 }
             }
-            device.SetRenderTarget(null);
+            
             terrainWater.RefractionMap = terrainWater.RefractionRenderTarget;
             /*using (FileStream fileStream = File.OpenWrite("refractionmap.jpg"))
             {
@@ -85,7 +85,7 @@ namespace ICGame
             {
                 o.GetDrawer().Draw(terrainWater.ProjectionMatrix, terrainWater.ReflectionViewMatrix, terrainWater.ReflCameraPosition, device, reflectionPlane);
             }
-            device.SetRenderTarget(null);
+            
             terrainWater.ReflectionMap = terrainWater.ReflectionRenderTarget;
             /*using (FileStream fileStream = File.OpenWrite("reflectionmap.jpg"))
             {
@@ -127,11 +127,12 @@ namespace ICGame
         public void Draw(GraphicsDevice device, List<GameObject> gameObjects, GameTime gameTime)
         {
             terrainWater.Time = (float)(gameTime.TotalGameTime.TotalMilliseconds) / 2000000.0f;
-            //if(terrainWater.RefractionMap == null)
-            //{
+            
+            RenderTargetBinding[] renderTargetBindings = device.GetRenderTargets();
                 DrawRefractionMap(device, gameObjects);
-            //}
+            
             DrawReflectionMap(device, gameObjects);
+            device.SetRenderTargets(renderTargetBindings);
             DrawWater(device);
         }
     }

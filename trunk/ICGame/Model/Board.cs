@@ -315,7 +315,7 @@ namespace ICGame
             SkyDomeModel = skyDome;
             //SkyDomeModel.Meshes[0].MeshParts[0].Effect = effect.Clone(device);
             //CONV
-            SkyDomeModel.Meshes[0].MeshParts[0].Effect = TechniqueProvider.GetEffect("effects").Clone();
+            SkyDomeModel.Meshes[0].MeshParts[0].Effect = TechniqueProvider.GetEffect("SkyDome").Clone();
             SkyDome = new SkyDome(device);
         }
 

@@ -15,7 +15,7 @@ namespace ICGame
         }
 
         public override void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, 
-            Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, Vector4? clipPlane)
+            Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, Vector4? clipPlane, float? alpha = null)
         {
             Vehicle vehicle = GameObject as Vehicle;
             if (vehicle.Selected)
@@ -23,7 +23,7 @@ namespace ICGame
                 vehicle.SelectionRing.GetDrawer().Draw(projection, viewMatrix, cameraPosition, gd, clipPlane);
             }
 
-            base.Draw(projection, viewMatrix, cameraPosition, gd, clipPlane);
+            base.Draw(projection, viewMatrix, cameraPosition, gd, clipPlane, alpha);
         }
     }
 }

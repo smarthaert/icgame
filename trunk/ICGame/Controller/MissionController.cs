@@ -34,7 +34,7 @@ namespace ICGame
             
         }
 
-        public void LoadMissionData(GameObjectFactory gameObjectFactory, EffectController effectController)
+        public void LoadMissionData(GameObjectFactory gameObjectFactory)
         {
             Microsoft.Xna.Framework.Content.ContentManager contentManager = MainGame.Content;
             Texture2D heightMap = contentManager.Load<Texture2D>("Resources/heightmap");
@@ -48,7 +48,7 @@ namespace ICGame
             Mission.Board.LoadHeightData(heightMap);
             Mission.Board.PrepareTerrainWater(MainGame.Display.Camera, MainGame.Display.Projection);
             Mission.Board.TerrainWater.LoadTextures(contentManager.Load<Texture2D>("Texture2D/Board/waterbump"));
-            Mission.LoadObjects(gameObjectFactory, effectController);
+            Mission.LoadObjects(gameObjectFactory);
         }
         /// <summary>
         /// Do wywalenia w przyszłości
