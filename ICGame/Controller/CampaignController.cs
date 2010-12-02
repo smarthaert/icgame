@@ -20,7 +20,7 @@ namespace ICGame
         }
         public void StartCampaign()
         {
-            Campaign = new Campaign(EffectController);
+            Campaign = new Campaign();
             
             MissionController.StartMission();
             Campaign.Mission = MissionController.Mission;
@@ -34,7 +34,7 @@ namespace ICGame
             //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
             //Campaign.BuyUnit(GameObjectID.FireTruck);
             //Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
-            MissionController.LoadMissionData(Campaign.GameObjectFactory, EffectController);
+            MissionController.LoadMissionData(Campaign.GameObjectFactory);
         }
 
         public List<GameObject> GetObjectsToDraw()

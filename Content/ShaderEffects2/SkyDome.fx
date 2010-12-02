@@ -3,6 +3,8 @@ float4x4 xWorldViewProjection;
 bool xEnableLighting;
 float xOvercast;
 float xTime;
+bool xSetAlpha;
+float xAlpha;
 
 float calcRS;
 //------- Texture Samplers --------
@@ -97,6 +99,9 @@ sampler TextureSampler = sampler_state { texture = <xTexture>; magfilter = LINEA
      
      Output.Color = lerp(baseColor,1, cloudValue);        
  
+	if(xSetAlpha)
+		Output.Color.a = xAlpha;
+
      return Output;
  }
  

@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace ICGame
 {
+    /// <summary>
+    /// Znajduje ścieżkę na mapie, po której poruszać się będzie obiekt
+    /// </summary>
     class PathFinder
     {
         private const int M = 10000;
@@ -44,13 +47,20 @@ namespace ICGame
                 throw new MissingFieldException("PathFinder was not initialized");
         }
 
-        public void FindPath(Point start, Point goal, int objectRadius, IControllable controllable)
+        /// <summary>
+        /// Oblicza ścieżkę dla obiektu.
+        /// </summary>
+        /// <param name="start">Punkt początkowy ścieżki</param>
+        /// <param name="goal">Puntk docelowy</param>
+        /// <param name="objectRadius">Promień kuli, która jest w stanie objąć cały obiekt</param>
+        /// <param name="controllable">Obiekt, dla którego obliczana jest ścieżka</param>
+        /// <param name="gameObjects">Lista wszystkich obiektów na planszy</param>
+        public void FindPath(Point start, Point goal, int objectRadius, IControllable controllable, List<GameObject> gameObjects)
         {
             msg = "";
             DateTime dateTime = DateTime.Now;
             if(!radiuses.Contains(objectRadius))
             {
-
                 curProcessed = ProcessMap(map, objectRadius, out curAvgDifficulty);
                 lastRadius = objectRadius;
                 lock (maps)
@@ -62,13 +72,14 @@ namespace ICGame
             }
             else
             {
+                lastRadius = objectRadius;
                 curProcessed = maps[radiuses.IndexOf(objectRadius)];
                 curAvgDifficulty = avgDifficulties[radiuses.IndexOf(objectRadius)];
             }
             msg += (DateTime.Now - dateTime).ToString() + "\r\n";
             Thread th = new Thread(new ParameterizedThreadStart(AStar));
             pathTime = DateTime.Now;
-            th.Start(new AStarArg(start,goal,controllable));
+            th.Start(new AStarArg(start,goal,controllable, gameObjects));
             //AStar(start, goal, out path);
         }
 
@@ -122,6 +133,46 @@ namespace ICGame
             }
             avgDifficulty = (double)ad/(double)(resultMap.GetLength(0)*resultMap.GetLength(1));
             return resultMap;
+        }
+
+        private int[,] PutUnits(ref int[,] map, List<GameObject> gameObjects, GameObject current)
+        {
+            int[,] output = new int[map.GetLength(0), map.GetLength(1)];
+
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    output[i, j] = map[i, j];
+                }
+            }
+
+            foreach (GameObject gameObject in gameObjects)
+            {
+                if ((gameObject is Unit || gameObject is Civilian) && gameObject != current)
+                {
+                    IPhysical physical = gameObject as IPhysical;
+                    int startI = Convert.ToInt32(Math.Floor(gameObject.Position.X - physical.Width/2.0)) - lastRadius;
+                    if(startI < 0) startI = 0;
+                    int endI = Convert.ToInt32(Math.Ceiling(gameObject.Position.X + physical.Width/2.0)) + lastRadius;
+                    if(endI >= map.GetLength(0)) endI = map.GetLength(0) - 1;
+                    int startJ = Convert.ToInt32(Math.Floor(gameObject.Position.Z - physical.Length/2.0)) - lastRadius;
+                    if (startJ < 0) startJ = 0;
+                    int endJ = Convert.ToInt32(Math.Ceiling(gameObject.Position.Z + physical.Length/2.0)) + lastRadius;
+                    if (endJ >= map.GetLength(0)) endI = map.GetLength(0) - 1;
+                    for (int i = startI; i < endI; ++i)
+                    {
+                        for (int j = startJ; j < endJ; ++j)
+                        {
+                            if (i < 0 || j < 0)
+                                throw new ArgumentOutOfRangeException("Bad location of object" + physical.ToString());
+                            output[i, j] = M;
+                        }
+                    }
+                }
+            }
+
+            return output;
         }
 
         private static int[,] PutObjects(ref int[,] map, List<GameObject> gameObjects)
@@ -408,6 +459,9 @@ namespace ICGame
             {
                 return;
             }
+
+            curProcessed = PutUnits(ref curProcessed, aStarArg.GameObjects, (GameObject) aStarArg.Controllable);
+
             if (curProcessed[aStarArg.Goal.X, aStarArg.Goal.Y] == M)
             {
                 aStarArg.Controllable.Path = new List<Point>();
@@ -415,15 +469,15 @@ namespace ICGame
             }
             else
             {
-                DateTime dateTime = DateTime.Now;
+                //DateTime dateTime = DateTime.Now;
                 AStar(aStarArg.Start, aStarArg.Goal, out path);
-                msg += (DateTime.Now - dateTime).ToString() + "\r\n";
-                dateTime = DateTime.Now;
+                //msg += (DateTime.Now - dateTime).ToString() + "\r\n";
+                //dateTime = DateTime.Now;
                 if (pathTime > aStarArg.Controllable.PathTime)
                 {
                     this.OpitmizePath(ref path);
-                    msg += (DateTime.Now - dateTime).ToString() + "\r\n";
-                    dateTime = DateTime.Now;
+                    //msg += (DateTime.Now - dateTime).ToString() + "\r\n";
+                    //dateTime = DateTime.Now;
                     aStarArg.Controllable.Path = path;
                     aStarArg.Controllable.NextStep = new Vector2(((GameObject) aStarArg.Controllable).Position.X,
                                                                  ((GameObject) aStarArg.Controllable).Position.Z);
@@ -558,12 +612,14 @@ namespace ICGame
             public Point Start{ get; set; }
             public Point Goal { get; set; }
             public IControllable Controllable { get; set; }
+            public List<GameObject> GameObjects { get; set; }
 
-            public AStarArg(Point start, Point goal, IControllable controllable)
+            public AStarArg(Point start, Point goal, IControllable controllable, List<GameObject> gameObjects)
             {
                 Start = start;
                 Goal = goal;
                 Controllable = controllable;
+                GameObjects = gameObjects;
             }
         }
 

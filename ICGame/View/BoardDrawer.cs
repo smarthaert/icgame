@@ -19,7 +19,7 @@ namespace ICGame
             set;
         }
 
-        public void DrawSkyDome(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void DrawSkyDome(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, float? alpha = null)
         {
             Matrix[] modelTransforms = new Matrix[Board.SkyDomeModel.Bones.Count];
             Board.SkyDomeModel.CopyAbsoluteBoneTransformsTo(modelTransforms);
@@ -32,11 +32,19 @@ namespace ICGame
                 {
                     Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * Matrix.CreateScale(400) * Matrix.CreateTranslation(modifiedCameraPosition);
                     currentEffect.CurrentTechnique = currentEffect.Techniques["SkyDome"];
-                    currentEffect.Parameters["xWorld"].SetValue(worldMatrix);
-                    currentEffect.Parameters["xView"].SetValue(view);
-                    currentEffect.Parameters["xProjection"].SetValue(projection);
+                    currentEffect.Parameters["xWorldViewProjection"].SetValue(worldMatrix * view * projection);
                     currentEffect.Parameters["xTexture"].SetValue(Board.CloudMap);
                     currentEffect.Parameters["xEnableLighting"].SetValue(false);
+                    
+                    if (alpha == null)
+                    {
+                        currentEffect.Parameters["xSetAlpha"].SetValue(false);
+                    }
+                    else
+                    {
+                        currentEffect.Parameters["xSetAlpha"].SetValue(true);
+                        currentEffect.Parameters["xAlpha"].SetValue((float)alpha);
+                    }
                 }
                 mesh.Draw();
             }
@@ -51,11 +59,11 @@ namespace ICGame
         /// <param name="cameraPosition">Pozycja kamery</param>
         /// <param name="clipPlane">Plan, wzdluz ktorego nastepuje przyciecie. Jezeli clipPlane == null, przyciecie nie nastepuje.
         ///                         Jezeli clipPlane != null nastepuje rowniez zmniejszenie w kazdym wymiarze liczby wierzcholkow o Board.ReduceFactor</param>
-        public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane)
+        public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane, float? alpha = null)
         {
             Effect effect = TechniqueProvider.GetEffect("MultiTextured");
             graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            DrawSkyDome(graphicsDevice, view, projection, cameraPosition);
+            DrawSkyDome(graphicsDevice, view, projection, cameraPosition, alpha);
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             effect.CurrentTechnique = effect.Techniques["MultiTextured"];
@@ -82,7 +90,17 @@ namespace ICGame
             effect.Parameters["xAmbient"].SetValue(0.4f);
             effect.Parameters["xLightDirection"].SetValue(Board.LightDirection);
             effect.Parameters["xCameraPosition"].SetValue(cameraPosition);
-            
+
+            if (alpha == null)
+            {
+                effect.Parameters["xSetAlpha"].SetValue(false);
+            }
+            else
+            {
+                effect.Parameters["xSetAlpha"].SetValue(true);
+                effect.Parameters["xAlpha"].SetValue((float)alpha);
+            }
+
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();

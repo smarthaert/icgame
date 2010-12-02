@@ -30,7 +30,7 @@ namespace ICGame
             Board.SkyDome.GeneratePerlinNoise(time);
         }
 
-        public void LoadObjects(GameObjectFactory gameObjectFactory,EffectController effectController)
+        public void LoadObjects(GameObjectFactory gameObjectFactory)
         {
             GameObject obj = gameObjectFactory.CreateGameObject("home0");
             obj.Position=new Vector3(122.0f,Board.GetHeight(122.0f,82.0f),82.0f);

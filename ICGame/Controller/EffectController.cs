@@ -41,6 +41,11 @@ namespace ICGame
             }
         }
 
+        public TextureDrawer GetTextureDrawer()
+        {
+            return new TextureDrawer();
+        }
+
         /// <summary>
         /// Deprecated
         /// </summary>

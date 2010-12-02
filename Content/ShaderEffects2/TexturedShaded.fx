@@ -31,6 +31,8 @@ bool xEnableLighting;
 bool xHasTexture;
 float4 xClipPlane0;
 bool xClipPlanes;
+bool xSetAlpha;
+float xAlpha;
 
 float calcRS;
 //------- Texture Samplers --------
@@ -96,7 +98,10 @@ PixelToFrame NotRlyTexturedShadedPS(VertexToPixel PSIn)
 	Output.Color +=float4(PSIn.calcRS*xSpecularColor,0);
 	Output.Color.rgb *= saturate(PSIn.LightingFactor);
 
-	Output.Color.a=xTransparency;
+	if(!xSetAlpha)
+		Output.Color.a=xTransparency;
+	else
+		Output.Color.a = xAlpha;
 
 	return Output;
 }
@@ -181,7 +186,10 @@ PixelToFrame TexturedShadedPS(VertexToPixel PSIn)
 	Output.Color +=float4(PSIn.calcRS*xSpecularColor,0);
 	Output.Color.rgb *= 0.7f * saturate(PSIn.LightingFactor);
 
-	Output.Color.a=xTransparency;
+	if(!xSetAlpha)
+		Output.Color.a=xTransparency;
+	else
+		Output.Color.a = xAlpha;
 
 	return Output;
 }
@@ -246,7 +254,10 @@ PixelToFrame BlueHologramPS(VertexToPixel PSIn)
 	Output.Color.rgb *= PSIn.Color;
 	Output.Color.rgb *= PSIn.LightingFactor;
 	
-	Output.Color.a=xTransparency;
+	if(!xSetAlpha)
+		Output.Color.a=xTransparency;
+	else
+		Output.Color.a = xAlpha;
 
 	return Output;
 }
@@ -257,7 +268,7 @@ technique BlueHologram
 {
 	pass Pass0
 	{   
-		VertexShader = compile vs_1_1 BlueHologramVS();
+		VertexShader = compile vs_2_0 BlueHologramVS();
 		PixelShader  = compile ps_2_0 BlueHologramPS();
 	}
 }
@@ -303,7 +314,10 @@ PixelToFrame NotRlyBlueHologramPS(VertexToPixel PSIn)
 	Output.Color.rgb = PSIn.Color;
 	Output.Color.rgb *= PSIn.LightingFactor;
 	
-	Output.Color.a=xTransparency;
+	if(!xSetAlpha)
+		Output.Color.a=xTransparency;
+	else
+		Output.Color.a = xAlpha;
 
 	return Output;
 }
@@ -314,7 +328,7 @@ technique NotRlyBlueHologram
 {
 	pass Pass0
 	{   
-		VertexShader = compile vs_1_1 NotRlyBlueHologramVS();
+		VertexShader = compile vs_2_0 NotRlyBlueHologramVS();
 		PixelShader  = compile ps_2_0 NotRlyBlueHologramPS();
 	}
 }

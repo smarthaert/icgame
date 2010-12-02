@@ -8,10 +8,9 @@ namespace ICGame
 {
     public class GameObjectFactory
     {
-        private EffectController EffectController;
-        public GameObjectFactory(EffectController effectController)
+        public GameObjectFactory()
         {
-            EffectController = effectController;
+            
         }
         
         public enum ObjectClass
@@ -41,7 +40,7 @@ namespace ICGame
         {
             GameObjectStatsReader.Initialize();
 
-            foreach (string name in GameObjectStatsReader.GetObjectsToLoad())
+            foreach (string name in GameObjectStatsReader.GetStatsReader().GetObjectsToLoad())
             {
                 loadedModels.Add(name,new LoadedModel ());
                 Model tempModel = loadedModels[name].model;
@@ -57,8 +56,6 @@ namespace ICGame
                 {
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
-                        //meshPart.Effect = game.effect.Clone(game.GraphicsDevice);
-                        //CONV
                         meshPart.Effect = TechniqueProvider.GetEffect("TexturedShaded").Clone();
                     }
                 }
@@ -72,17 +69,15 @@ namespace ICGame
             
             LoadedModel loadedModel = loadedModels[name];
             GameObject newObject = null;
-            ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetObjectStats(name);
+            ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetStatsReader().GetObjectStats(name);
             
             switch (objectStats.Type) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
                     newObject = new Vehicle(loadedModel.model, objectStats as ObjectStats.VehicleStats);
-                    //if (loadedModel.name == "firetruck_2")
-                    //    EffectController.AddEffectToAnObject(newObject,"water"); //tak, bezsens...
-
-       
+                    
                     (newObject as Vehicle).SelectionRing = (CreateGameObject("selection_ring") as StaticObject); //creepy
+
                     //Hotffix
                     if(name == "chassy_1")
                         newObject.Position = new Vector3(100, 0, 80);

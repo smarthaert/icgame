@@ -20,8 +20,8 @@
   </GameObject>
   <GameObject Name="selection_ring" Type="StaticObject" />
   <GameObject Name="animfigure" Type="Infantry">
-    <GameObjectAttribute AttributeName="Speed" AttributeType="float">0.1f</GameObjectAttribute>
-    <GameObjectAttribute AttributeName="TurnRadius" AttributeType="float">0.1f</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="Speed" AttributeType="float">0,1</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="TurnRadius" AttributeType="float">0,1</GameObjectAttribute>
   </GameObject>
   <GameObject Name="home0" Type="Building">
     <GameObjectAttribute AttributeName="Effect" AttributeType="string">fire</GameObjectAttribute>

@@ -7,11 +7,11 @@ namespace ICGame
     public class Campaign
     {
     
-        public Campaign(EffectController effectController)
+        public Campaign()
         {
             GameState = GameState.Initialize;
             UnitContainer = new UnitContainer();
-            GameObjectFactory = new GameObjectFactory(effectController);
+            GameObjectFactory = new GameObjectFactory();
         }
 
 

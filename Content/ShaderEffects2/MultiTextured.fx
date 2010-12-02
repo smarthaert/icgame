@@ -27,6 +27,8 @@ bool xEnableLighting;
 float xAmbient;
 float4 xClipPlane0;
 bool xClipPlanes;
+bool xSetAlpha;
+float xAlpha;
 
 float calcRS;
 //------- Texture Samplers --------
@@ -94,6 +96,9 @@ MTPixelToFrame MultiTexturedPS(MTVertexToPixel PSIn)
       
 	Output.Color.xyz *= lightingFactor;
     
+	if(xSetAlpha)
+		Output.Color.a = xAlpha;
+
     return Output;
 }
 
