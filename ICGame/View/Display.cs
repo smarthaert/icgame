@@ -110,7 +110,7 @@ namespace ICGame
             float? alpha = null;
             if(creatingEffects)
             {
-                alpha = 0;
+                alpha = 1.0f;
             }
 
             if(!creatingEffects)

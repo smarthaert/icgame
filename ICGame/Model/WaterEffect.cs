@@ -54,9 +54,9 @@ namespace ICGame
             particleEmmiter.MinStartSize = 1;
             particleEmmiter.MaxStartSize = 3;
 
-            particleEmmiter.MinColor = new Color(0, 0, 50, 0.1f);
-            particleEmmiter.MaxColor = new Color(255, 255, 200, 0.9f);
-            particleEmmiter.BlendState = BlendState.AlphaBlend;
+            particleEmmiter.MinColor = new Color(255, 255, 255, 255);
+            particleEmmiter.MaxColor = new Color(255, 255, 255, 255);
+            particleEmmiter.BlendState = BlendState.NonPremultiplied;
 
             particleEmmiter.MinEndSize = 3;
             particleEmmiter.MaxEndSize = 7;
