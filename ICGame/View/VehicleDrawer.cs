@@ -20,7 +20,7 @@ namespace ICGame
             Vehicle vehicle = GameObject as Vehicle;
             if (vehicle.Selected)
             {
-                vehicle.SelectionRing.GetDrawer().Draw(projection, viewMatrix, cameraPosition, gd, clipPlane);
+                //vehicle.SelectionRing.GetDrawer().Draw(projection, viewMatrix, cameraPosition, gd, clipPlane);
             }
 
             base.Draw(projection, viewMatrix, cameraPosition, gd, clipPlane, alpha);

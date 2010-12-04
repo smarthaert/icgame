@@ -65,6 +65,7 @@ namespace GameObjectCreator
             ClearPanel1();
             panel1.Enabled = false;
             editState = EditState.None;
+            ioHandler.Reset();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -77,33 +78,7 @@ namespace GameObjectCreator
                 }
                 //TODO: Sprawdzanie obecności wymaganych pól
 
-                XElement xElement= new XElement("GameObject");
-                xElement.SetAttributeValue("Name", textBox1.Text);
-                xElement.SetAttributeValue("Type", comboBox1.Text);
-                foreach (DataGridViewRow row in dataGridView1.Rows)
-                {
-                    if (!row.IsNewRow)
-                    {
-                        XElement el = new XElement("GameObjectAttribute");
-                        el.SetAttributeValue("AttributeName", row.Cells[0].Value);
-                        el.SetAttributeValue("AttributeType", row.Cells[1].Value);
-                        el.Value = row.Cells[2].Value.ToString();
-
-                        xElement.Add(el);
-                    }
-                }
-                if (editState == EditState.Creating)
-                {
-                    ioHandler.XDocument.Root.Add(xElement);
-                }
-                else if (editState == EditState.Editing)
-                {
-                    ioHandler.XDocument.Root.Elements().ElementAt(selectedToEdit).ReplaceWith(xElement);
-                }
-                else
-                {
-                    throw new Exception();
-                }
+                SetValues();
                 
                 ioHandler.WriteXMLFile();
 
@@ -117,6 +92,47 @@ namespace GameObjectCreator
             catch (Exception ex)
             {
                 MessageBox.Show("Insufficent data\r\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SetValues()
+        {
+            XElement xElement = new XElement("GameObject");
+            xElement.SetAttributeValue("Name", textBox1.Text);
+            xElement.SetAttributeValue("Type", comboBox1.Text);
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    XElement el = new XElement("GameObjectAttribute");
+                    el.SetAttributeValue("AttributeName", row.Cells[0].Value);
+                    el.SetAttributeValue("AttributeType", row.Cells[1].Value);
+                    if (ioHandler.XDocument.Root.Elements().ElementAt(selectedToEdit).
+                        Elements().Count() > row.Index)
+                    {
+                        foreach (XAttribute xAttribute in ioHandler.XDocument.Root.Elements().ElementAt(selectedToEdit).
+                            Elements().ElementAt(row.Index).Attributes().Where(
+                                s => s.Name != "AttributeName" && s.Name != "AttributeType"))
+                        {
+                            el.SetAttributeValue(xAttribute.Name, xAttribute.Value); //don't like this
+                        }
+                    }
+                    el.Value = row.Cells[2].Value.ToString();
+
+                    xElement.Add(el);
+                }
+            }
+            if (editState == EditState.Creating)
+            {
+                ioHandler.XDocument.Root.Add(xElement);
+            }
+            else if (editState == EditState.Editing)
+            {
+                ioHandler.XDocument.Root.Elements().ElementAt(selectedToEdit).ReplaceWith(xElement);
+            }
+            else
+            {
+                throw new Exception();
             }
         }
 
@@ -172,6 +188,24 @@ namespace GameObjectCreator
                 ClearPanel1();
 
                 ioHandler.WriteXMLFile();
+            }
+        }
+
+        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            XElement xElement;
+
+            DataGridView dataGridView = (DataGridView) sender;
+
+            if (!dataGridView.SelectedCells[0].OwningRow.IsNewRow)
+            {
+                SetValues();
+                xElement =
+                    ioHandler.XDocument.Root.Elements().ElementAt(selectedToEdit).Elements().ElementAt(
+                        dataGridView.SelectedCells[0].OwningRow.Index);
+                EditAttributes editAttributes = new EditAttributes(ref xElement);
+
+                editAttributes.Show();
             }
         }
     }

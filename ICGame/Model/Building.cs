@@ -12,8 +12,7 @@ namespace ICGame
         public Building(Model model, ObjectStats.BuildingStats buildingStats)
             : base(model, buildingStats)
         {
-            //Position = new Vector3(10,0,16);
-            PhysicalTransforms = Matrix.Identity;// +Matrix.CreateTranslation(Position);
+            PhysicalTransforms = Matrix.Identity;
 
             Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
@@ -153,7 +152,7 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public void Animate(GameTime gameTime, List<GameObject> gameObjects)
+        public void Animate(GameTime gameTime, GameObject[] gameObjects)
         {
             
         }
@@ -200,8 +199,8 @@ namespace ICGame
             Vector3 near = new Vector3((float)x, (float)y, 0f);
             Vector3 far = new Vector3((float)x, (float)y, 1f);
 
-            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, ModelMatrix);
-            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, ModelMatrix);
+            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, AbsoluteModelMatrix);
 
             Vector3 direction = farpt - nearpt;
 
@@ -221,7 +220,7 @@ namespace ICGame
             throw new NotImplementedException();
         }
 
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, GameObject[] gameObjects, GameTime gameTime)
         {
             throw new NotImplementedException();
         }

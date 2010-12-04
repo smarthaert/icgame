@@ -9,7 +9,7 @@ namespace ICGame
     public interface IDrawable
     {
 
-        Matrix ModelMatrix
+        Matrix AbsoluteModelMatrix
         {
             get;
         
@@ -60,6 +60,11 @@ namespace ICGame
         {
             get;
             set;
+        }
+
+        bool Visible
+        {
+            get; set;
         }
     
         GameObjectDrawer GetDrawer();

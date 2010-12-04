@@ -21,12 +21,13 @@ namespace ICGame.Helper
             
         }
 
-        public void Draw(GraphicsDevice graphicsDevice, List<GameObject> gameObjects, Camera camera, Matrix projection, GameTime gameTime)
+        public void Draw(GraphicsDevice graphicsDevice, GameObject[] gameObjects, Camera camera, Matrix projection, GameTime gameTime)
         {
             graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
             graphicsDevice.RasterizerState = RasterizerState.CullNone;
-            
             graphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            //TODO: Sortowanie efektów
             
             foreach (GameObject gameObject in gameObjects)
             {

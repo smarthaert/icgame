@@ -42,7 +42,7 @@ namespace ICGame
             get; set;
         }
 
-        void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects);
+        void CalculateNextStep(GameTime gameTime, GameObject[] gameObjects);
 
         void Move(Direction direction, GameTime gameTime);
 

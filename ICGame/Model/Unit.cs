@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using ICGame.ObjectStats;
 using ICGame.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,10 +13,7 @@ namespace ICGame
 {
     public class Unit : GameObject, IAnimated, IPhysical, IInteractive, IDestructible, IControllable
     {
-        public StaticObject SelectionRing
-        {
-            get; set;
-        }
+        protected StaticObject selectionRing;
         private BoundingBox boundingBox;
 
         protected Matrix[] BasicTransforms
@@ -39,19 +37,34 @@ namespace ICGame
             get; set;
         }
 
-        public Unit(Model model, ObjectStats.UnitStats unitStats):
+        public Unit(Model model, UnitStats unitStats):
             base(model, unitStats)
         {
             moving = Direction.None;
             turning = Direction.None;
             Speed = unitStats.Speed;
             TurnRadius = unitStats.TurnRadius;
+
+            if (children == null)
+            {
+                children = new List<GameObject>();
+            }
+
+            for (int i = 0; i < unitStats.SubElements.Count; ++i )
+            {
+                if (unitStats.SubElements[i].Name == "selection_ring")
+                {
+                    selectionRing = (StaticObject)children[i];
+                    selectionRing.Visible = false;
+                    
+                    break;
+                }
+            }
+
             Path = new List<Point>();
             lastGameTime = new GameTime();
             moving = Direction.None;
-            //TEMP
-            //moving = Direction.Forward;
-            //\TEMP
+
             BasicTransforms = new Matrix[Model.Bones.Count];
             int j = 0;
             foreach (ModelBone bone in Model.Bones)
@@ -109,9 +122,19 @@ namespace ICGame
 
         #region IInteractive Members
 
+        private bool selected;
+
         public bool Selected
         {
-			get;set;
+			get
+			{
+			    return selected;
+			}
+            set
+			{
+			    selectionRing.Visible = value;
+			    selected = value;
+			}
         }
 
         #endregion
@@ -157,7 +180,7 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public virtual void Animate(GameTime gameTime, List<GameObject> gameObjects)
+        public virtual void Animate(GameTime gameTime, GameObject[] gameObjects)
         {
             CalculateNextStep(gameTime, gameObjects);
             for(int i = 0; i < Model.Bones.Count; ++i)
@@ -196,17 +219,17 @@ namespace ICGame
 
         #region IControllable Members
 
-        public Microsoft.Xna.Framework.Vector2 Destination
+        public Vector2 Destination
         {
             get; set;
         }
 
-        public Microsoft.Xna.Framework.Vector2 NextStep
+        public Vector2 NextStep
         {
             get; set;
         }
 
-        public virtual void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
+        public virtual void CalculateNextStep(GameTime gameTime, GameObject[] gameObjects)
         {
             /*NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
             NextStep = new Vector2(NextStep.X*Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.Y*Convert.ToSingle(Math.Sin(Angle.Y)),
@@ -330,13 +353,13 @@ namespace ICGame
             set;
         }
 
-        public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+        public float? CheckClicked(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
         {
             Vector3 near = new Vector3((float)x, (float)y, 0f);
             Vector3 far = new Vector3((float)x, (float)y, 1f);
 
-            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, ModelMatrix);
-            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, ModelMatrix);
+            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, AbsoluteModelMatrix);
 
             Vector3 direction = farpt - nearpt;
 
@@ -381,7 +404,7 @@ namespace ICGame
         public bool CheckMove(IPhysical physical, BoundingBox thisBB, GameTime gameTime)
         {
             GameObject go = physical as GameObject;
-            BoundingBox checkBB = BoundingBoxTools.TransformBoundingBox(physical.BoundingBox, go.ModelMatrix);
+            BoundingBox checkBB = BoundingBoxTools.TransformBoundingBox(physical.BoundingBox, go.AbsoluteModelMatrix);
             
             return !thisBB.Intersects(checkBB);
         }
@@ -391,7 +414,7 @@ namespace ICGame
             return OOBoundingBox.Intersects(physical.OOBoundingBox);
         }
 
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, GameObject[] gameObjects, GameTime gameTime)
         {
             float spd = 0;
             if (directionFB == Direction.Forward)
@@ -494,7 +517,5 @@ namespace ICGame
         }
 
         #endregion
-
     }
-
 }

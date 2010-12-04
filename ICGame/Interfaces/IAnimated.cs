@@ -8,7 +8,7 @@ namespace ICGame
     public interface IAnimated
     {
 
-        void Animate(GameTime gameTime, List<GameObject> gameObjects);
+        void Animate(GameTime gameTime, GameObject[] gameObjects);
 
         Matrix[] GetBasicTransforms();
     }

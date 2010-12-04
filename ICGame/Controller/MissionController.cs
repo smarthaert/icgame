@@ -54,7 +54,7 @@ namespace ICGame
         /// Do wywalenia w przyszłości
         /// </summary>
         /// <returns></returns>
-        public List<GameObject> GetMissionObjects()
+        public GameObject[] GetMissionObjects()
         {
             return Mission.ObjectContainer.GameObjects;
         }
