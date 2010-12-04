@@ -118,7 +118,7 @@ namespace ICGame
                 CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), gameTime);
             }
 
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, Camera.CameraMatrix, Projection, Camera.CameraPosition, null, alpha);
+            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, Camera.CameraMatrix, Projection, Camera.CameraPosition, null, creatingEffects, alpha);
 
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {

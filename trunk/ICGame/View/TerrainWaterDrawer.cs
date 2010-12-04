@@ -28,7 +28,7 @@ namespace ICGame
             return planeCoeffs;
         }
 
-        public void DrawRefractionMap(GraphicsDevice device, List<GameObject> gameObjects)
+        public void DrawRefractionMap(GraphicsDevice device, GameObject[] gameObjects)
         {
             Vector4 refractionPlane = CreatePlane(terrainWater.WaterHeight + 6.5f, new Vector3(0, -1, 0), false);
             Vector4 vRefractionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), false);
@@ -36,7 +36,7 @@ namespace ICGame
             device.SetRenderTarget(terrainWater.RefractionRenderTarget);
             device.Clear(ClearOptions.Target, Color.White, 1.0f, 0);
             terrainWater.Board.GetDrawer().Draw(device, terrainWater.Camera.CameraMatrix, terrainWater.ProjectionMatrix, 
-                                                terrainWater.Camera.CameraPosition, refractionPlane);
+                                                terrainWater.Camera.CameraPosition, refractionPlane, true);
 
             foreach (GameObject o in gameObjects)
             {
@@ -70,7 +70,7 @@ namespace ICGame
             terrainWater.ReflectionViewMatrix = Matrix.CreateLookAt(terrainWater.ReflCameraPosition, reflTargetPos, invUpVector);
         }
 
-        public void DrawReflectionMap(GraphicsDevice device, List<GameObject> gameObjects)
+        public void DrawReflectionMap(GraphicsDevice device, GameObject[] gameObjects)
         {
             UpdateReflectionViewMatrix(terrainWater.Camera);
 
@@ -80,7 +80,7 @@ namespace ICGame
             
             device.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
             terrainWater.Board.GetDrawer().Draw(device, terrainWater.ReflectionViewMatrix,
-                                                terrainWater.ProjectionMatrix, terrainWater.ReflCameraPosition, reflectionPlane);
+                                                terrainWater.ProjectionMatrix, terrainWater.ReflCameraPosition, reflectionPlane, true);
             foreach (GameObject o in gameObjects)
             {
                 o.GetDrawer().Draw(terrainWater.ProjectionMatrix, terrainWater.ReflectionViewMatrix, terrainWater.ReflCameraPosition, device, reflectionPlane);
@@ -124,7 +124,7 @@ namespace ICGame
             }
         }
 
-        public void Draw(GraphicsDevice device, List<GameObject> gameObjects, GameTime gameTime)
+        public void Draw(GraphicsDevice device, GameObject[] gameObjects, GameTime gameTime)
         {
             terrainWater.Time = (float)(gameTime.TotalGameTime.TotalMilliseconds) / 2000000.0f;
             

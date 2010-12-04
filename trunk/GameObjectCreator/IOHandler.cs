@@ -22,6 +22,11 @@ namespace GameObjectCreator
             XDocument = XDocument.Load(path);
         }
 
+        public void Reset()
+        {
+            ReadXMLFile();
+        }
+
         public void WriteXMLFile()
         {
             XDocument.Save(path);

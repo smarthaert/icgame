@@ -101,13 +101,23 @@ namespace ICGame
 
         public float Length { get; set; }
 
-		public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+		public float? CheckClicked(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
         {
-            throw new NotImplementedException();
+            Vector3 near = new Vector3((float)x, (float)y, 0f);
+            Vector3 far = new Vector3((float)x, (float)y, 1f);
+
+            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+
+            Vector3 direction = farpt - nearpt;
+
+            direction.Normalize();
+
+            Ray ray = new Ray(nearpt, direction);
+
+            return BoundingBox.Intersects(ray);
         }
 
         #endregion
-
-
     }
 }

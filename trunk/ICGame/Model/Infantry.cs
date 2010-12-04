@@ -14,7 +14,7 @@ namespace ICGame
             
         }
 
-        public override void Animate(GameTime gameTime, List<GameObject> gameObjects)
+        public override void Animate(GameTime gameTime, GameObject[] gameObjects)
         {
             
             base.Animate(gameTime, gameObjects);

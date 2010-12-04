@@ -9,6 +9,7 @@
     <GameObjectAttribute AttributeName="HasTurret" AttributeType="bool">true</GameObjectAttribute>
     <GameObjectAttribute AttributeName="WaterSourceCount" AttributeType="int">2</GameObjectAttribute>
     <GameObjectAttribute AttributeName="Effect" AttributeType="string">water</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="SubModel" AttributeType="string" Position="0 0 0" Rotation="0 0 0" Scale="1 1 1">selection_ring</GameObjectAttribute>
   </GameObject>
   <GameObject Name="chassy_1" Type="Vehicle">
     <GameObjectAttribute AttributeName="Speed" AttributeType="float">0,005</GameObjectAttribute>
@@ -17,6 +18,7 @@
     <GameObjectAttribute AttributeName="FrontWheelsCount" AttributeType="int">2</GameObjectAttribute>
     <GameObjectAttribute AttributeName="DoorCount" AttributeType="int">2</GameObjectAttribute>
     <GameObjectAttribute AttributeName="HasTurret" AttributeType="bool">false</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="SubModel" AttributeType="string">selection_ring</GameObjectAttribute>
   </GameObject>
   <GameObject Name="selection_ring" Type="StaticObject" />
   <GameObject Name="animfigure" Type="Infantry">
@@ -24,7 +26,7 @@
     <GameObjectAttribute AttributeName="TurnRadius" AttributeType="float">0,1</GameObjectAttribute>
   </GameObject>
   <GameObject Name="home0" Type="Building">
-    <GameObjectAttribute AttributeName="Effect" AttributeType="string">fire</GameObjectAttribute>
-    <GameObjectAttribute AttributeName="Effect" AttributeType="string">firesmoke</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="Effect" AttributeType="string" Name="firetruck_2" Type="Vehicle">fire</GameObjectAttribute>
+    <GameObjectAttribute AttributeName="Effect" AttributeType="string" Name="chassy_1" Type="Vehicle">firesmoke</GameObjectAttribute>
   </GameObject>
 </GameObjects>

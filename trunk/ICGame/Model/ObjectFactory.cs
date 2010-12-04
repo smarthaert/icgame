@@ -66,17 +66,15 @@ namespace ICGame
 
         public GameObject CreateGameObject(string name)
         {
-            
             LoadedModel loadedModel = loadedModels[name];
             GameObject newObject = null;
             ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetStatsReader().GetObjectStats(name);
+            objectStats.GameObjectFactory = this;       //może to da się rozwiązać lepiej - teraz daję obiektowi w konstruktorze dostęp do GameObjectFactory, żeby mógł sobie załadować podmodele
             
             switch (objectStats.Type) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:
                     newObject = new Vehicle(loadedModel.model, objectStats as ObjectStats.VehicleStats);
-                    
-                    (newObject as Vehicle).SelectionRing = (CreateGameObject("selection_ring") as StaticObject); //creepy
 
                     //Hotffix
                     if(name == "chassy_1")

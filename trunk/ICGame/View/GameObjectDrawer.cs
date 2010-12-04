@@ -30,12 +30,6 @@ namespace ICGame
             }
         }
 
-        public void DrawSelectionDisc(Matrix projection, Camera camera, GraphicsDevice gd)
-        {
-
-        }
-
-
         /// <summary>
         /// Rysowanie miniaturki modelu, na pozycji UI
         /// </summary>
@@ -44,6 +38,16 @@ namespace ICGame
         /// <param name="gd">Graphics device</param>
         public virtual void DrawSmallModel(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime, float? alpha = null)
         {
+            if (!GameObject.Visible)
+            {
+                return;
+            }
+
+            foreach (GameObject child in GameObject.GetChildren())
+            {
+                child.GetDrawer().DrawSmallModel(projection, camera, gd, gameTime, alpha);
+            }
+
             gd.BlendState = BlendState.AlphaBlend;
             gd.RasterizerState = RasterizerState.CullCounterClockwise;
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
@@ -107,12 +111,12 @@ namespace ICGame
                                                                    temporaryCamera.CameraMatrix, Matrix.Identity);
 
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] *
-                                                         GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width,
+                                                         GameObject.GetAbsoluteSmallModelMatrix(unproject, gd.Viewport.Width,
                                                                                         gameTime));
                     temporaryCamera.Reset();
                     effect.Parameters["xView"].SetValue(temporaryCamera.CameraMatrix);
                     effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * 
-                                                                        GameObject.GetSmallModelMatrix(unproject, gd.Viewport.Width, gameTime) * 
+                                                                        GameObject.GetAbsoluteSmallModelMatrix(unproject, gd.Viewport.Width, gameTime) * 
                                                                         temporaryCamera.CameraMatrix * projection);
                     
                 }
@@ -133,8 +137,12 @@ namespace ICGame
 
         public virtual void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, GraphicsDevice gd, Vector4? clipPlane, float? alpha = null)
         {
+            if(!GameObject.Visible)
+            {
+                return;
+            }
             Matrix[] transforms = new Matrix[GameObject.Model.Bones.Count];
-            Matrix modelMatrix = GameObject.ModelMatrix;
+            Matrix modelMatrix = GameObject.AbsoluteModelMatrix;
             GameObject.Model.CopyAbsoluteBoneTransformsTo(transforms);
             gd.RasterizerState = RasterizerState.CullCounterClockwise;
             foreach (var model in GameObject.Model.Meshes)

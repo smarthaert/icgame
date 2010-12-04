@@ -106,7 +106,7 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public void Animate(GameTime gameTime, List<GameObject> gameObjects)
+        public void Animate(GameTime gameTime, GameObject[] gameObjects)
         {
             throw new NotImplementedException();
         }
@@ -189,7 +189,7 @@ namespace ICGame
             throw new NotImplementedException();
         }
 
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, List<GameObject> gameObjects, GameTime gameTime)
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, GameObject[] gameObjects, GameTime gameTime)
         {
             throw new NotImplementedException();
         }

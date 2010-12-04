@@ -58,8 +58,10 @@ namespace ICGame
         /// <param name="projection">Macierz przyciecia</param>
         /// <param name="cameraPosition">Pozycja kamery</param>
         /// <param name="clipPlane">Plan, wzdluz ktorego nastepuje przyciecie. Jezeli clipPlane == null, przyciecie nie nastepuje.
-        ///                         Jezeli clipPlane != null nastepuje rowniez zmniejszenie w kazdym wymiarze liczby wierzcholkow o Board.ReduceFactor</param>
-        public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane, float? alpha = null)
+        ///                         </param>
+        /// <param name="useLessVertices">Jezeli useLessVertices == true nastepuje rowniez zmniejszenie w kazdym wymiarze liczby wierzcholkow o Board.ReduceFactor</param>
+        /// <param name="alpha">Ustawia przezroczystość na konkretną wartość, jeżeli alpha != null</param>
+        public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane, bool useLessVertices, float? alpha = null)
         {
             Effect effect = TechniqueProvider.GetEffect("MultiTextured");
             graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
@@ -108,7 +110,7 @@ namespace ICGame
                 int noTriangles;
 
                 graphicsDevice.SetVertexBuffer(Board.TerrainVertexBuffer);
-                if (clipPlane == null)
+                if (!useLessVertices)
                 {
                     graphicsDevice.Indices = Board.TerrainIndexBuffer;
 

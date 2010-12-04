@@ -444,7 +444,7 @@ namespace ICGame
             }
         }
 
-        public override void Animate(GameTime gameTime, List<GameObject> gameObjects)
+        public override void Animate(GameTime gameTime, GameObject[] gameObjects)
         {
             
             AnimateTurn(gameTime);
@@ -468,7 +468,7 @@ namespace ICGame
         private float toleranceX = toleranceSmall;
         private float toleranceY = toleranceSmall;
 
-        public override void CalculateNextStep(GameTime gameTime, List<GameObject> gameObjects)
+        public override void CalculateNextStep(GameTime gameTime, GameObject[] gameObjects)
         {
             if(Path.Count > 0)
             {
@@ -660,7 +660,7 @@ namespace ICGame
             Model.CopyAbsoluteBoneTransformsTo(matrices);*/
             Matrix test = Model.Bones["WaterSource0"].Transform;
          //   test *= Matrix.CreateTranslation(0, -2.4f, 1);
-            Vector3 Result = (test*Model.Bones[0].Transform*ModelMatrix).Translation;
+            Vector3 Result = (test*Model.Bones[0].Transform*AbsoluteModelMatrix).Translation;
             return Result;
         }
         //Temp jak diabli
@@ -668,7 +668,7 @@ namespace ICGame
         {
             Matrix test = Model.Bones["WaterSource1"].Transform;
             
-            Vector3 Result = (test * Model.Bones[0].Transform * ModelMatrix).Translation;
+            Vector3 Result = (test * Model.Bones[0].Transform * AbsoluteModelMatrix).Translation;
             return Result;
         }
 

@@ -37,7 +37,7 @@ namespace ICGame
             MissionController.LoadMissionData(Campaign.GameObjectFactory);
         }
 
-        public List<GameObject> GetObjectsToDraw()
+        public GameObject[] GetObjectsToDraw()
         {
             return MissionController.GetMissionObjects();
         }

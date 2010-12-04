@@ -57,9 +57,8 @@ namespace ICGame
 
         public void SendToMission(Unit unit)
         {
-            unit.Mission = Mission;
-            unit.SelectionRing.Mission = Mission;
-            Mission.ObjectContainer.GameObjects.Add(unit);
+            //unit.SelectionRing.Mission = Mission;       //TODO: usunąć i to szybko
+            Mission.ObjectContainer.AddGameObject(unit, Mission);
         }
     }
 }

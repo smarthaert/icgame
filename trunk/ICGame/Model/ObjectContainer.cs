@@ -30,18 +30,18 @@ namespace ICGame
             }
             set
             {
-                if (selectedObject < GameObjects.Count && selectedObject != -1)
+                if (selectedObject < gameObjects.Count && selectedObject != -1)
                 {
-                    if(GameObjects[selectedObject] is IInteractive)
+                    if(gameObjects[selectedObject] is IInteractive)
                     {
-                        IInteractive interactive = GameObjects[selectedObject] as IInteractive;
+                        IInteractive interactive = gameObjects[selectedObject] as IInteractive;
                         interactive.Selected = false;
                     }
                 }
                 selectedObject = value;
-                if (selectedObject != -1 && GameObjects[selectedObject] is IInteractive)
+                if (selectedObject != -1 && gameObjects[selectedObject] is IInteractive)
                 {
-                    IInteractive interactive = GameObjects[selectedObject] as IInteractive;
+                    IInteractive interactive = gameObjects[selectedObject] as IInteractive;
                     interactive.Selected = true;
                 }
             }
@@ -54,30 +54,56 @@ namespace ICGame
         public GameObjectContainer(Board board)
         {
             Board = board;
-            GameObjects=new List<GameObject>();
+            gameObjects=new List<GameObject>();
             SelectedObject = -1;
             //TEMP
             //gi = new GameInfo();
             //\TEMP
         }
-        public List<GameObject> GameObjects
+
+        private List<GameObject> gameObjects
         {
             get; set;
+        }
+
+        public GameObject[] GameObjects
+        {
+            get
+            {
+                return gameObjects.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Dodaje obiekt i jego potomków do listy.
+        /// </summary>
+        /// <param name="gameObject">Obiekt do dodania</param>
+        /// <param name="mission">Misja, do której obiekt jest wysyłany</param>
+        public void AddGameObject(GameObject gameObject, Mission mission)
+        {
+            gameObject.Mission = mission;
+            foreach (GameObject child in gameObject.GetChildren())
+            {
+                child.Mission = mission;
+            }
+
+            gameObjects.Add(gameObject);
+            gameObjects.AddRange(gameObject.GetChildren());
         }
 
         public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
         {
             float? selected = null;
             int i;
-            for (i = 0; i < GameObjects.Count; ++i)
+            for (i = 0; i < gameObjects.Count; ++i)
             {
-                if (GameObjects[i] is IPhysical)
+                if (gameObjects[i] is IPhysical)
                 {
-                    float? check = (GameObjects[i] as IPhysical).CheckClicked(x, y, camera, projection, gd);
+                    float? check = (gameObjects[i] as IPhysical).CheckClicked(x, y, camera, projection, gd);
                     if (check != null && (selected == null || check < selected))
                     {
                         selected = check;
-                        SelectedObject = i;
+                        SelectedObject = gameObjects.IndexOf(gameObjects[i].RootObject);
                     }
                 }
             }
@@ -99,22 +125,25 @@ namespace ICGame
         /// <returns>Referencje na obiekt albo null jesli nic nie kliknięto</returns>
         public GameObject CheckClickedObject(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd )
         {
-            foreach (GameObject gameObject in GameObjects)
+            foreach (GameObject gameObject in gameObjects)
             {
-                if ((gameObject as IPhysical).CheckClicked(x, y, camera, projection, gd) != null)
-                    return gameObject;
+                if(gameObject is IPhysical)
+                {
+                    if ((gameObject as IPhysical).CheckClicked(x, y, camera, projection, gd) != null)
+                    return gameObject.RootObject;
+                }
             }
             return null;
         }
 
         public void InitializePathFinder()
         {
-            pathFinder = new PathFinder(Board.GetDifficultyMap(), GameObjects);
+            pathFinder = new PathFinder(Board.GetDifficultyMap(), gameObjects);
         }
 
         public GameObject GetSelectedObject()
         {
-            foreach (GameObject gameObject in GameObjects)
+            foreach (GameObject gameObject in gameObjects)
             {
                 if (gameObject is Vehicle)
                 {
@@ -132,40 +161,40 @@ namespace ICGame
             //TEMP
             //string logText = "";
             //\TEMP
-            for (int i=0;i<GameObjects.Count;i++)
+            for (int i=0;i<gameObjects.Count;i++)
             {
-                if (GameObjects[i] is IPhysical)
+                if (gameObjects[i] is IPhysical)
                 {
-                    IPhysical go = GameObjects[i] as IPhysical; 
+                    IPhysical go = gameObjects[i] as IPhysical; 
 
-                    float sinl = Convert.ToSingle(Math.Sin(GameObjects[i].Angle.Y) * go.Length / 2);
-                    float cosl = Convert.ToSingle(Math.Cos(GameObjects[i].Angle.Y) * go.Length / 2);
-                    float sinw = Convert.ToSingle(Math.Sin(GameObjects[i].Angle.Y) * go.Width / 2);
-                    float cosw = Convert.ToSingle(Math.Cos(GameObjects[i].Angle.Y) * go.Width / 2);
+                    float sinl = Convert.ToSingle(Math.Sin(gameObjects[i].Angle.Y) * go.Length / 2);
+                    float cosl = Convert.ToSingle(Math.Cos(gameObjects[i].Angle.Y) * go.Length / 2);
+                    float sinw = Convert.ToSingle(Math.Sin(gameObjects[i].Angle.Y) * go.Width / 2);
+                    float cosw = Convert.ToSingle(Math.Cos(gameObjects[i].Angle.Y) * go.Width / 2);
 
                     //TEMP
                     //logText += sinl.ToString() + "\r\n" + cosl.ToString() + "\r\n" + sinw.ToString() + "\r\n" + cosw.ToString() + "\r\n";
                     //\TEMP
 
-                    GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,
-                        (Board.GetHeight(GameObjects[i].Position.X,GameObjects[i].Position.Z)),
-                        GameObjects[i].Position.Z);
+                    gameObjects[i].Position = new Vector3(gameObjects[i].Position.X,
+                        (Board.GetHeight(gameObjects[i].Position.X,gameObjects[i].Position.Z)),
+                        gameObjects[i].Position.Z);
                     go.AdjustToGround(
                         Board.GetHeight(
-                            GameObjects[i].Position.X + sinl,
-                            GameObjects[i].Position.Z + cosl
+                            gameObjects[i].Position.X + sinl,
+                            gameObjects[i].Position.Z + cosl
                             ),
                         Board.GetHeight(
-                            GameObjects[i].Position.X - sinl,
-                            GameObjects[i].Position.Z - cosl
+                            gameObjects[i].Position.X - sinl,
+                            gameObjects[i].Position.Z - cosl
                             ),
                         Board.GetHeight(
-                            GameObjects[i].Position.X + cosw,
-                            GameObjects[i].Position.Z - sinw
+                            gameObjects[i].Position.X + cosw,
+                            gameObjects[i].Position.Z - sinw
                             ),
                         Board.GetHeight(
-                            GameObjects[i].Position.X - cosw,
-                            GameObjects[i].Position.Z + sinw
+                            gameObjects[i].Position.X - cosw,
+                            gameObjects[i].Position.Z + sinw
                             ),
                         go.Length,
                         go.Width
@@ -173,17 +202,17 @@ namespace ICGame
                 }
                 else
                 {
-                    GameObjects[i].Position = new Vector3(GameObjects[i].Position.X,
-                        (Board.GetHeight(GameObjects[i].Position.X, GameObjects[i].Position.Z)),
-                        GameObjects[i].Position.Z);
+                    gameObjects[i].Position = new Vector3(gameObjects[i].Position.X,
+                        (Board.GetHeight(gameObjects[i].Position.X, gameObjects[i].Position.Z)),
+                        gameObjects[i].Position.Z);
                 }
                 //TEMP
                 //logText += Convert.ToString(i) + ":\r\n";
-                //logText += "Position:\t" + GameObjects[i].Position.ToString() + "\r\n";
-                //logText += "Rotation:\t" + GameObjects[i].Angle.ToString() + "\r\n";
-                if (GameObjects[i] is IPhysical)
+                //logText += "Position:\t" + gameObjects[i].Position.ToString() + "\r\n";
+                //logText += "Rotation:\t" + gameObjects[i].Angle.ToString() + "\r\n";
+                if (gameObjects[i] is IPhysical)
                 {
-                    IPhysical ip = GameObjects[i] as IPhysical;
+                    IPhysical ip = gameObjects[i] as IPhysical;
                     //logText += "BoundingBox:\t" + ip.BoundingBox.ToString() + "\r\n";
                 }
                 //\TEMP
@@ -203,20 +232,20 @@ namespace ICGame
                 return;
             }
 
-            if(SelectedObject >= GameObjects.Count)
+            if(SelectedObject >= gameObjects.Count)
             {
                 throw new ArgumentOutOfRangeException("dupa");
             }
 
-            if(GameObjects[SelectedObject] is IControllable)
+            if(gameObjects[SelectedObject] is IControllable)
             {
-                IControllable controllable = GameObjects[SelectedObject] as IControllable;
+                IControllable controllable = gameObjects[SelectedObject] as IControllable;
 
                 int radius = 0;
 
-                if(GameObjects[SelectedObject] is IPhysical)
+                if(gameObjects[SelectedObject] is IPhysical)
                 {
-                    IPhysical physical = GameObjects[SelectedObject] as IPhysical;
+                    IPhysical physical = gameObjects[SelectedObject] as IPhysical;
 
                     radius =
                         Convert.ToInt32(
@@ -224,16 +253,16 @@ namespace ICGame
                                       Math.Pow(physical.Length/2, 2.0)));
                 }
 
-                new PathFinder().FindPath(new Point(Convert.ToInt32(GameObjects[SelectedObject].Position.X),
-                                                    Convert.ToInt32(GameObjects[SelectedObject].Position.Z)),
-                                          new Point(Convert.ToInt32(x),Convert.ToInt32(z)), radius, controllable, GameObjects);
+                new PathFinder().FindPath(new Point(Convert.ToInt32(gameObjects[SelectedObject].Position.X),
+                                                    Convert.ToInt32(gameObjects[SelectedObject].Position.Z)),
+                                          new Point(Convert.ToInt32(x),Convert.ToInt32(z)), radius, controllable, gameObjects);
 
             }
         }
         
         public void UpdateEffects(GameTime gameTime)
         {
-            foreach (GameObject gameObject in GameObjects)
+            foreach (GameObject gameObject in gameObjects)
             {
                 foreach (IObjectEffect effect in gameObject.EffectList)
                 {

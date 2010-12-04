@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using ICGame.ObjectStats;
+using ICGame.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,17 +18,22 @@ namespace ICGame
     {
         protected const float scale = 0.005f;
 
+        public Vector3 Scale { get; set; }
         private Vector3 position;
         private Model _model;
         //temp
         private float rot;
         private ArrayList meshesNames=new ArrayList();
+        public GameObject Parent { get; set; }
+        protected List<GameObject> children;
 
-        public delegate void EventHandler(object sender, VectorEventArgs e);
+        public delegate void VectorEventHandler(object sender, VectorEventArgs e);
+
+        public delegate void BoolEventHandler(object sender, BoolEventArgs e);
 
         #region IDrawable Members
 
-        public GameObject(Model model, ObjectStats.GameObjectStats objectStats)
+        public GameObject(Model model, GameObjectStats objectStats)
         {
             Model = model;
             Ambient = new List<float>();
@@ -39,8 +46,12 @@ namespace ICGame
             Shininess = new List<Vector3>();
             Opacity = new List<float>();
 
-            EffectList = new List<IObjectEffect>();
+            Scale = Vector3.One;
 
+            position = new Vector3(105, 0, 80);
+
+            EffectList = new List<IObjectEffect>();
+            
             foreach (string effectName in objectStats.Effects)
             {
                 IObjectEffect effect = EffectFactory.GetEffectByName(effectName);
@@ -48,9 +59,46 @@ namespace ICGame
                 EffectList.Add(effect);
             }
 
-            position = new Vector3(105, 0, 80);
+            //tworzymy obiekty zależne od aktualnie ładowanego...
+
+            if(children == null)
+            {
+                children = new List<GameObject>();
+            }
+
+            foreach (SubElement subElement in objectStats.SubElements)
+            {
+                GameObject gameObject = objectStats.GameObjectFactory.CreateGameObject(subElement.Name);
+                gameObject.Position = subElement.Position;
+                gameObject.Angle = subElement.Rotation;
+                gameObject.Scale = subElement.Scale;
+                gameObject.Parent = this;
+
+                children.Add(gameObject);
+            }
+
+            visible = true;
             
         }
+
+        private bool visible;
+        
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            } 
+            set
+            {
+                foreach (GameObject child in children)
+                {
+                    child.Visible = value;
+                }
+                visible = value;
+            }
+        }
+
         public virtual GameObjectDrawer GetDrawer()
         {
             return new GameObjectDrawer(this);
@@ -62,15 +110,55 @@ namespace ICGame
             
         }
 
+        public List<GameObject> GetChildren()
+        {
+            if(children == null)
+            {
+                return new List<GameObject>();
+            }
 
-        public Matrix ModelMatrix
+            else
+            {
+                List<GameObject> result = new List<GameObject>();
+
+                result.AddRange(children);
+                foreach (GameObject gameObject in children)
+                {
+                    result.AddRange(gameObject.GetChildren());
+                }
+                return result;
+            }
+        }
+
+        public GameObject RootObject
+        {
+            get
+            {
+                if(Parent == null)
+                {
+                    return this;
+                }
+                else
+                {
+                    return Parent.RootObject;
+                }
+            }
+        }
+
+
+        private Matrix ModelMatrix
         {
             get
             {
                 Matrix result = Matrix.Identity;
-                result *= Matrix.CreateScale(scale,scale,scale) /** Matrix.CreateRotationY(3*MathHelper.PiOver2)*/ * Matrix.CreateRotationZ(-MathHelper.PiOver2);// *result;
-                //if(this is Unit)
-                //    return result;
+                if(Parent == null)
+                {
+                    result *= Matrix.CreateScale(scale,scale,scale) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
+                }
+                else
+                {
+                    result *= Matrix.CreateScale(Scale);
+                }
                 if (this is IPhysical)
                 {
                     result *= ((IPhysical)this).PhysicalTransforms;// *result;
@@ -79,14 +167,47 @@ namespace ICGame
                 result *= Matrix.CreateTranslation(Position);
                 return result;
             }
-            
-
         }
-        //TODO: WYWALIC DO OSODNEGO MODELU ASAP!
-        public Matrix GetSmallModelMatrix(Vector3 newPosition, int screenWidth, GameTime gameTime)
+
+        public Matrix AbsoluteModelMatrix
+        {
+            get
+            {
+                if(Parent == null)
+                {
+                    return ModelMatrix;
+                }
+                else
+                {
+                    return ModelMatrix*Parent.AbsoluteModelMatrix;
+                }
+            }
+        }
+
+        public Matrix GetAbsoluteSmallModelMatrix(Vector3 newPosition, int screenWidth, GameTime gameTime)
+        {
+            if(Parent == null)
+            {
+                return GetSmallModelMatrix(newPosition, screenWidth, gameTime);
+            }
+            else
+            {
+                return ModelMatrix*Parent.GetAbsoluteSmallModelMatrix(newPosition, screenWidth, gameTime);
+            }
+        }
+
+        //TODO: WYWALIC DO OSODNEGO MODELU ASAP! //coś za szybko to ASAP nie nadchodzi ;)
+        private Matrix GetSmallModelMatrix(Vector3 newPosition, int screenWidth, GameTime gameTime)
         {
             Matrix result = Matrix.Identity;
-            result *= Matrix.CreateScale(scale / (screenWidth / 16), scale / (screenWidth / 16), scale / (screenWidth / 16)) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
+            if(Parent == null)
+            {
+                result *= Matrix.CreateScale(scale / (screenWidth / 16), scale / (screenWidth / 16), scale / (screenWidth / 16)) * Matrix.CreateRotationZ(-MathHelper.PiOver2);
+            }
+            else
+            {
+                result *= Matrix.CreateScale(Scale);
+            }
 
             rot += gameTime.ElapsedGameTime.Milliseconds*0.0001f;
             result *=Matrix.CreateRotationY(rot);
@@ -121,7 +242,7 @@ namespace ICGame
 
         #endregion
 
-        public event EventHandler PositionChanged;
+        public event VectorEventHandler PositionChanged;
 
         public Vector3 Position
         {
@@ -133,10 +254,6 @@ namespace ICGame
             {
                 position = new Vector3(value.X,value.Y,value.Z);
                 PositionChanged.Invoke(this, new VectorEventArgs(value));
-                if(this is Vehicle)
-                {
-                    (this as Vehicle).SelectionRing.Position = position;
-                }
             }
         }
 
@@ -149,7 +266,7 @@ namespace ICGame
         }
 
         private Vector3 angle;
-        public event EventHandler AngleChanged;
+        public event VectorEventHandler AngleChanged;
 
         public Vector3 Angle
         {
@@ -237,7 +354,5 @@ namespace ICGame
             }
             return result;
         }
-
-     
     }
 }
