@@ -29,6 +29,7 @@ Każdy obiekt musi implementować atrybuty dla swojej klasy i wszystkich klas, p
 
   * `Speed [float]`
   * `TurnRadius [float]`
+  * `SubModel [string]` o wartości `selection_ring` - każda jednostka musi mieć możliwość wyświetlenia selection ring'a
 
 == Vehicle _: Unit_ ==
 
@@ -45,3 +46,11 @@ Każdy obiekt musi implementować atrybuty dla swojej klasy i wszystkich klas, p
 == StaticObject _: GameObject_ ==
 
 == Civilian _: GameObject_ ==
+
+= Atrybuty opcjonalne =
+
+  * `Effect [string]` - wartość jest nazwą efektu cząsteczkowego przypisywanego do obiektu
+  * `SubModel [string]` - wartość jest nazwą modelu składowego. <br>Dodatkowe atrybuty:
+    * `Position [float float float]` - translacja względem pozycji rodzica. Domyślnie `0 0 0`
+    * `Rotation [float float float]` - rotacja względem rodzica. Domyślnie `0 0 0`
+    * `Scale [float float float]` - skalowanie względem rodzica. Domyślnie `1 1 1`
