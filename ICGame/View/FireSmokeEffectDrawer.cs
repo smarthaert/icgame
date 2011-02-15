@@ -17,10 +17,9 @@ namespace ICGame
             this.objectEffect = objectEffect;
         }
 
-        public override void Draw(Matrix projection, Camera camera,
-                         Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, GameTime gameTime)
+        public override void Draw(GraphicsDevice gd, GameTime gameTime, Vector4? clipPlane = null, float? alpha = null)
         {
-            new ParticleDrawer((objectEffect as FireSmokeEffect).particleEmmiter).Draw(projection, camera, gd, gameTime);
+            new ParticleDrawer((objectEffect as FireSmokeEffect).particleEmmiter).Draw(gd, gameTime);
         }
     }
 }

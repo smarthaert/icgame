@@ -9,7 +9,7 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace ICGame
 {
-    public class TerrainWaterDrawer
+    public class TerrainWaterDrawer : IDrawer
     {
         private TerrainWater terrainWater;
 
@@ -28,22 +28,20 @@ namespace ICGame
             return planeCoeffs;
         }
 
-        public void DrawRefractionMap(GraphicsDevice device, GameObject[] gameObjects)
+        public void DrawRefractionMap(GraphicsDevice device, GameTime gameTime)
         {
             Vector4 refractionPlane = CreatePlane(terrainWater.WaterHeight + 6.5f, new Vector3(0, -1, 0), false);
             Vector4 vRefractionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), false);
 
             device.SetRenderTarget(terrainWater.RefractionRenderTarget);
             device.Clear(ClearOptions.Target, Color.White, 1.0f, 0);
-            terrainWater.Board.GetDrawer().Draw(device, terrainWater.Camera.CameraMatrix, terrainWater.ProjectionMatrix, 
-                                                terrainWater.Camera.CameraPosition, refractionPlane, true);
+            terrainWater.Board.GetDrawer().Draw(device, gameTime, refractionPlane);
 
-            foreach (GameObject o in gameObjects)
+            foreach (GameObject o in terrainWater.MissionController.GetMissionObjects())
             {
                 if(o is StaticObject || o is Building)
                 {
-                    o.GetDrawer().Draw(terrainWater.ProjectionMatrix, terrainWater.Camera.CameraMatrix, 
-                        terrainWater.Camera.CameraPosition, device, vRefractionPlane);
+                    o.GetDrawer().Draw(device, gameTime, vRefractionPlane);
                 }
             }
             
@@ -70,21 +68,27 @@ namespace ICGame
             terrainWater.ReflectionViewMatrix = Matrix.CreateLookAt(terrainWater.ReflCameraPosition, reflTargetPos, invUpVector);
         }
 
-        public void DrawReflectionMap(GraphicsDevice device, GameObject[] gameObjects)
+        public void DrawReflectionMap(GraphicsDevice device, GameTime gameTime)
         {
-            UpdateReflectionViewMatrix(terrainWater.Camera);
+            UpdateReflectionViewMatrix(DisplayController.Camera);
 
             Vector4 reflectionPlane = CreatePlane(terrainWater.WaterHeight, new Vector3(0, -1, 0), true);
 
             device.SetRenderTarget(terrainWater.ReflectionRenderTarget);
             
             device.Clear(ClearOptions.Target, Color.Black, 1.0f, 0);
-            terrainWater.Board.GetDrawer().Draw(device, terrainWater.ReflectionViewMatrix,
-                                                terrainWater.ProjectionMatrix, terrainWater.ReflCameraPosition, reflectionPlane, true);
-            foreach (GameObject o in gameObjects)
+            terrainWater.Board.GetDrawer().Draw(device, gameTime, reflectionPlane);
+
+            Matrix cameraMatrix = DisplayController.Camera.CameraMatrix;
+
+            DisplayController.Camera.CameraMatrix = terrainWater.ReflectionViewMatrix;
+
+            foreach (GameObject o in terrainWater.MissionController.GetMissionObjects())
             {
-                o.GetDrawer().Draw(terrainWater.ProjectionMatrix, terrainWater.ReflectionViewMatrix, terrainWater.ReflCameraPosition, device, reflectionPlane);
+                o.GetDrawer().Draw(device, gameTime, reflectionPlane);
             }
+
+            DisplayController.Camera.CameraMatrix = cameraMatrix;
             
             terrainWater.ReflectionMap = terrainWater.ReflectionRenderTarget;
             /*using (FileStream fileStream = File.OpenWrite("reflectionmap.jpg"))
@@ -101,14 +105,14 @@ namespace ICGame
             effect.CurrentTechnique = effect.Techniques["Water"];
             Matrix worldMatrix = Matrix.Identity;
             effect.Parameters["xWorld"].SetValue(worldMatrix);
-            effect.Parameters["xWorldViewProjection"].SetValue(worldMatrix * terrainWater.Camera.CameraMatrix * terrainWater.ProjectionMatrix);
-            effect.Parameters["xWorldReflectionViewProjection"].SetValue(worldMatrix * terrainWater.ReflectionViewMatrix * terrainWater.ProjectionMatrix);
+            effect.Parameters["xWorldViewProjection"].SetValue(worldMatrix * DisplayController.Camera.CameraMatrix * DisplayController.Projection);
+            effect.Parameters["xWorldReflectionViewProjection"].SetValue(worldMatrix * terrainWater.ReflectionViewMatrix * DisplayController.Projection);
             effect.Parameters["xReflectionMap"].SetValue(terrainWater.ReflectionMap);
             effect.Parameters["xRefractionMap"].SetValue(terrainWater.RefractionMap); 
             effect.Parameters["xWaterBumpMap"].SetValue(terrainWater.Waves);
             effect.Parameters["xWaveLength"].SetValue(terrainWater.WaveLength);
             effect.Parameters["xWaveHeight"].SetValue(terrainWater.WaveHeight);
-            effect.Parameters["xCameraPosition"].SetValue(terrainWater.Camera.CameraPosition);
+            effect.Parameters["xCameraPosition"].SetValue(DisplayController.Camera.CameraPosition);
             effect.Parameters["xTime"].SetValue(terrainWater.Time);
             effect.Parameters["xWindForce"].SetValue(terrainWater.WindForce);
             effect.Parameters["xWindDirection"].SetValue(terrainWater.WindDirection);
@@ -124,14 +128,19 @@ namespace ICGame
             }
         }
 
-        public void Draw(GraphicsDevice device, GameObject[] gameObjects, GameTime gameTime)
+        public void Draw(GraphicsDevice device, GameTime gameTime, Vector4? clipPlane = null, float? alpha = null)
         {
             terrainWater.Time = (float)(gameTime.TotalGameTime.TotalMilliseconds) / 2000000.0f;
             
             RenderTargetBinding[] renderTargetBindings = device.GetRenderTargets();
-                DrawRefractionMap(device, gameObjects);
-            
-            DrawReflectionMap(device, gameObjects);
+
+            terrainWater.Board.UseLessVertices = true;
+
+            DrawRefractionMap(device, gameTime);
+            DrawReflectionMap(device, gameTime);
+
+            terrainWater.Board.UseLessVertices = false;
+
             device.SetRenderTargets(renderTargetBindings);
             DrawWater(device);
         }

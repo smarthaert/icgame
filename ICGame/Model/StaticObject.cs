@@ -11,9 +11,7 @@ namespace ICGame
         public StaticObject(Model model, ObjectStats.StaticObjectStats staticObjectStats)
             : base(model, staticObjectStats)
         {
-           /* if(parent!=null)
-                PhysicalTransforms =parent.PhysicalTransforms;
-            else*/ PhysicalTransforms = Matrix.Identity;
+            PhysicalTransforms = Matrix.Identity;
             OOBoundingBox = new OOBoundingBox(new Vector3(0,0,0), new Vector3(0,0,0));
             PositionChanged += OnPositionChanged;
             AngleChanged += OnAngleChanged;

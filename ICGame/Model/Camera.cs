@@ -53,8 +53,8 @@ namespace ICGame
         {
             rotation = Quaternion.Identity;
             rotation2 = Quaternion.Identity;
-            CalculateCamera();
             cameraPosition.Y = 5.0f;
+            CalculateCamera();
         }
 
         public MissionController MissionController
@@ -65,15 +65,10 @@ namespace ICGame
         /// <summary>
         /// Zwraca macierz kamery obliczoną dla aktualnej pozycji na .
         /// </summary>
-
-        public Matrix CameraMatrix
-        {
-            get
-            {
-                return Matrix.CreateLookAt(cameraPosition, lookAtPosition, Vector3.Transform(new Vector3(0,5,0),Matrix.CreateFromQuaternion(rotation)));
-                
-            }
-        }
+        /// <remarks>
+        /// Uwaga! Nie jest juz obliczana dynamicznie. Aby zaktualizowac nalezy uzyc funkcji CalculateCamera.
+        /// </remarks>
+        public Matrix CameraMatrix { get; set;}
 
         public Vector3 CameraPosition
         {
@@ -105,8 +100,8 @@ namespace ICGame
 
         public Vector3 CalculateCamera()
         {
-            
             CameraPosition = Vector3.Transform(cameraAdditionalPosition, Matrix.CreateFromQuaternion(rotation*rotation2)) + lookAtPosition;
+            CameraMatrix = Matrix.CreateLookAt(cameraPosition, lookAtPosition, Vector3.Transform(new Vector3(0,5,0),Matrix.CreateFromQuaternion(rotation)));
             return CameraPosition;
         }
 

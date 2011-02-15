@@ -11,7 +11,6 @@ namespace ICGame.ObjectStats
         public GameObjectFactory.ObjectClass Type { get; set; }
         public List<string> Effects { get; set; }
         public List<SubElement> SubElements { get; set; }
-        public GameObjectFactory GameObjectFactory { get; set; }
 
         public GameObjectStats()
         {

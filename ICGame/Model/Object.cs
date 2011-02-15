@@ -68,7 +68,7 @@ namespace ICGame
 
             foreach (SubElement subElement in objectStats.SubElements)
             {
-                GameObject gameObject = objectStats.GameObjectFactory.CreateGameObject(subElement.Name);
+                GameObject gameObject = subElement.GameObject;
                 gameObject.Position = subElement.Position;
                 gameObject.Angle = subElement.Rotation;
                 gameObject.Scale = subElement.Scale;
@@ -209,8 +209,8 @@ namespace ICGame
                 result *= Matrix.CreateScale(Scale);
             }
 
-            rot += gameTime.ElapsedGameTime.Milliseconds*0.0001f;
-            result *=Matrix.CreateRotationY(rot);
+            rot += gameTime.ElapsedGameTime.Milliseconds*0.00004f;
+            result *=Matrix.CreateRotationY(rot)*Matrix.CreateRotationX(-MathHelper.PiOver4);
             result *= Matrix.CreateTranslation(newPosition);
 
             return result;
@@ -353,6 +353,16 @@ namespace ICGame
                     result.Add(objectEffect);
             }
             return result;
+        }
+
+        public IEnumerable<IParticleEffectDrawer> GetEffectDrawers()
+        {
+            List<IParticleEffectDrawer> drawers = new List<IParticleEffectDrawer>();
+            foreach (IObjectEffect objectEffect in EffectList)
+            {
+                drawers.Add(objectEffect.GetDrawer());
+            }
+            return drawers;
         }
     }
 }

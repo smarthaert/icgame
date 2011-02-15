@@ -28,7 +28,8 @@ namespace ICGame
         public GraphicsDeviceManager GraphicsDeviceManager { get; private set; }
         SpriteBatch spriteBatch;
         private int frameCounter;
-        private int frameTime, fps;
+        private int frameTime;
+        public static int FPS { get; set; }
         private GameInfo gi = new GameInfo();
 
         public Game()
@@ -51,7 +52,7 @@ namespace ICGame
             
             Camera = new Camera(new Vector3(244, 0, 154),MissionController);
 
-            UserInterfaceController = new UserInterfaceController(Camera, CampaignController,UserInterface);
+            UserInterfaceController = new UserInterfaceController(CampaignController,UserInterface);
         
 # if DEBUG
             GraphicsDeviceManager.PreparingDeviceSettings += new System.EventHandler<PreparingDeviceSettingsEventArgs>(OnPreparingDeviceSettings);
@@ -85,7 +86,7 @@ namespace ICGame
             get; set;
         }
 
-        public Display Display
+        public DisplayController DisplayController
         {
             get; set;
         }
@@ -142,24 +143,15 @@ namespace ICGame
         {
             base.Initialize();
 
-            Display = new Display(GraphicsDeviceManager, UserInterface, Camera, CampaignController);
+            DisplayController = new DisplayController(GraphicsDeviceManager, UserInterface, Camera, CampaignController);
 
             CampaignController.StartCampaign();
             CampaignController.CampaignState = GameState.MainMenu;
             
-            
-
             IsMouseVisible = true;
 
             UserInterfaceController.InitializeUserInterface(this);
 
-            
-            //Alpha blending
-          //  GraphicsDevice.RenderState.AlphaBlendEnable = true;
-          //  GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
-          //GraphicsDevice.RenderState.DepthBufferEnable = false;
-          //  GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
-            
         }
 
         /// <summary>
@@ -222,12 +214,20 @@ namespace ICGame
             frameTime += gameTime.ElapsedGameTime.Milliseconds;
             if (frameTime >= 1000)
             {
-                fps = frameCounter;
+                FPS = frameCounter;
                 frameTime -= 1000;
                 frameCounter = 0;
             }
+            //TODO: !!!!!!!!!!
 
-            Display.Draw(gameTime, "FPS: " + fps.ToString());
+            List<IDrawer> drawers = new List<IDrawer>();
+
+            drawers.Add(CampaignController.GetTerrainWaterDrawer());
+
+
+            drawers.AddRange(CampaignController.GetGameObjectDrawers());
+
+            DisplayController.DrawScene(drawers, gameTime);
            base.Draw(gameTime);
         }
     }

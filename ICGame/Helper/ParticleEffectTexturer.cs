@@ -33,7 +33,7 @@ namespace ICGame.Helper
             {
                 foreach (IObjectEffect objectEffect in gameObject.GetEffectsToDraw())
                 {
-                    objectEffect.GetDrawer().Draw(projection, camera, graphicsDevice, gameTime);
+                    objectEffect.GetDrawer().Draw(graphicsDevice, gameTime);
                 }
             }
             
