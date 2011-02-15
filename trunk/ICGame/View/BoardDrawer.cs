@@ -19,37 +19,6 @@ namespace ICGame
             set;
         }
 
-        public void DrawSkyDome(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, float? alpha = null)
-        {
-            Matrix[] modelTransforms = new Matrix[Board.SkyDomeModel.Bones.Count];
-            Board.SkyDomeModel.CopyAbsoluteBoneTransformsTo(modelTransforms);
-            Vector3 modifiedCameraPosition = cameraPosition;
-            modifiedCameraPosition.Y = -45.0f;
-            
-            foreach (ModelMesh mesh in Board.SkyDomeModel.Meshes)
-            {
-                foreach (Effect currentEffect in mesh.Effects)
-                {
-                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * Matrix.CreateScale(400) * Matrix.CreateTranslation(modifiedCameraPosition);
-                    currentEffect.CurrentTechnique = currentEffect.Techniques["SkyDome"];
-                    currentEffect.Parameters["xWorldViewProjection"].SetValue(worldMatrix * view * projection);
-                    currentEffect.Parameters["xTexture"].SetValue(Board.CloudMap);
-                    currentEffect.Parameters["xEnableLighting"].SetValue(false);
-                    
-                    if (alpha == null)
-                    {
-                        currentEffect.Parameters["xSetAlpha"].SetValue(false);
-                    }
-                    else
-                    {
-                        currentEffect.Parameters["xSetAlpha"].SetValue(true);
-                        currentEffect.Parameters["xAlpha"].SetValue((float)alpha);
-                    }
-                }
-                mesh.Draw();
-            }
-        }
-
         /// <summary>
         /// Rysuje plansze.
         /// </summary>
@@ -65,7 +34,7 @@ namespace ICGame
         {
             Effect effect = TechniqueProvider.GetEffect("MultiTextured");
             graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            DrawSkyDome(graphicsDevice, DisplayController.Camera.CameraMatrix, DisplayController.Projection, DisplayController.Camera.CameraPosition, alpha);
+            new SkyDomeDrawer(Board).Draw(alpha);
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             effect.CurrentTechnique = effect.Techniques["MultiTextured"];

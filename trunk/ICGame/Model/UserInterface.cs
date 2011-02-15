@@ -24,9 +24,7 @@ namespace ICGame
         private int fullscreenSizeY = 768;
         const int THRESHOLD = 5; //Do wykrywania brzegow
         public SpriteFont spriteFont;
-
-        private UserInterfaceDraw userInterfaceDraw;
-
+        
 	#endregion
 
         
@@ -52,13 +50,9 @@ namespace ICGame
         }
         
         
-        public UserInterfaceDraw Drawer
+        public UserInterfaceDraw GetDrawer()
         {
-            get
-            {
-                return userInterfaceDraw;
-            }
-
+            return new UserInterfaceDraw(this);
         }
 
         /// <summary>
@@ -92,7 +86,6 @@ namespace ICGame
             originalScreenSizeY = screenSizeY;
 
             ZuneUIModel = new Zune(mainGame.Content.Load<Texture2D>("Texture2D/UI/zune"), ScreenSizeY);
-            userInterfaceDraw = new UserInterfaceDraw(this, mainGame.GraphicsDevice);
 
             fullscreenSizeY = mainGame.GraphicsDevice.DisplayMode.Height;
             fullscreenSizeX = mainGame.GraphicsDevice.DisplayMode.Width;

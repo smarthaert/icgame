@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using ICGame.Helper;
 using Microsoft.Xna.Framework;
@@ -45,7 +46,7 @@ namespace ICGame
             get; set;
         }
 
-        public void Draw(IEnumerable<IDrawer> drawers, Camera camera, GameTime gameTime)
+        public void Draw(IEnumerable<IDrawer> drawers, GameTime gameTime)
         {
             //TODO: Refactoring - update stanu obiektów raczej nie powinien być tutaj
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
@@ -53,24 +54,22 @@ namespace ICGame
                 if (gameObject is IAnimated)
                     ((IAnimated)gameObject).Animate(gameTime, CampaignController.GetObjectsToDraw());
             }
-            camera.CalculateCamera();
+            DisplayController.Camera.CalculateCamera();
 
             graphicsDevice.SetRenderTarget(renderTargetManager.SceneRenderTarget);
             graphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here // O RLY!? :D
-            
             //Main scene
-            DrawScene(camera, gameTime);
+            DrawScene(drawers, gameTime);
             
             graphicsDevice.SetRenderTarget(renderTargetManager.ParticleTexture);
 
             graphicsDevice.Clear(ClearOptions.Target, new Color(0.0f, 0.0f, 0.0f, 0.0f), 1.0f, 0);
 
             //Effects
-            DrawScene(camera, gameTime,true);
+            DrawScene(drawers, gameTime,true);
             
-            particleEffectTexturer.Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), camera, DisplayController.Projection, gameTime);
+            particleEffectTexturer.Draw(graphicsDevice, drawers.Where(s => s is IParticleEffectDrawer), gameTime);
             
             graphicsDevice.SetRenderTarget(null);
 
@@ -78,12 +77,14 @@ namespace ICGame
                                              renderTargetManager.ParticleTexture, DisplayController.Projection);
 
 #if !DEBUG
-
-            UserInterface.Drawer.Draw();
+            foreach (IDrawer drawer in drawers.Where(s => s is UserInterfaceDraw))
+            {
+                drawer.Draw(graphicsDevice, gameTime);
+            }
 #endif
         }
 
-        private void DrawScene(Camera camera, GameTime gameTime, bool creatingEffects = false)
+        private void DrawScene(IEnumerable<IDrawer> drawers, GameTime gameTime, bool creatingEffects = false)
         {
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
@@ -96,27 +97,18 @@ namespace ICGame
                 alpha = 1.0f;
             }
 
-            if(!creatingEffects)
+            if(creatingEffects)
             {
-                CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, gameTime);
-            }
-
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, gameTime, null, alpha);
-
-            foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
-            {
-                //TODO: CampaignController.GetObjectsToCheck(IPhysical physical) -> lista obiektów które mogą kolidować z animowanym
-                gameObject.GetDrawer().Draw(graphicsDevice, gameTime, null, alpha);
-            }
-
-            //TODO: Rysowanie malego modelu powinno obslugiwac zaznaczenie wielu jednostek i ogolnie powinno wyleciec do jakiegos kontrolera jednostek (niestniejacego)
-
-            if (!creatingEffects)
-            {
-                GameObject selectedObject = CampaignController.MissionController.GetSeletedObject();
-                if (selectedObject != null)
+                foreach (IDrawer drawer in drawers.Where(s => !(s is UserInterfaceDraw || s is TerrainWaterDrawer || s is MiniModelDrawer)))
                 {
-                    selectedObject.GetMiniModelDrawer().Draw(graphicsDevice, gameTime);
+                    drawer.Draw(graphicsDevice, gameTime, null, alpha);
+                }
+            }
+            else
+            {
+                foreach (IDrawer drawer in drawers.Where(s => !(s is UserInterfaceDraw)))
+                {
+                    drawer.Draw(graphicsDevice, gameTime, null, alpha);
                 }
             }
         }

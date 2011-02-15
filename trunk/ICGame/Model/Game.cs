@@ -218,17 +218,24 @@ namespace ICGame
                 frameTime -= 1000;
                 frameCounter = 0;
             }
-            //TODO: !!!!!!!!!!
 
             List<IDrawer> drawers = new List<IDrawer>();
 
             drawers.Add(CampaignController.GetTerrainWaterDrawer());
-
+            drawers.Add(CampaignController.GetBackgroundDrawer());
 
             drawers.AddRange(CampaignController.GetGameObjectDrawers());
 
+            drawers.Add(UserInterface.GetDrawer());
+
+            if(CampaignController.MissionController.GetSeletedObject() != null)
+            {
+                drawers.Add(CampaignController.MissionController.GetSeletedObject().GetMiniModelDrawer());
+            }
+
             DisplayController.DrawScene(drawers, gameTime);
-           base.Draw(gameTime);
+
+            base.Draw(gameTime);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ICGame
 
         public void DrawScene(IEnumerable<IDrawer> drawers, GameTime gameTime)
         {
-            display.Draw(drawers, Camera, gameTime);
+            display.Draw(drawers, gameTime);
         }
     }
 }

@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 namespace ICGame
 {
-    public class UserInterfaceDraw
+    public class UserInterfaceDraw : IDrawer
     {
-        private GraphicsDevice graphicsDevice;
-        public UserInterfaceDraw(UserInterface userInterface, GraphicsDevice graphicsDevice)
+        public UserInterfaceDraw(UserInterface userInterface)
         {
-            this.UserInterface = userInterface;
-            this.graphicsDevice = graphicsDevice;
+            UserInterface = userInterface;
         }
 
         public UserInterface UserInterface
         {
             get; set;
         }
-    
-        public void Draw()
+
+        public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime, Vector4? clipPlane = null, float? alpha = null)
         {
             SpriteBatch spriteBatch=new SpriteBatch(graphicsDevice);
             //spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Texture,SaveStateMode.SaveState);
