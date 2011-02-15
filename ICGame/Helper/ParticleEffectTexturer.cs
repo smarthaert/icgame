@@ -21,20 +21,17 @@ namespace ICGame.Helper
             
         }
 
-        public void Draw(GraphicsDevice graphicsDevice, GameObject[] gameObjects, Camera camera, Matrix projection, GameTime gameTime)
+        public void Draw(GraphicsDevice graphicsDevice, IEnumerable<IDrawer> particleEffectDrawers, GameTime gameTime)
         {
             graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
             graphicsDevice.RasterizerState = RasterizerState.CullNone;
             graphicsDevice.BlendState = BlendState.AlphaBlend;
 
             //TODO: Sortowanie efektów
-            
-            foreach (GameObject gameObject in gameObjects)
+
+            foreach (IParticleEffectDrawer particleEffectDrawer in particleEffectDrawers)
             {
-                foreach (IObjectEffect objectEffect in gameObject.GetEffectsToDraw())
-                {
-                    objectEffect.GetDrawer().Draw(graphicsDevice, gameTime);
-                }
+                particleEffectDrawer.Draw(graphicsDevice, gameTime);
             }
             
             graphicsDevice.DepthStencilState = DepthStencilState.Default;

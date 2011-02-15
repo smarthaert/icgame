@@ -344,17 +344,6 @@ namespace ICGame
 
         #endregion
 
-        public List<IObjectEffect> GetEffectsToDraw()
-        {
-            List<IObjectEffect> result = new List<IObjectEffect>();
-            foreach (IObjectEffect objectEffect in EffectList)
-            {
-                if(objectEffect.IsActive)
-                    result.Add(objectEffect);
-            }
-            return result;
-        }
-
         public IEnumerable<IParticleEffectDrawer> GetEffectDrawers()
         {
             List<IParticleEffectDrawer> drawers = new List<IParticleEffectDrawer>();
