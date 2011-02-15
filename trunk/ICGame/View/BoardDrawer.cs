@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
-    public class BoardDrawer
+    public class BoardDrawer : IDrawer
     {
         public BoardDrawer(Board board)
         {
@@ -61,11 +61,11 @@ namespace ICGame
         ///                         </param>
         /// <param name="useLessVertices">Jezeli useLessVertices == true nastepuje rowniez zmniejszenie w kazdym wymiarze liczby wierzcholkow o Board.ReduceFactor</param>
         /// <param name="alpha">Ustawia przezroczystość na konkretną wartość, jeżeli alpha != null</param>
-        public void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 cameraPosition, Vector4? clipPlane, bool useLessVertices, float? alpha = null)
+        public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime, Vector4? clipPlane, float? alpha = null)
         {
             Effect effect = TechniqueProvider.GetEffect("MultiTextured");
             graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            DrawSkyDome(graphicsDevice, view, projection, cameraPosition, alpha);
+            DrawSkyDome(graphicsDevice, DisplayController.Camera.CameraMatrix, DisplayController.Projection, DisplayController.Camera.CameraPosition, alpha);
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             effect.CurrentTechnique = effect.Techniques["MultiTextured"];
@@ -86,12 +86,12 @@ namespace ICGame
             effect.Parameters["xTexture3"].SetValue(Board.Textures["snow"]);
 
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
-            effect.Parameters["xView"].SetValue(view);
-            effect.Parameters["xWorldViewProjection"].SetValue(view * projection);
+            effect.Parameters["xView"].SetValue(DisplayController.Camera.CameraMatrix);
+            effect.Parameters["xWorldViewProjection"].SetValue(DisplayController.Camera.CameraMatrix * DisplayController.Projection);
             effect.Parameters["xEnableLighting"].SetValue(true);
             effect.Parameters["xAmbient"].SetValue(0.4f);
             effect.Parameters["xLightDirection"].SetValue(Board.LightDirection);
-            effect.Parameters["xCameraPosition"].SetValue(cameraPosition);
+            effect.Parameters["xCameraPosition"].SetValue(DisplayController.Camera.CameraPosition);
 
             if (alpha == null)
             {
@@ -110,7 +110,7 @@ namespace ICGame
                 int noTriangles;
 
                 graphicsDevice.SetVertexBuffer(Board.TerrainVertexBuffer);
-                if (!useLessVertices)
+                if (!Board.UseLessVertices)
                 {
                     graphicsDevice.Indices = Board.TerrainIndexBuffer;
 

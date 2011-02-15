@@ -28,11 +28,10 @@ namespace ICGame
             UserInterface.LoadGraphics(mainGame);
         }
 
-        public UserInterfaceController(Camera camera, CampaignController campaignController, UserInterface userInterface)
+        public UserInterfaceController(CampaignController campaignController, UserInterface userInterface)
         {
             curState = Keyboard.GetState();
             mouseCurState = Mouse.GetState();
-            Camera = camera;
             CampaignController = campaignController;
             UserInterface = userInterface;
         }
@@ -46,11 +45,6 @@ namespace ICGame
         {
             get;
             set;
-        }
-
-        public Camera Camera
-        {
-            get; set;
         }
 
         public void UpdateUserInterfaceState(GameTime gameTime)
@@ -80,7 +74,7 @@ namespace ICGame
                 //Okienko informacyjne
                 if (!UserInterface.InterfaceOverlaped(mouseCurState.X,mouseCurState.Y))
                 {
-                    if(!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection,
+                    if (!CampaignController.CheckSelection(mouseCurState.X, mouseCurState.Y, DisplayController.Camera, DisplayController.Projection,
                         mainGame.GraphicsDevice))
                     {
                         //GameInfo gi = new GameInfo();
@@ -127,7 +121,7 @@ namespace ICGame
             if(isMouseDragging)
             {
                 lastDraging = gameTime.TotalGameTime.TotalMilliseconds;
-                Camera.TransformCameraAccordingToMouseTravel(mouseCurState.X-mousePrevState.X,mouseCurState.Y-mousePrevState.Y);
+                DisplayController.Camera.TransformCameraAccordingToMouseTravel(mouseCurState.X-mousePrevState.X,mouseCurState.Y-mousePrevState.Y);
             }
             else 
             {
@@ -143,7 +137,7 @@ namespace ICGame
                 {
                     Vector3 pos3D = CampaignController.MissionController.Mission.Board.GetPosition(mouseCurState.X, mouseCurState.Y);
                     //Zakapsulkowac To!
-                    GameObject pointedObject = CampaignController.MissionController.Mission.ObjectContainer.CheckClickedObject(mouseCurState.X, mouseCurState.Y, Camera, mainGame.Display.Projection, mainGame.GraphicsDevice);
+                    GameObject pointedObject = CampaignController.MissionController.Mission.ObjectContainer.CheckClickedObject(mouseCurState.X, mouseCurState.Y, DisplayController.Camera, DisplayController.Projection, mainGame.GraphicsDevice);
                     if (pointedObject != null)
                     {
                         if (CampaignController.MissionController.GetSeletedObject()!=null && (pointedObject is Building))
@@ -164,28 +158,28 @@ namespace ICGame
 
             if (isMouseRotating)
             {
-                Camera.RotateCameraAccordingToMouseTravel(mouseCurState.X - mousePrevState.X, mouseCurState.Y - mousePrevState.Y);
+                DisplayController.Camera.RotateCameraAccordingToMouseTravel(mouseCurState.X - mousePrevState.X, mouseCurState.Y - mousePrevState.Y);
             }
 
 
          
 
             //Scroll control
-            Camera.ChangeHeightAccordingToMouseWheel(mouseCurState.ScrollWheelValue - mousePrevState.ScrollWheelValue);
+            DisplayController.Camera.ChangeHeightAccordingToMouseWheel(mouseCurState.ScrollWheelValue - mousePrevState.ScrollWheelValue);
 
 
             //Scroll na brzegach
             if (UserInterface.IsFullscreen)
             {
                 if (UserInterface.GetHorizontalEdge(mouseCurState.X) == WindowPosition.LEFT)
-                    Camera.MoveLeft();
+                    DisplayController.Camera.MoveLeft();
                 else if (UserInterface.GetHorizontalEdge(mouseCurState.X) == WindowPosition.RIGHT)
-                    Camera.MoveRight();
+                    DisplayController.Camera.MoveRight();
 
                 if (UserInterface.GetVerticalEdge(mouseCurState.Y) == WindowPosition.UP)
-                    Camera.MoveForward();
+                    DisplayController.Camera.MoveForward();
                 else if (UserInterface.GetVerticalEdge(mouseCurState.Y) == WindowPosition.DOWN)
-                    Camera.MoveBack();
+                    DisplayController.Camera.MoveBack();
             }
 
         }
@@ -202,42 +196,42 @@ namespace ICGame
             
             if(curState.IsKeyDown(Keys.Z))
             {
-                Camera.MoveLeft();
+                DisplayController.Camera.MoveLeft();
             }
             
             if (curState.IsKeyDown(Keys.X))
             {
-                Camera.MoveRight();
+                DisplayController.Camera.MoveRight();
             }
 
             if (curState.IsKeyDown(Keys.Up))
             {
-                Camera.MoveForward();
+                DisplayController.Camera.MoveForward();
             }
             
             if (curState.IsKeyDown(Keys.Down))
             {
-                Camera.MoveBack();
+                DisplayController.Camera.MoveBack();
             }
 
             if (curState.IsKeyDown(Keys.Right))
             {
-                Camera.RotateRight();
+                DisplayController.Camera.RotateRight();
             }
 
             if (curState.IsKeyDown(Keys.Left))
             {
-                Camera.RotateLeft();
+                DisplayController.Camera.RotateLeft();
             }
 
             if (curState.IsKeyDown(Keys.Q))
             {
-                Camera.MoveUp();
+                DisplayController.Camera.MoveUp();
             }
 
             if (curState.IsKeyDown(Keys.A))
             {
-                Camera.MoveDown();
+                DisplayController.Camera.MoveDown();
             }
 
             if (curState.IsKeyDown(Keys.E))

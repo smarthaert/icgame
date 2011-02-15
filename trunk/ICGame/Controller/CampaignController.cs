@@ -42,6 +42,17 @@ namespace ICGame
             return MissionController.GetMissionObjects();
         }
 
+        public IEnumerable<IDrawer> GetGameObjectDrawers()
+        {
+            List<IDrawer> drawers = new List<IDrawer>();
+            foreach (GameObject gameObject in MissionController.GetMissionObjects())
+            {
+                drawers.Add(gameObject.GetDrawer());
+                drawers.AddRange(gameObject.GetEffectDrawers());
+            }
+            return drawers;
+        }
+
         public GameState CampaignState
         {
             set

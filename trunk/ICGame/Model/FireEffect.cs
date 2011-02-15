@@ -33,7 +33,7 @@ namespace ICGame
 
             IsActive = false;
 
-            particleEmmiter.MaxParticles = 10000;
+            particleEmmiter.MaxParticles = 3000;
 
             particleEmmiter.Duration = TimeSpan.FromSeconds(3);
 
@@ -48,20 +48,16 @@ namespace ICGame
             // Set gravity upside down, so the flames will 'fall' upward.
             particleEmmiter.Gravity = new Vector3(0, 5, 0);
 
-            particleEmmiter.MinColor = new Color(255, 255, 255, 10);
-            particleEmmiter.MaxColor = new Color(255, 255, 255, 40);
-            particleEmmiter.BlendState = BlendState.AlphaBlend;
+            particleEmmiter.MinColor = new Color(255, 255, 255, 100);
+            particleEmmiter.MaxColor = new Color(255, 255, 255, 200);
+            particleEmmiter.BlendState = BlendState.NonPremultiplied;
 
             particleEmmiter.MinStartSize = 5;
             particleEmmiter.MaxStartSize = 8;
 
             particleEmmiter.MinEndSize = 15;
             particleEmmiter.MaxEndSize = 30;
-
-            // Use additive blending.
-            particleEmmiter.BlendState = BlendState.Additive;
-
-
+            
             particleEmmiter.Reset();
 
             particleEmmiter.LoadContent(game.GraphicsDevice);

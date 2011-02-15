@@ -73,6 +73,7 @@ namespace ICGame
         public Board(Game game)
         {
             MainGame = game;
+            UseLessVertices = false;
         }
 
         public Model SkyDomeModel
@@ -87,6 +88,11 @@ namespace ICGame
                 return SkyDome.CloudMap;
             }
         }
+
+        /// <summary>
+        /// Określa, czy plansza będzie renderowana w gorszej jakości.
+        /// </summary>
+        public bool UseLessVertices { get; set; }
 
         public VertexMultitextured[] VertexPositionColor1
         {
@@ -319,9 +325,9 @@ namespace ICGame
             SkyDome = new SkyDome(device);
         }
 
-        public void PrepareTerrainWater(Camera camera, Matrix projectionMatrix)
+        public void PrepareTerrainWater(MissionController missionController)
         {
-            TerrainWater = new TerrainWater(MainGame.GraphicsDevice, camera, projectionMatrix, this);
+            TerrainWater = new TerrainWater(MainGame.GraphicsDevice, this, missionController);
         }
 
         public void PrepareBuffers()
@@ -346,8 +352,8 @@ namespace ICGame
             Vector3 nearScreenPoint = new Vector3(pointerPosition.X, pointerPosition.Y, 0);
             Vector3 farScreenPoint = new Vector3(pointerPosition.X, pointerPosition.Y, 1);
 
-            Vector3 near3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(nearScreenPoint, MainGame.Display.Projection, MainGame.Display.Camera.CameraMatrix, Matrix.Identity);
-            Vector3 far3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(farScreenPoint, MainGame.Display.Projection, MainGame.Display.Camera.CameraMatrix, Matrix.Identity);
+            Vector3 near3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(nearScreenPoint, DisplayController.Projection, DisplayController.Camera.CameraMatrix, Matrix.Identity);
+            Vector3 far3DWorldPoint = MainGame.GraphicsDevice.Viewport.Unproject(farScreenPoint, DisplayController.Projection, DisplayController.Camera.CameraMatrix, Matrix.Identity);
 
             Vector3 pointerRayDirection = far3DWorldPoint - near3DWorldPoint;
             //pointerRayDirection.Normalize();

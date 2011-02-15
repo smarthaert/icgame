@@ -18,7 +18,7 @@ namespace ICGame.ParticleSystem
             emmiter = particleEmitter;
         }
 
-        public void Draw(Matrix projection, Camera camera, GraphicsDevice gd, GameTime gameTime)
+        public void Draw(GraphicsDevice gd, GameTime gameTime)
         {
             GraphicsDevice device = gd;
 
@@ -37,8 +37,8 @@ namespace ICGame.ParticleSystem
             {
                 device.BlendState = emmiter.BlendState;
                 
-                effect.Parameters["ViewProjection"].SetValue(camera.CameraMatrix * projection);
-                effect.Parameters["Projection"].SetValue(projection);
+                effect.Parameters["ViewProjection"].SetValue(DisplayController.Camera.CameraMatrix * DisplayController.Projection);
+                effect.Parameters["Projection"].SetValue(DisplayController.Projection);
 
                 effect.Parameters["ViewportScale"].SetValue(new Vector2(0.5f / device.Viewport.AspectRatio, -0.5f));
 

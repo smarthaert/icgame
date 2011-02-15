@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace ICGame
 {
-    public abstract class EffectDrawer
+    public abstract class EffectDrawer : IParticleEffectDrawer
     {
         protected IObjectEffect objectEffect; 
         protected GameObject gameObject; 
@@ -17,7 +17,6 @@ namespace ICGame
         }
         
 
-        public abstract void Draw(Microsoft.Xna.Framework.Matrix projection, Camera camera,
-                          Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, GameTime gameTime);
+        public abstract void Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, GameTime gameTime, Vector4? clipPlane = null, float? alpha = null);
     }
 }

@@ -13,8 +13,6 @@ namespace ICGame
         public const float waterHeight = 5.0f;
         public Board Board { get; set; }
         VertexBuffer waterVertexBuffer;
-        public Camera Camera { get; set; }
-        public Matrix ProjectionMatrix { get; set; }
         public Matrix ReflectionViewMatrix { get; set; }
         public Vector3 ReflCameraPosition { get; set; }
         public Texture2D Waves { get; set; }
@@ -47,11 +45,12 @@ namespace ICGame
             get { return waterHeight; }
         }
 
-        public TerrainWater(GraphicsDevice device, Camera camera, Matrix projectionMatrix, Board board)
+        public MissionController MissionController { get; set; }
+
+        public TerrainWater(GraphicsDevice device, Board board, MissionController missionController)
         {
             Board = board;
-            Camera = camera;
-            ProjectionMatrix = projectionMatrix;
+            MissionController = missionController;
             SetUpWaterVertices(device);
             WindDirection = new Vector3(-1, 0, -0.2f);
             WindDirection.Normalize();

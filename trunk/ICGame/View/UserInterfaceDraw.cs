@@ -19,7 +19,7 @@ namespace ICGame
             get; set;
         }
     
-        public void Draw(string fps)
+        public void Draw()
         {
             SpriteBatch spriteBatch=new SpriteBatch(graphicsDevice);
             //spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Texture,SaveStateMode.SaveState);
@@ -30,7 +30,7 @@ namespace ICGame
                 spriteBatch.Draw(UserInterface.RightUI, new Vector2(UserInterface.ScreenSizeX - UserInterface.RightUI.Width, UserInterface.ScreenSizeY - UserInterface.RightUI.Height * i),new Color(1.0f,1.0f,1.0f,1.0f));
             }
             spriteBatch.Draw(UserInterface.ZuneUIModel.ZuneUI, new Vector2(UserInterface.ZuneUIModel.PositionX, UserInterface.ZuneUIModel.PositionY), new Color(1.0f, 1.0f, 1.0f, 1.0f));
-            spriteBatch.DrawString(UserInterface.spriteFont, fps, new Vector2(0,0), Color.White);
+            spriteBatch.DrawString(UserInterface.spriteFont, "FPS: " + Game.FPS.ToString(), new Vector2(0, 0), Color.White);
             spriteBatch.End();
         }
     }

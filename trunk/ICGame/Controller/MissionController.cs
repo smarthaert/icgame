@@ -46,7 +46,7 @@ namespace ICGame
                 );
             Mission.Board.PrepareSkyDome(MainGame.Content.Load<Model>("Resources/dome"), MainGame.GraphicsDevice);
             Mission.Board.LoadHeightData(heightMap);
-            Mission.Board.PrepareTerrainWater(MainGame.Display.Camera, MainGame.Display.Projection);
+            Mission.Board.PrepareTerrainWater(this);
             Mission.Board.TerrainWater.LoadTextures(contentManager.Load<Texture2D>("Texture2D/Board/waterbump"));
             Mission.LoadObjects(gameObjectFactory);
         }

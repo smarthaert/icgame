@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ICGame
 {
@@ -14,16 +15,9 @@ namespace ICGame
            
         }
 
-        public override void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, 
-            Microsoft.Xna.Framework.Graphics.GraphicsDevice gd, Vector4? clipPlane, float? alpha = null)
+        public override void Draw(GraphicsDevice gd, GameTime gameTime, Vector4? clipPlane, float? alpha = null)
         {
-            Vehicle vehicle = GameObject as Vehicle;
-            if (vehicle.Selected)
-            {
-                //vehicle.SelectionRing.GetDrawer().Draw(projection, viewMatrix, cameraPosition, gd, clipPlane);
-            }
-
-            base.Draw(projection, viewMatrix, cameraPosition, gd, clipPlane, alpha);
+            base.Draw(gd, gameTime, clipPlane, alpha);
         }
     }
 }

@@ -23,7 +23,6 @@ namespace ICGame
             public Model model;
             public List<Texture2D> textures = new List<Texture2D>();
             public string name;
-            public ObjectClass objectClass;
         } 
 
         private Dictionary<GameObjectID, string> objectAccessList = new Dictionary<GameObjectID, string>()
@@ -69,8 +68,12 @@ namespace ICGame
             LoadedModel loadedModel = loadedModels[name];
             GameObject newObject = null;
             ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetStatsReader().GetObjectStats(name);
-            objectStats.GameObjectFactory = this;       //może to da się rozwiązać lepiej - teraz daję obiektowi w konstruktorze dostęp do GameObjectFactory, żeby mógł sobie załadować podmodele
             
+            foreach (ObjectStats.SubElement subElement in objectStats.SubElements)
+            {
+                subElement.GameObject = CreateGameObject(subElement.Name);
+            }
+
             switch (objectStats.Type) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
             {
                 case ObjectClass.Vehicle:

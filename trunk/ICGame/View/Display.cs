@@ -16,15 +16,13 @@ namespace ICGame
         private ParticleEffectTexturer particleEffectTexturer;
         private RenderTargetManager renderTargetManager;
 
-        public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, Camera camera, CampaignController campaignController)
+        public Display(GraphicsDeviceManager graphicsDeviceManager, UserInterface userInterface, CampaignController campaignController)
         {
             graphics = graphicsDeviceManager;
             graphicsDevice = graphics.GraphicsDevice;
             
             UserInterface = userInterface;
-            Camera = camera;
             CampaignController = campaignController;
-            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 600.0f);
             particleEffectTexturer = new ParticleEffectTexturer();
             renderTargetManager = new RenderTargetManager(graphicsDevice);
 
@@ -36,17 +34,7 @@ namespace ICGame
             renderTargetManager.ResetRenderTargets();
         }
 
-        public ContentManager Content
-        {
-            get; set;
-        }
-
         public UserInterface UserInterface
-        {
-            get; set;
-        }
-
-        public Camera Camera
         {
             get; set;
         }
@@ -57,13 +45,7 @@ namespace ICGame
             get; set;
         }
 
-        public Matrix Projection
-        {
-            get;
-            set;
-        }
-
-        public void Draw(GameTime gameTime, string fps)
+        public void Draw(IEnumerable<IDrawer> drawers, Camera camera, GameTime gameTime)
         {
             //TODO: Refactoring - update stanu obiektów raczej nie powinien być tutaj
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
@@ -71,7 +53,7 @@ namespace ICGame
                 if (gameObject is IAnimated)
                     ((IAnimated)gameObject).Animate(gameTime, CampaignController.GetObjectsToDraw());
             }
-            Camera.CalculateCamera();
+            camera.CalculateCamera();
 
             graphicsDevice.SetRenderTarget(renderTargetManager.SceneRenderTarget);
             graphicsDevice.Clear(Color.Black);
@@ -79,28 +61,29 @@ namespace ICGame
             // TODO: Add your drawing code here // O RLY!? :D
             
             //Main scene
-            DrawScene(gameTime);
+            DrawScene(camera, gameTime);
             
             graphicsDevice.SetRenderTarget(renderTargetManager.ParticleTexture);
 
             graphicsDevice.Clear(ClearOptions.Target, new Color(0.0f, 0.0f, 0.0f, 0.0f), 1.0f, 0);
 
             //Effects
-            DrawScene(gameTime,true);
+            DrawScene(camera, gameTime,true);
             
-            particleEffectTexturer.Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), Camera, Projection, gameTime);
+            particleEffectTexturer.Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), camera, DisplayController.Projection, gameTime);
             
             graphicsDevice.SetRenderTarget(null);
 
-            TextureDrawer.DrawMergedTextures(graphicsDevice, renderTargetManager.SceneRenderTarget, renderTargetManager.ParticleTexture, Projection);
+            TextureDrawer.DrawMergedTextures(graphicsDevice, renderTargetManager.SceneRenderTarget,
+                                             renderTargetManager.ParticleTexture, DisplayController.Projection);
 
 #if !DEBUG
 
-            UserInterface.Drawer.Draw(fps);
+            UserInterface.Drawer.Draw();
 #endif
         }
 
-        private void DrawScene(GameTime gameTime, bool creatingEffects = false)
+        private void DrawScene(Camera camera, GameTime gameTime, bool creatingEffects = false)
         {
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
@@ -115,15 +98,15 @@ namespace ICGame
 
             if(!creatingEffects)
             {
-                CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, CampaignController.GetObjectsToDraw(), gameTime);
+                CampaignController.GetTerrainWaterDrawer().Draw(graphicsDevice, gameTime);
             }
 
-            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, Camera.CameraMatrix, Projection, Camera.CameraPosition, null, creatingEffects, alpha);
+            CampaignController.GetBackgroundDrawer().Draw(graphicsDevice, gameTime, null, alpha);
 
             foreach (GameObject gameObject in CampaignController.GetObjectsToDraw())
             {
                 //TODO: CampaignController.GetObjectsToCheck(IPhysical physical) -> lista obiektów które mogą kolidować z animowanym
-                gameObject.GetDrawer().Draw(Projection, Camera.CameraMatrix, Camera.CameraPosition, graphicsDevice, null, alpha);
+                gameObject.GetDrawer().Draw(graphicsDevice, gameTime, null, alpha);
             }
 
             //TODO: Rysowanie malego modelu powinno obslugiwac zaznaczenie wielu jednostek i ogolnie powinno wyleciec do jakiegos kontrolera jednostek (niestniejacego)
@@ -133,7 +116,7 @@ namespace ICGame
                 GameObject selectedObject = CampaignController.MissionController.GetSeletedObject();
                 if (selectedObject != null)
                 {
-                    selectedObject.GetDrawer().DrawSmallModel(Projection, Camera, graphicsDevice, gameTime);
+                    selectedObject.GetDrawer().DrawSmallModel(DisplayController.Projection, camera, graphicsDevice, gameTime);
                 }
             }
         }

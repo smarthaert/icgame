@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ICGame
 {
-    public class GameObjectDrawer
+    public class GameObjectDrawer : IDrawer
     {
         public GameObjectDrawer(GameObject gameObject)
         {
@@ -61,6 +61,7 @@ namespace ICGame
             }
 
             Camera temporaryCamera = new Camera(camera);
+            temporaryCamera.CalculateCamera();
             int i = 0;
             foreach (var model in GameObject.Model.Meshes)
             {
@@ -135,7 +136,7 @@ namespace ICGame
             }
         }
 
-        public virtual void Draw(Matrix projection, Matrix viewMatrix, Vector3 cameraPosition, GraphicsDevice gd, Vector4? clipPlane, float? alpha = null)
+        public virtual void Draw(GraphicsDevice gd, GameTime gameTime, Vector4? clipPlane, float? alpha = null)
         {
             if(!GameObject.Visible)
             {
@@ -161,12 +162,14 @@ namespace ICGame
 
                     effect.Parameters["xEnableLighting"].SetValue(true);
                     effect.Parameters["xLightDirection"].SetValue(GameObject.Mission.Board.LightDirection);
-                    effect.Parameters["xCameraPosition"].SetValue(cameraPosition);
+                    effect.Parameters["xCameraPosition"].SetValue(DisplayController.Camera.CameraPosition);
 
                     //Macierze
                     effect.Parameters["xWorld"].SetValue(transforms[model.ParentBone.Index] * modelMatrix);
-                    effect.Parameters["xView"].SetValue(viewMatrix);
-                    effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index] * modelMatrix* viewMatrix * projection);
+                    effect.Parameters["xView"].SetValue(DisplayController.Camera.CameraMatrix);
+                    effect.Parameters["xWorldViewProjection"].SetValue(transforms[model.ParentBone.Index]*modelMatrix*
+                                                                       DisplayController.Camera.CameraMatrix*
+                                                                       DisplayController.Projection);
                     
                     if(alpha == null)
                     {
