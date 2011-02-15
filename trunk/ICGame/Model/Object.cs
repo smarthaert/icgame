@@ -364,5 +364,10 @@ namespace ICGame
             }
             return drawers;
         }
+
+        public IDrawer GetMiniModelDrawer()
+        {
+            return new MiniModelDrawer(this);
+        }
     }
 }
