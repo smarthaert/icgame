@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,106 +9,84 @@ namespace ICGame
 {
     public class GameObjectFactory
     {
-        public GameObjectFactory()
+        #region SINGLETON
+        private GameObjectFactory()
         {
-            
+
         }
-        
+
+        private static GameObjectFactory instance;
+
+        public static GameObjectFactory Factory
+        {
+            get
+            {
+                if(instance==null)
+                    instance = new GameObjectFactory();
+                return instance;
+            }
+        }
+
+        #endregion
+
+
         public enum ObjectClass
         {
             Vehicle, StaticObject, Unit, Building, GameObject, Infantry, Civilian
         }
 
-        private class LoadedModel
+
+
+        public GameObject CreateGameObject(GameObjectID gameObjectId)
         {
-            public Model model;
-            public List<Texture2D> textures = new List<Texture2D>();
-            public string name;
-        } 
 
-        private Dictionary<GameObjectID, string> objectAccessList = new Dictionary<GameObjectID, string>()
-                                 {
-                                     {GameObjectID.FireTruck,"firetruck_2"},
-                                     {GameObjectID.SelectionRing,"selection_ring"},
-                                     {GameObjectID.Home0,"home0"},
-                                     {GameObjectID.AnimFigure, "animfigure"},
-                                     {GameObjectID.Chassy, "chassy_1"}
-                                 };
-        private Dictionary<string, LoadedModel> loadedModels = new Dictionary<string, LoadedModel>();
+            GameObject CreatedObject = null;
+            ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetStatsReader().GetObjectStats(GameContentManager.GameObjectNames[gameObjectId]);
 
-        public void LoadModels(Game game)
-        {
-            GameObjectStatsReader.Initialize();
-
-            foreach (string name in GameObjectStatsReader.GetStatsReader().GetObjectsToLoad())
-            {
-                loadedModels.Add(name,new LoadedModel ());
-                Model tempModel = loadedModels[name].model;
-                tempModel = game.Content.Load<Model>("Model/" + name);
-                foreach (ModelMesh mesh in tempModel.Meshes)
-                {
-                    foreach (BasicEffect effect in mesh.Effects)
-                    {
-                        loadedModels[name].textures.Add(effect.Texture);
-                    }
-                }
-                foreach (ModelMesh mesh in tempModel.Meshes)
-                {
-                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
-                    {
-                        meshPart.Effect = TechniqueProvider.GetEffect("TexturedShaded").Clone();
-                    }
-                }
-                loadedModels[name].model = tempModel;
-                loadedModels[name].name = name;
-            }
-        }
-
-        public GameObject CreateGameObject(string name)
-        {
-            LoadedModel loadedModel = loadedModels[name];
-            GameObject newObject = null;
-            ObjectStats.GameObjectStats objectStats = GameObjectStatsReader.GetStatsReader().GetObjectStats(name);
-            
             foreach (ObjectStats.SubElement subElement in objectStats.SubElements)
             {
-                subElement.GameObject = CreateGameObject(subElement.Name);
+                //Translacja name <-> GameObjectID
+                GameObjectID idOfSubElement = (from ids in GameContentManager.GameObjectNames
+                                               where ids.Value == subElement.Name
+                                               select ids.Key).First();
+                subElement.GameObject = CreateGameObject(idOfSubElement);
             }
 
-            switch (objectStats.Type) //To zdecydowanie da sie jakos zrefaktoryzowac... Refleksja, skomplikowane rzutowanie?
+            Model loadedModel = GameContentManager.Content.GetGameObjectModel(gameObjectId);
+            switch (objectStats.Type)
             {
                 case ObjectClass.Vehicle:
-                    newObject = new Vehicle(loadedModel.model, objectStats as ObjectStats.VehicleStats);
+                    CreatedObject = new Vehicle(loadedModel, objectStats as ObjectStats.VehicleStats);
 
                     //Hotffix
-                    if(name == "chassy_1")
-                        newObject.Position = new Vector3(100, 0, 80);
+                    if (gameObjectId == GameObjectID.Chassy)
+                        CreatedObject.Position = new Vector3(100, 0, 80);
 
                     break;
                 case ObjectClass.StaticObject:
-                    newObject = new StaticObject(loadedModel.model, objectStats as ObjectStats.StaticObjectStats);
+                    CreatedObject = new StaticObject(loadedModel, objectStats as ObjectStats.StaticObjectStats);
                     break;
                 case ObjectClass.Building:
-                    newObject = new Building(loadedModel.model, objectStats as ObjectStats.BuildingStats);
+                    CreatedObject = new Building(loadedModel, objectStats as ObjectStats.BuildingStats);
                     break;
                 case ObjectClass.Infantry:
-                    newObject = new Infantry(loadedModel.model, objectStats as ObjectStats.InfantryStats);
+                    CreatedObject = new Infantry(loadedModel, objectStats as ObjectStats.InfantryStats);
                     break;
                 case ObjectClass.Civilian:
-                    newObject = new Civilian(loadedModel.model, objectStats as ObjectStats.CivilianStats);
+                    CreatedObject = new Civilian(loadedModel, objectStats as ObjectStats.CivilianStats);
                     break;
             }
 
-            if (newObject != null)
+            if (CreatedObject != null)
             {
-                newObject.Textures = loadedModel.textures;
+                CreatedObject.Textures = GameContentManager.Content.GetModelTextures(gameObjectId).ToList();
 
                 int i = 0;
-                foreach (var model in newObject.Model.Meshes)
+                foreach (var model in CreatedObject.Model.Meshes)
                 {
                     foreach (Effect effect in model.Effects)
                     {
-                        if (newObject.Textures[i++] != null)      //inaczej się kurwa nie dało
+                        if (CreatedObject.Textures[i++] != null)      //inaczej się kurwa nie dało
                         {
                             effect.CurrentTechnique = effect.Techniques["TexturedShaded"];
                         }
@@ -118,41 +97,38 @@ namespace ICGame
                     }
                 }
 
-                MaterialReader materialReader = new MaterialReader(newObject, loadedModel.name);
+                //Wprowadzenie danych materialu - fix buga z Pipelinem
+                MaterialReader materialReader = new MaterialReader(CreatedObject, GameContentManager.GameObjectNames[gameObjectId]);
                 materialReader.PopulateObject();
 
                 i = 0;
-                foreach (var model in newObject.Model.Meshes)
+                foreach (var model in CreatedObject.Model.Meshes)
                 {
                     foreach (Effect effect in model.Effects)
                     {
                         //Parametry materialu
-                        effect.Parameters["xAmbient"].SetValue(newObject.Ambient[i]);
-                        effect.Parameters["xDiffuseColor"].SetValue(newObject.DiffuseColor[i]);
-                        effect.Parameters["xDiffuseFactor"].SetValue(newObject.DiffuseFactor[i]);
+                        effect.Parameters["xAmbient"].SetValue(CreatedObject.Ambient[i]);
+                        effect.Parameters["xDiffuseColor"].SetValue(CreatedObject.DiffuseColor[i]);
+                        effect.Parameters["xDiffuseFactor"].SetValue(CreatedObject.DiffuseFactor[i]);
 
-                        effect.Parameters["xTransparency"].SetValue(newObject.Transparency[i]);
-                        effect.Parameters["xSpecularColor"].SetValue(newObject.Specular[i]);
-                        effect.Parameters["xSpecularFactor"].SetValue(newObject.SpecularFactor[i]);
+                        effect.Parameters["xTransparency"].SetValue(CreatedObject.Transparency[i]);
+                        effect.Parameters["xSpecularColor"].SetValue(CreatedObject.Specular[i]);
+                        effect.Parameters["xSpecularFactor"].SetValue(CreatedObject.SpecularFactor[i]);
 
-                        effect.Parameters["xHasTexture"].SetValue(newObject.Textures[i] != null ? true : false);
-                        effect.Parameters["xTexture"].SetValue(newObject.Textures[i++]);
+                        effect.Parameters["xHasTexture"].SetValue(CreatedObject.Textures[i] != null ? true : false);
+                        effect.Parameters["xTexture"].SetValue(CreatedObject.Textures[i++]);
                     }
                 }
 
-                return newObject;
+                return CreatedObject;
             }
             else
             {
                 throw new Exception("Unknown unit!");
             }
-          
+
             return null;
         }
 
-        public List<GameObject> GetAvaliableUnits()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
