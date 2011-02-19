@@ -25,9 +25,9 @@ namespace ICGame
             MissionController.StartMission();
             Campaign.Mission = MissionController.Mission;
 
-            Campaign.GameObjectFactory.LoadModels(MainGame);
-            Campaign.BuyUnit("firetruck_2");
-            Campaign.BuyUnit("chassy_1");
+            //Campaign.GameObjectFactory.LoadModels(MainGame);
+            Campaign.BuyUnit(GameObjectID.FireTruck);
+            Campaign.BuyUnit(GameObjectID.Chassy);
             Campaign.SendToMission(Campaign.UnitContainer.Units[0]);
             Campaign.SendToMission(Campaign.UnitContainer.Units[1]);
             //Campaign.BuyUnit(GameObjectID.AnimFigure);
@@ -37,7 +37,7 @@ namespace ICGame
             MissionController.LoadMissionData(Campaign.GameObjectFactory);
         }
 
-        public GameObject[] GetObjectsToDraw()
+        public IEnumerable<GameObject> GetObjectsToDraw()
         {
             return MissionController.GetMissionObjects();
         }
@@ -91,11 +91,6 @@ namespace ICGame
         public GameObject GetActiveObject()
         {
             return MissionController.GetActiveObject();
-        }
-
-        public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
-        {
-            return MissionController.CheckSelection(x, y, camera, projection, gd);
         }
     }
 }

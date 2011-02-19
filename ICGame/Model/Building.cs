@@ -152,7 +152,7 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public void Animate(GameTime gameTime, GameObject[] gameObjects)
+        public void Animate(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
             
         }
@@ -194,13 +194,13 @@ namespace ICGame
             get; set;
         }
 
-        public float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
+        public float? CheckClicked(int x, int y, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd)
         {
             Vector3 near = new Vector3((float)x, (float)y, 0f);
             Vector3 far = new Vector3((float)x, (float)y, 1f);
 
-            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, AbsoluteModelMatrix);
-            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 nearpt = gd.Viewport.Unproject(near, DisplayController.Projection, DisplayController.Camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, DisplayController.Projection, DisplayController.Camera.CameraMatrix, AbsoluteModelMatrix);
 
             Vector3 direction = farpt - nearpt;
 
@@ -220,7 +220,7 @@ namespace ICGame
             throw new NotImplementedException();
         }
 
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, GameObject[] gameObjects, GameTime gameTime)
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, IEnumerable<GameObject> gameObjects, GameTime gameTime)
         {
             throw new NotImplementedException();
         }

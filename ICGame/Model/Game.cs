@@ -35,17 +35,12 @@ namespace ICGame
         public Game()
         {
             GraphicsDeviceManager = new GraphicsDeviceManager(this);
-            //GraphicsDeviceManager = new PerfHUDDeviceManager(this);
             GraphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
             GraphicsDeviceManager.ApplyChanges();
-            //GraphicsDeviceManager.IsFullScreen = true;
             Content.RootDirectory = "Content";
-
-          //  Campaign = new Campaign(EffectController);
 
             UserInterface = new UserInterface();
 
-            
             EffectController = new EffectController(this);
             MissionController = new MissionController(this);
             CampaignController = new CampaignController(this, MissionController, EffectController);
@@ -53,6 +48,8 @@ namespace ICGame
             Camera = new Camera(new Vector3(244, 0, 154),MissionController);
 
             UserInterfaceController = new UserInterfaceController(CampaignController,UserInterface);
+
+            UnitCommander = new UnitCommander();
         
 # if DEBUG
             GraphicsDeviceManager.PreparingDeviceSettings += new System.EventHandler<PreparingDeviceSettingsEventArgs>(OnPreparingDeviceSettings);
@@ -77,11 +74,6 @@ namespace ICGame
         #region Subclasses
 
         public UserInterfaceController UserInterfaceController
-        {
-            get; set;
-        }
-
-        public Campaign Campaign
         {
             get; set;
         }
@@ -131,7 +123,7 @@ namespace ICGame
 
         public EffectController EffectController { get; set; }
 
-
+        public UnitCommander UnitCommander { get; set; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -144,6 +136,11 @@ namespace ICGame
             base.Initialize();
 
             DisplayController = new DisplayController(GraphicsDeviceManager, UserInterface, Camera, CampaignController);
+
+
+            GameObjectStatsReader.Initialize();
+            TechniqueProvider.StartTechniqueProvider(Content);
+            GameContentManager.Initialize(Content);
 
             CampaignController.StartCampaign();
             CampaignController.CampaignState = GameState.MainMenu;
@@ -182,8 +179,15 @@ namespace ICGame
         protected override void Update(GameTime gameTime)
         {
             UserInterfaceController.UpdateUserInterfaceState(gameTime);
+
+            if(UserInterfaceController.LeftMouseButtonClicked != null)
+                UnitCommander.ToggleLeftClick((Point)UserInterfaceController.LeftMouseButtonClicked, MissionController.Mission.ObjectContainer, GraphicsDevice);
+            if (UserInterfaceController.RightMouseButtonClicked != null)
+                UnitCommander.ToggleRightClick((Point)UserInterfaceController.RightMouseButtonClicked, MissionController.Mission.ObjectContainer, GraphicsDevice);
+
             MissionController.UpdateMission(gameTime);
             EffectController.Update(gameTime);
+
             switch (CampaignController.CampaignState)
             {
                 case GameState.Initialize:

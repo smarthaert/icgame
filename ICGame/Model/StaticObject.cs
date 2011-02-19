@@ -99,13 +99,13 @@ namespace ICGame
 
         public float Length { get; set; }
 
-		public float? CheckClicked(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
+		public float? CheckClicked(int x, int y, GraphicsDevice gd)
         {
             Vector3 near = new Vector3((float)x, (float)y, 0f);
             Vector3 far = new Vector3((float)x, (float)y, 1f);
 
-            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, AbsoluteModelMatrix);
-            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 nearpt = gd.Viewport.Unproject(near, DisplayController.Projection, DisplayController.Camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, DisplayController.Projection, DisplayController.Camera.CameraMatrix, AbsoluteModelMatrix);
 
             Vector3 direction = farpt - nearpt;
 

@@ -11,7 +11,7 @@ namespace ICGame
         {
             GameState = GameState.Initialize;
             UnitContainer = new UnitContainer();
-            GameObjectFactory = new GameObjectFactory();
+            GameObjectFactory = GameObjectFactory.Factory;
         }
 
 
@@ -42,7 +42,7 @@ namespace ICGame
             //Mission.LoadObjects(GameObjectFactory);
         }
 
-        public void BuyUnit(string gameObjectID)
+        public void BuyUnit(GameObjectID gameObjectID)
         {
             GameObject gameObject = GameObjectFactory.CreateGameObject(gameObjectID);
             if(gameObject.GetType() == typeof(Vehicle))

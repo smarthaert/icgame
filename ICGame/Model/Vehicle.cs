@@ -444,7 +444,7 @@ namespace ICGame
             }
         }
 
-        public override void Animate(GameTime gameTime, GameObject[] gameObjects)
+        public override void Animate(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
             
             AnimateTurn(gameTime);
@@ -468,7 +468,7 @@ namespace ICGame
         private float toleranceX = toleranceSmall;
         private float toleranceY = toleranceSmall;
 
-        public override void CalculateNextStep(GameTime gameTime, GameObject[] gameObjects)
+        public override void CalculateNextStep(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
             if(Path.Count > 0)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
@@ -55,7 +56,7 @@ namespace ICGame
         /// <param name="objectRadius">Promień kuli, która jest w stanie objąć cały obiekt</param>
         /// <param name="controllable">Obiekt, dla którego obliczana jest ścieżka</param>
         /// <param name="gameObjects">Lista wszystkich obiektów na planszy</param>
-        public void FindPath(Point start, Point goal, int objectRadius, IControllable controllable, List<GameObject> gameObjects)
+        public void FindPath(Point start, Point goal, int objectRadius, IControllable controllable, IEnumerable<GameObject> gameObjects)
         {
             msg = "";
             DateTime dateTime = DateTime.Now;
@@ -614,12 +615,12 @@ namespace ICGame
             public IControllable Controllable { get; set; }
             public List<GameObject> GameObjects { get; set; }
 
-            public AStarArg(Point start, Point goal, IControllable controllable, List<GameObject> gameObjects)
+            public AStarArg(Point start, Point goal, IControllable controllable, IEnumerable<GameObject> gameObjects)
             {
                 Start = start;
                 Goal = goal;
                 Controllable = controllable;
-                GameObjects = gameObjects;
+                GameObjects = gameObjects.ToList();
             }
         }
 

@@ -54,7 +54,7 @@ namespace ICGame
         /// Do wywalenia w przyszłości
         /// </summary>
         /// <returns></returns>
-        public GameObject[] GetMissionObjects()
+        public IEnumerable<GameObject> GetMissionObjects()
         {
             return Mission.ObjectContainer.GameObjects;
         }
@@ -83,13 +83,7 @@ namespace ICGame
 
         public GameObject GetActiveObject()
         {
-            return GetMissionObjects()[0];
-        }
-
-        public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
-        {
-            bool selected = Mission.ObjectContainer.CheckSelection(x, y, camera, projection, gd);
-            return selected;
+            return GetMissionObjects().ElementAt(0);
         }
     }
 }

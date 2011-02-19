@@ -15,6 +15,6 @@ namespace ICGame
 
         bool CheckMove(IPhysical physical, BoundingBox thisBB, GameTime gameTime);
 
-        bool CheckMoveList(Direction directionFB, Direction directionLR, GameObject[] gameObjects, GameTime gameTime);
+        bool CheckMoveList(Direction directionFB, Direction directionLR, IEnumerable<GameObject> gameObjects, GameTime gameTime);
     }
 }

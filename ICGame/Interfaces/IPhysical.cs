@@ -46,6 +46,6 @@ namespace ICGame
 
         void AdjustToGround(float front, float back, float left, float right, float length, float width);
 
-        float? CheckClicked(int x, int y, Camera camera, Matrix projection, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd);
+        float? CheckClicked(int x, int y, Microsoft.Xna.Framework.Graphics.GraphicsDevice gd);
     }
 }
