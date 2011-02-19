@@ -46,8 +46,6 @@ namespace ICGame
         /// </summary>
         private void LoadModels()
         {
-            GameObjectStatsReader.Initialize();
-
             foreach (string name in GameObjectStatsReader.GetStatsReader().GetObjectsToLoad())
             {
                 //odczytaj id obiektu na podstawie nazwy z xmla
@@ -115,7 +113,7 @@ namespace ICGame
 
         public SpriteFont GetFont()
         {
-            return contentManager.Load<SpriteFont>("Resources/UIFont");
+            return contentManager.Load<SpriteFont>("Resources/font");
         }
 
         public Texture2D GetTexture(string name)

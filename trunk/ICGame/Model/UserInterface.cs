@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using InterfaceControls;
+
 namespace ICGame
 {
     public enum WindowPosition
@@ -14,8 +16,6 @@ namespace ICGame
     {
     #region Bebechy
 		
-        private Game mainGame;
-
         private int originalScreenSizeX;
         private int originalScreenSizeY;
         private int screenSizeX;
@@ -27,29 +27,41 @@ namespace ICGame
         
 	#endregion
 
-        
-        public Texture2D RightUI { get; set; }
-        public Zune ZuneUIModel { get; set; }
+        #region Controls
 
-        public int ScreenSizeY
+        public List<InterfaceControl> Controls { get; set; }
+
+        private Panel rightUI;
+        private InterfaceControls.Zune zune;
+
+        private void InitializeControls(GraphicsDevice device)
         {
-            get { return screenSizeY; }
+            Controls = new List<InterfaceControl>();
+
+            //--------------------------------------------------------------------------------------------
+            //Right UI Panel
+            //--------------------------------------------------------------------------------------------
+
+            rightUI = new Panel();
+            rightUI.Texture = GameContentManager.Content.GetTexture("Texture2D/UI/rightUIPanel");
+            rightUI.Position = new Vector2(device.PresentationParameters.BackBufferWidth - rightUI.Texture.Width, 0);
+            rightUI.Size = new Vector2(rightUI.Texture.Width, device.PresentationParameters.BackBufferHeight);
+
+            Controls.Add(rightUI);
+
+
+            //--------------------------------------------------------------------------------------------
+            //Zune
+            //--------------------------------------------------------------------------------------------
+
+            zune = new InterfaceControls.Zune(GameContentManager.Content.GetTexture("Texture2D/UI/zune"), device.PresentationParameters.BackBufferHeight);
+            zune.Size = new Vector2(zune.Texture.Width, zune.Texture.Height);
+
+            Controls.Add(zune);
         }
 
-        public int ScreenSizeX
-        {
-            get { return screenSizeX; }
-        }
+        #endregion
 
-        public bool IsFullscreen
-        {
-            get
-            {
-                return mainGame.GraphicsDeviceManager.IsFullScreen;
-            }
-        }
-        
-        
         public UserInterfaceDraw GetDrawer()
         {
             return new UserInterfaceDraw(this);
@@ -64,40 +76,41 @@ namespace ICGame
 
         public bool InterfaceOverlaped(int x, int y)
         {
-            // Jesli nad prawym paskiem
-            if ((x >= ScreenSizeX - RightUI.Width) || ZuneUIModel.InterfaceOverlaped(x, y))
+            if ((x >= rightUI.Position.X) || zune.InterfaceOverlaped(x, y))
                 return true;
+            else if (x >= zune.Position.X && x <= zune.Position.X + zune.Size.X && y >= zune.Position.Y && y <= zune.Position.Y + 20)
+            {
+                zune.ToggleOnClick();
+            }
             return false;
         }
 
         /// <summary>
-        /// KONIECZNA inicjalizacja modelu (nie wrzucona do konstruktora z powodu ograniczen technicznych - kolejnosc metod w
-        /// klasie Game
+        /// Inicjalizacja interfejsu
         /// </summary>
-        /// <param name="game">referencja na maingame</param>
+        /// <param name="device">GraphicsDevice - tymczasowo</param>
 
-        public void LoadGraphics(Game game)
+        public void LoadGraphics(GraphicsDevice device)
         {
-            mainGame = game;
-            RightUI = mainGame.Content.Load<Texture2D>("Texture2D/UI/rightUIPanel");
-            screenSizeX = mainGame.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            screenSizeY = mainGame.GraphicsDevice.PresentationParameters.BackBufferHeight;
+            screenSizeX = device.PresentationParameters.BackBufferWidth;
+            screenSizeY = device.PresentationParameters.BackBufferHeight;
+
             originalScreenSizeX = screenSizeX;
             originalScreenSizeY = screenSizeY;
 
-            ZuneUIModel = new Zune(mainGame.Content.Load<Texture2D>("Texture2D/UI/zune"), ScreenSizeY);
+            fullscreenSizeY = device.DisplayMode.Height;
+            fullscreenSizeX = device.DisplayMode.Width;
 
-            fullscreenSizeY = mainGame.GraphicsDevice.DisplayMode.Height;
-            fullscreenSizeX = mainGame.GraphicsDevice.DisplayMode.Width;
-
-            spriteFont = mainGame.Content.Load<SpriteFont>("Resources/font");
+            InitializeControls(device);
+            spriteFont = GameContentManager.Content.GetFont();
         }
+
         /// <summary>
         /// Zmienia stan ekranu (fullscren/windowed) i informuje obiekty UI o tej zmianie
         /// </summary>
-        public void ToggleFullscreen()
+        public void ToggleFullscreen(bool isFullScreen, GraphicsDeviceManager graphicsDeviceManager)
         {
-            if (!mainGame.GraphicsDeviceManager.IsFullScreen)
+            if (!isFullScreen)
             {
                 screenSizeX = fullscreenSizeX;
                 screenSizeY = fullscreenSizeY;
@@ -108,20 +121,25 @@ namespace ICGame
                 screenSizeY = originalScreenSizeY;
             }
 
-            ZuneUIModel.UpdateScreenSize(screenSizeY);
-            mainGame.GraphicsDeviceManager.PreferredBackBufferWidth = screenSizeX;
-            mainGame.GraphicsDeviceManager.PreferredBackBufferHeight = screenSizeY;
+            graphicsDeviceManager.PreferredBackBufferWidth = screenSizeX;
+            graphicsDeviceManager.PreferredBackBufferHeight = screenSizeY;
 
+            graphicsDeviceManager.ApplyChanges();
 
-            mainGame.GraphicsDeviceManager.ApplyChanges();
+            graphicsDeviceManager.ToggleFullScreen();
 
-            mainGame.GraphicsDeviceManager.ToggleFullScreen();
+            UpdateControls();
+        }
 
+        private void UpdateControls()
+        {
+            zune.UpdateScreenSize(screenSizeY);
+            rightUI.Position = new Vector2(screenSizeX - rightUI.Size.X, rightUI.Position.Y);
+            rightUI.Size = new Vector2(rightUI.Size.X, screenSizeY);
         }
 
         public WindowPosition GetHorizontalEdge(int x)
         {
-
             if (x - THRESHOLD < 0)
                 return WindowPosition.LEFT;
             if (screenSizeX - x < THRESHOLD)
@@ -131,7 +149,6 @@ namespace ICGame
 
         public WindowPosition GetVerticalEdge(int y)
         {
-          
             if (y - THRESHOLD < 0)
                 return WindowPosition.UP;
             if (screenSizeY - y < THRESHOLD)
@@ -139,5 +156,9 @@ namespace ICGame
             return WindowPosition.NONE;
         }
         
+        public void Animate(GameTime gameTime)
+        {
+            zune.Animate(gameTime);
+        }
     }
 }

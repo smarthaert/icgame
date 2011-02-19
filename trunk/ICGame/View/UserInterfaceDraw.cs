@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using InterfaceControls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,14 +22,14 @@ namespace ICGame
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime, Vector4? clipPlane = null, float? alpha = null)
         {
             SpriteBatch spriteBatch=new SpriteBatch(graphicsDevice);
-            //spriteBatch.Begin(SpriteBlendMode.AlphaBlend,SpriteSortMode.Texture,SaveStateMode.SaveState);
-            //CONV
+
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
-            for (int i = 0; i < UserInterface.ScreenSizeY; i++)
+
+            foreach (InterfaceControl interfaceControl in UserInterface.Controls)
             {
-                spriteBatch.Draw(UserInterface.RightUI, new Vector2(UserInterface.ScreenSizeX - UserInterface.RightUI.Width, UserInterface.ScreenSizeY - UserInterface.RightUI.Height * i),new Color(1.0f,1.0f,1.0f,1.0f));
+                interfaceControl.Draw(spriteBatch);
             }
-            spriteBatch.Draw(UserInterface.ZuneUIModel.ZuneUI, new Vector2(UserInterface.ZuneUIModel.PositionX, UserInterface.ZuneUIModel.PositionY), new Color(1.0f, 1.0f, 1.0f, 1.0f));
+            
             spriteBatch.DrawString(UserInterface.spriteFont, "FPS: " + Game.FPS.ToString(), new Vector2(0, 0), Color.White);
             spriteBatch.End();
         }

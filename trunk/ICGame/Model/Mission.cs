@@ -32,11 +32,11 @@ namespace ICGame
 
         public void LoadObjects(GameObjectFactory gameObjectFactory)
         {
-            GameObject obj = gameObjectFactory.CreateGameObject("home0");
+            GameObject obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
             obj.Position=new Vector3(122.0f,Board.GetHeight(122.0f,82.0f),82.0f);
             obj.Mission = this;
             ObjectContainer.AddGameObject(obj, this);
-            obj = gameObjectFactory.CreateGameObject("home0");
+            obj = gameObjectFactory.CreateGameObject(GameObjectID.Home0);
             obj.Position = new Vector3(137.0f, Board.GetHeight(137.0f, 67.0f), 67.0f);
             obj.Mission = this;
             ObjectContainer.AddGameObject(obj, this);

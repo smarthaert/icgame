@@ -180,7 +180,7 @@ namespace ICGame
 
         #region IAnimated Members
 
-        public virtual void Animate(GameTime gameTime, GameObject[] gameObjects)
+        public virtual void Animate(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
             CalculateNextStep(gameTime, gameObjects);
             for(int i = 0; i < Model.Bones.Count; ++i)
@@ -229,7 +229,7 @@ namespace ICGame
             get; set;
         }
 
-        public virtual void CalculateNextStep(GameTime gameTime, GameObject[] gameObjects)
+        public virtual void CalculateNextStep(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
             /*NextStep = new Vector2(Destination.X - Position.X, Destination.Y - Position.Z);
             NextStep = new Vector2(NextStep.X*Convert.ToSingle(Math.Cos(Angle.Y)) + NextStep.Y*Convert.ToSingle(Math.Sin(Angle.Y)),
@@ -353,13 +353,13 @@ namespace ICGame
             set;
         }
 
-        public float? CheckClicked(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
+        public float? CheckClicked(int x, int y, GraphicsDevice gd)
         {
             Vector3 near = new Vector3((float)x, (float)y, 0f);
             Vector3 far = new Vector3((float)x, (float)y, 1f);
 
-            Vector3 nearpt = gd.Viewport.Unproject(near, projection, camera.CameraMatrix, AbsoluteModelMatrix);
-            Vector3 farpt = gd.Viewport.Unproject(far, projection, camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 nearpt = gd.Viewport.Unproject(near, DisplayController.Projection, DisplayController.Camera.CameraMatrix, AbsoluteModelMatrix);
+            Vector3 farpt = gd.Viewport.Unproject(far, DisplayController.Projection, DisplayController.Camera.CameraMatrix, AbsoluteModelMatrix);
 
             Vector3 direction = farpt - nearpt;
 
@@ -414,7 +414,7 @@ namespace ICGame
             return OOBoundingBox.Intersects(physical.OOBoundingBox);
         }
 
-        public bool CheckMoveList(Direction directionFB, Direction directionLR, GameObject[] gameObjects, GameTime gameTime)
+        public bool CheckMoveList(Direction directionFB, Direction directionLR, IEnumerable<GameObject> gameObjects, GameTime gameTime)
         {
             float spd = 0;
             if (directionFB == Direction.Forward)

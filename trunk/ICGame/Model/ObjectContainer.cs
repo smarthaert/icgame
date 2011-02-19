@@ -22,7 +22,7 @@ namespace ICGame
         private int selectedObject;
         private PathFinder pathFinder;
 
-        private int SelectedObject
+        public int SelectedObject
         {
             get 
             { 
@@ -47,10 +47,11 @@ namespace ICGame
             }
         }
 
-        private Board Board
+        public Board Board
         {
-            get; set;
+            get; private set;
         }
+
         public GameObjectContainer(Board board)
         {
             Board = board;
@@ -66,11 +67,11 @@ namespace ICGame
             get; set;
         }
 
-        public GameObject[] GameObjects
+        public IEnumerable<GameObject> GameObjects
         {
             get
             {
-                return gameObjects.ToArray();
+                return gameObjects;
             }
         }
 
@@ -91,51 +92,6 @@ namespace ICGame
             gameObjects.AddRange(gameObject.GetChildren());
         }
 
-        public bool CheckSelection(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd)
-        {
-            float? selected = null;
-            int i;
-            for (i = 0; i < gameObjects.Count; ++i)
-            {
-                if (gameObjects[i] is IPhysical)
-                {
-                    float? check = (gameObjects[i] as IPhysical).CheckClicked(x, y, camera, projection, gd);
-                    if (check != null && (selected == null || check < selected))
-                    {
-                        selected = check;
-                        SelectedObject = gameObjects.IndexOf(gameObjects[i].RootObject);
-                    }
-                }
-            }
-            if (selected == null)
-            {
-                SelectedObject = -1;
-            }
-            return selected!=null;
-        }
-
-        /// <summary>
-        /// Zwracamy kliknięty obiekt 
-        /// </summary>
-        /// <param name="x">mouse x</param>
-        /// <param name="y">mouse y</param>
-        /// <param name="camera"></param>
-        /// <param name="projection"></param>
-        /// <param name="gd"></param>
-        /// <returns>Referencje na obiekt albo null jesli nic nie kliknięto</returns>
-        public GameObject CheckClickedObject(int x, int y, Camera camera, Matrix projection, GraphicsDevice gd )
-        {
-            foreach (GameObject gameObject in gameObjects)
-            {
-                if(gameObject is IPhysical)
-                {
-                    if ((gameObject as IPhysical).CheckClicked(x, y, camera, projection, gd) != null)
-                    return gameObject.RootObject;
-                }
-            }
-            return null;
-        }
-
         public void InitializePathFinder()
         {
             pathFinder = new PathFinder(Board.GetDifficultyMap(), gameObjects);
@@ -143,7 +99,7 @@ namespace ICGame
 
         public GameObject GetSelectedObject()
         {
-            foreach (GameObject gameObject in gameObjects)
+            /*foreach (GameObject gameObject in gameObjects)
             {
                 if (gameObject is Vehicle)
                 {
@@ -152,6 +108,10 @@ namespace ICGame
                         return gameObject;
                     }
                 }
+            }*/
+            if(SelectedObject >= 0)
+            {
+                return gameObjects[SelectedObject];
             }
             return null;
         }
@@ -223,41 +183,6 @@ namespace ICGame
             //\TEMP
 
             UpdateEffects(gameTime);
-        }
-
-        public void MoveToLocation(float x, float z)
-        {
-            if(SelectedObject == -1)
-            {
-                return;
-            }
-
-            if(SelectedObject >= gameObjects.Count)
-            {
-                throw new ArgumentOutOfRangeException("dupa");
-            }
-
-            if(gameObjects[SelectedObject] is IControllable)
-            {
-                IControllable controllable = gameObjects[SelectedObject] as IControllable;
-
-                int radius = 0;
-
-                if(gameObjects[SelectedObject] is IPhysical)
-                {
-                    IPhysical physical = gameObjects[SelectedObject] as IPhysical;
-
-                    radius =
-                        Convert.ToInt32(
-                            Math.Sqrt(Math.Pow(physical.Width/2.0, 2) + Math.Pow(physical.Height/2.0, 2) +
-                                      Math.Pow(physical.Length/2, 2.0)));
-                }
-
-                new PathFinder().FindPath(new Point(Convert.ToInt32(gameObjects[SelectedObject].Position.X),
-                                                    Convert.ToInt32(gameObjects[SelectedObject].Position.Z)),
-                                          new Point(Convert.ToInt32(x),Convert.ToInt32(z)), radius, controllable, gameObjects);
-
-            }
         }
         
         public void UpdateEffects(GameTime gameTime)
